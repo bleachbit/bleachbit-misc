@@ -1,0 +1,264 @@
+<?php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
+
+/*
+ * HTTP Mail
+ * Copyright (C) 2009 Andrew Ziem.  All rights reserved.
+ * Licensed under the GNU General Public License version 2 or later.  See COPYING for details.
+ *
+ */
+
+/**
+ * @file
+ * Queue Drupal emails to database.  Allow polling for emails by HTTP.
+ *
+ * Andrew Ziem
+ *
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function httpmail_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#httpmail':
+      return t('Queue email in database for polling by HTTP.');
+  }
+}
+
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function httpmail_menu() {
+  $items['admin/settings/httpmail'] = array(
+    'title'            => 'HTTP Mail',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('httpmail_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'description'      => 'Queue email in database for polling by HTTP.',
+  );
+
+  $secret = variable_get('httpmail_secret', 'You must set this to a unique value!!!');
+
+  $items[$secret] = array('title' => 'Secret!');
+
+  return $items;
+}
+
+
+/**
+ * Administrative settings.
+ *
+ * @return
+ *   An array containing form items to place on the module settings page.
+ */
+function httpmail_admin_settings() {
+  // Override the smtp_library variable.
+  if (variable_get('httpmail_on', 0)) {
+    $smtp_path = drupal_get_filename('module', 'httpmail');
+    if ($smtp_path) {
+      variable_set('smtp_library', $smtp_path); /* see includes/mail.inc */
+      drupal_set_message(t('HTTPMAIL.module is active.'));
+    }
+    // If drupal can't find the path to the module, display an error.
+    else {
+      drupal_set_message(t("HTTPMAIL.module error: Can't find file."), 'error');
+    }
+  }
+  // If this module is turned off, delete the variable.
+  else {
+    variable_del('smtp_library');
+    drupal_set_message(t('HTTPMAIL.module is INACTIVE.'));
+  }
+
+  $form['onoff'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Install options'),
+  );
+  $form['onoff']['httpmail_on'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Turn this module on or off'),
+    '#default_value' => variable_get('httpmail_on', 0),
+    '#options'       => array(1 => t('On'), 0 => t('Off')),
+    '#description'   => t('To uninstall this module you must turn it off here first.'),
+  );
+
+  $form['server'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('SMTP server settings'),
+  );
+  $form['server']['httpmail_secret'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Secret'),
+    '#default_value' => variable_get('httpmail_secret', ''),
+    '#description'   => t('A secret code'),
+  );
+
+  // If an address was given, send a test e-mail message.
+  $test_address = variable_get('httpmail_test_address', '');
+  if ($test_address != '') {
+    // Clear the variable so only one message is sent.
+    variable_del('httpmail_test_address');
+    global $language;
+    $params['subject'] = t('Drupal test e-mail');
+    $params['body']    = t('If you receive this message it means your site is capable of sending e-mail.');
+    drupal_mail('httpmail', 'httpmail-test', $test_address, $language, $params);
+    drupal_set_message(t('A test e-mail has been sent to @email. You may want to !check for any error messages.', array('@email' => $test_address, '!check' => l(t('check the logs'), 'admin/reports/dblog'))));
+  }
+  $form['email_test'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Send test e-mail'),
+  );
+  $form['email_test']['httpmail_test_address'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('E-mail address to send a test e-mail to'),
+    '#default_value' => '',
+    '#description'   => t('Type in an address to have a test e-mail sent there.'),
+  );
+
+  return system_settings_form($form);
+}  
+
+
+
+/**
+ * Validation for the administrative settings form.
+ *
+ * @param form
+ *   An associative array containing the structure of the form.
+ * @param form_state
+ *   A keyed array containing the current state of the form.
+ */
+function httpmail_admin_settings_validate($form, &$form_state) {
+
+
+}
+
+
+
+/**
+ * Sends out the e-mail.
+ *
+ * @param message
+ *   An array with at least the following elements: id, to, subject, body and
+ *  headers.
+ *
+ * @see drupal_mail_send()
+ */
+function drupal_mail_wrapper($message) {
+  $id       = $message['id'];
+  $to       = $message['to'];
+  $from     = $message['from'];
+  $language = $message['language'];
+  $subject  = $message['subject'];
+  $body     = $message['body'];
+  $headers  = $message['headers'];
+  $headers_str = implode("\n", $headers);
+
+  // check
+  assert(is_string($id));
+  assert(is_string($to));
+  assert(is_string($from));
+//  assert(is_string($language));
+  assert(is_string($body));
+
+  // Log
+  watchdog('httpmail', 'Sending mail to: @to', array('@to' => $to));
+
+  // Queue
+  $ok = db_query("INSERT INTO {httpmail_queue} (dt_queued, type_id, to_addr, from_addr, subject, body, headers) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+    date("Y-m-d H:m:s"), $id, $to, $from, $subject, $body, $headers_str);
+
+  // Log any error
+  if (!$ok) {
+    watchdog('httpmail', 'Error sending e-mail from @from to @to : !error_message', array('@from' => $from, '@to' => $to, '!error_message' => 'database'), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  return TRUE;
+}  //  End of drupal_mail_wrapper()
+
+
+
+/**
+ * implementation of hook_mail().
+ */
+function httpmail_mail($key, &$message, $params) {
+  if ($key == 'httpmail-test') {
+    $message['subject'] = $params['subject'];
+    $message['body']    = $params['body'];
+  }
+}
+
+
+/*
+ * Authenticate
+ * Used by XML RPC functions
+ */
+function httpmail_authenticate($secret)
+{
+  $real_secret = variable_get('httpmail_secret', "");
+  if ($real_secret === $secret and strlen($real_secret) >= 10)
+    return TRUE;
+  else
+    return t('Permission denied.');
+}
+
+
+/*
+ * List ID's of new mail
+ * Exported by XML RPC
+ */
+function httpmail_list_new($secret)
+{
+  $ret = httpmail_authenticate($secret);
+  if (is_string($ret))
+    return array($ret);
+  $result = db_query("SELECT id FROM {httpmail_queue} WHERE status='N' ORDER BY dt_queued");
+  $ret = array();
+  while ($mail = db_fetch_object($result)) {
+    array_push($ret, $mail->id);
+  }
+  return $ret;
+}
+
+
+/*
+ * Return one new email and mark it read
+ * Export by XML RPC
+ */
+function httpmail_get_email($secret, $id)
+{
+  $ret = httpmail_authenticate($secret);
+  if (is_string($ret))
+    return array($ret);
+  $id = intval($id);
+  $result1 = db_query("SELECT to_addr, from_addr, subject, headers, body FROM {httpmail_queue} WHERE status='N' AND id='%d'", $id);
+  $email = db_fetch_object($result1);
+  $result2 = db_query("UPDATE {httpmail_queue} SET status='O', dt_sent=now() WHERE id='%d' LIMIT 1", $id);
+  return $email;
+}
+
+/**
+ * implementation of hook_xmlrpc().
+ */
+function httpmail_xmlrpc() {
+  return array(
+    array(
+      'httpmail.list_new',
+      httpmail_list_new,
+      array('struct', 'string'),
+      t('List new messages')),
+    array(
+      'httpmail.get_email',
+      httpmail_get_email,
+      array('array', 'string', 'int'),
+      t('Retrieve one new email and mark it read')));
+}
+
+
+
+
+

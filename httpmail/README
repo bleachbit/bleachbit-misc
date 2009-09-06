@@ -1,0 +1,37 @@
+HTTP Mail
+http://bleachbit.svn.sourceforge.net/viewvc/bleachbit/misc/
+Copyright (c) 2009 by Andrew Ziem. All Rights Reserved.
+
+
+
+SUMMARY
+HTTP Mail is a module for Drupal 6 to queue external mail and
+export it from Drupal by XML RPC.  Then, a client fetches
+the mail from Drupal and relays it.  A client in Python
+for Google App Engine is provided.
+
+
+APPLICATION
+SourceForge (and probably other web hosts) doesn't allow external
+connections.  The module may also be useful for some high
+traffic sites.
+
+
+CREDITS
+A few parts copied from Khalid Baheyeldin's Queue Mail
+http://drupal.org/project/queue_mail
+
+
+LICENSE
+GNU General Public License version or later.
+
+
+INSTALLATION
+1. Copy httpmail.{info,module,install} to Drupal sites/all/modules/httpmail
+2. In Drupal under modules, enable HTTP Mail.
+3. In Drupal under HTTP Mail, turn HTTP Mail on.
+4. Setup the client to poll periodically using cron. (GAE supports cron.)
+
+
+
+

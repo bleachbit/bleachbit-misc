@@ -1,0 +1,8 @@
+name = HTTP Mail
+description = "Queue email for polling by HTTP"
+core = 6.x
+package = Mail
+php = 4.0.0
+version = 6.x-1
+
+

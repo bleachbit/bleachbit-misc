@@ -1,0 +1,136 @@
+<?php
+
+/*
+ * HTTP Mail
+ * Copyright (C) 2009 Andrew Ziem.  All rights reserved.
+ * Licensed under the GNU General Public License version 2 or later.  See COPYING for details.
+ *
+ */
+
+
+/**
+ * @file
+ * The installation instructions for the SMTP Authentication Support.
+ */
+
+
+
+/**
+ * Implementation of hook_install().
+ */
+function httpmail_install() {
+  watchdog('httpmail', 'httpmail_install()');
+  variable_set('httpmail_secret', rand_str());
+  drupal_install_schema('httpmail');
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function httpmail_uninstall() {
+  variable_del('httpmail_secret');
+  drupal_uninstall_schema('httpmail');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function httpmail_schema() {
+  $schema['httpmail_queue'] = array(
+    'description' => 'Stores emails.',
+    'fields' => array(
+      'id'  => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: HTTP Mail queue',
+      ),
+      'dt_queued' => array(
+        'type' => 'datetime',
+        'not null' => TRUE,
+        'description' => 'Date-time the record was inserted.',
+      ),
+      'dt_sent' => array(
+        'type' => 'datetime',
+        'not null' => FALSE,
+        'description' => 'Date-time the record was exported by XML RPC.',
+      ),
+      'status' => array(
+        'type' => 'char',
+        'length' => 1,
+        'default' => 'N',
+        'description' => 'N=new, O=old, E=error sending',
+      ),
+      'type_id' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Unique identifier for type of email',
+      ),
+      'to_addr' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Recipient',
+      ),
+      'from_addr' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Sender email address',
+      ),
+      'subject' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Language',
+      ),
+      'body' => array(
+        'type' => 'varchar',
+        'length' => 32000,
+        'description' => 'Body',
+      ),
+      'headers' => array(
+        'type' => 'varchar',
+        'length' => 5000,
+        'description' => 'Headers',
+      ),
+    ),
+
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+/**
+ * http://www.php.net/manual/en/function.rand.php
+ */
+function rand_str($length = 32, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890')
+{
+    // Length of character list
+    $chars_length = (strlen($chars) - 1);
+
+    // Start our string
+    $string = $chars{rand(0, $chars_length)};
+
+    // Generate random string
+    for ($i = 1; $i < $length; $i = strlen($string))
+    {
+        // Grab a random character from our list
+        $r = $chars{rand(0, $chars_length)};
+
+        // Make sure the same two characters don't appear next to each other
+        if ($r != $string{$i - 1}) $string .=  $r;
+    }
+
+    // Return the string
+    return $string;
+}
+?>
+
+
+
+
+
+
+
+
+
