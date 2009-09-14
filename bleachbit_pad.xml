@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<XML_DIZ_INFO>
+	<MASTER_PAD_VERSION_INFO>
+		<MASTER_PAD_VERSION>3.01</MASTER_PAD_VERSION>
+		<MASTER_PAD_EDITOR>PADGen 3.0.1.38 http://www.padgen.org</MASTER_PAD_EDITOR>
+		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+	</MASTER_PAD_VERSION_INFO>
+	<Company_Info>
+		<Company_Name>BleachBit</Company_Name>
+		<Address_1 />
+		<Address_2 />
+		<City_Town>Springfield</City_Town>
+		<State_Province />
+		<Zip_Postal_Code />
+		<Country>USA</Country>
+		<Company_WebSite_URL>http://bleachbit.sourceforge.net</Company_WebSite_URL>
+		<Contact_Info>
+			<Author_First_Name>Andrew</Author_First_Name>
+			<Author_Last_Name>Ziem</Author_Last_Name>
+			<Author_Email>ahz001@gmail.com</Author_Email>
+			<Contact_First_Name>Andrew</Contact_First_Name>
+			<Contact_Last_Name>Ziem</Contact_Last_Name>
+			<Contact_Email>ahz001@gmail.com</Contact_Email>
+		</Contact_Info>
+		<Support_Info>
+			<Sales_Email>ahz001@gmail.com</Sales_Email>
+			<Support_Email>ahz001@gmail.com</Support_Email>
+			<General_Email>ahz001@gmail.com</General_Email>
+			<Sales_Phone />
+			<Support_Phone />
+			<General_Phone />
+			<Fax_Phone />
+		</Support_Info>
+	</Company_Info>
+	<Program_Info>
+		<Program_Name>BleachBit</Program_Name>
+		<Program_Version>0.6.3</Program_Version>
+		<Program_Release_Month>08</Program_Release_Month>
+		<Program_Release_Day>28</Program_Release_Day>
+		<Program_Release_Year>2009</Program_Release_Year>
+		<Program_Cost_Dollars>0</Program_Cost_Dollars>
+		<Program_Cost_Other_Code />
+		<Program_Cost_Other />
+		<Program_Type>Freeware</Program_Type>
+		<Program_Release_Status>Major Update</Program_Release_Status>
+		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
+		<Program_OS_Support>WinXP,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
+		<Program_Language>English,Arabic,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
+		<Program_Change_Info>More thorougly wipe free disk space.  Delete Windows system logs.  Fix bugs.  Update many translations.</Program_Change_Info>
+		<Program_Specific_Category>Utilities</Program_Specific_Category>
+		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
+		<Program_System_Requirements>Windows XP, Vista or 7 or Linux.</Program_System_Requirements>
+		<File_Info>
+			<File_Size_Bytes>7417131</File_Size_Bytes>
+			<File_Size_K>7243</File_Size_K>
+			<File_Size_MB>7.1</File_Size_MB>
+		</File_Info>
+		<Expire_Info>
+			<Has_Expire_Info>N</Has_Expire_Info>
+			<Expire_Count />
+			<Expire_Based_On>Days</Expire_Based_On>
+			<Expire_Other_Info />
+			<Expire_Month />
+			<Expire_Day />
+			<Expire_Year />
+		</Expire_Info>
+	</Program_Info>
+	<Program_Descriptions>
+		<English>
+			<Keywords>cleaner, privacy, disk space, cache, internet history, temporary files, cookies, junk, open source, free</Keywords>
+			<Char_Desc_45>Clean disk space and maintain privacy--free</Char_Desc_45>
+			<Char_Desc_80>Free valuable disk space and maintain your privacy with ease</Char_Desc_80>
+			<Char_Desc_250>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts.</Char_Desc_250>
+			<Char_Desc_450>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts.  Applications include Internet Explorer, Firefox, Flash, Google Chrome, Opera, Windows Media Player, and many others.</Char_Desc_450>
+			<Char_Desc_2000>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts. Designed for Linux and Windows systems, it wipes clean Adobe Reader, APT, Bash, Beagle, Chromium, Epiphany, Firefox, Flash, GIMP, Google Chrome, Google Earth, Internet Explorer, Java, KDE, OpenOffice.org, Opera, RealPlayer, Safari, Skype, VIM, XChat, Yum, and more.</Char_Desc_2000>
+		</English>
+	</Program_Descriptions>
+	<Web_Info>
+		<Application_URLs>
+			<Application_Info_URL>http://bleachbit.sourceforge.net</Application_Info_URL>
+			<Application_Order_URL />
+			<Application_Screenshot_URL>http://lh5.ggpht.com/_1XYQfEGGEIw/SirfzXVldWI/AAAAAAAAB-k/2GtanYsRyAM/s800/bleachbit-0.5.1-xp-shred.png</Application_Screenshot_URL>
+			<Application_Icon_URL>http://launchpadlibrarian.net/21946427/bleachbit_logo_192.png</Application_Icon_URL>
+			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
+		</Application_URLs>
+		<Download_URLs>
+			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.3/BleachBit-0.6.3-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.3/BleachBit-0.6.3-Win32-install-full.zip</Secondary_Download_URL>
+			<Additional_Download_URL_1>http://bleachbit.sourceforge.net/download</Additional_Download_URL_1>
+			<Additional_Download_URL_2 />
+		</Download_URLs>
+	</Web_Info>
+	<Permissions>
+		<Distribution_Permissions>GNU General Public License version 3 or later</Distribution_Permissions>
+		<EULA>GNU General Public License version 3 or later</EULA>
+	</Permissions>
+</XML_DIZ_INFO>
