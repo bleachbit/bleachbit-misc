@@ -4,7 +4,7 @@
 
 # http://wiki.freegeek.org/index.php/Basic_Debian_Packaging
 # http://ubuntuforums.org/showthread.php?t=51003
-apt-get install build-essential dh-make debhelper devscripts fakeroot
+apt-get install build-essential dh-make debhelper devscripts fakeroot libnotify-bin
 
 # These are just nice to have
 apt-get install mc sshfs vim-full
