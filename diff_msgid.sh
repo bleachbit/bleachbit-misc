@@ -24,7 +24,7 @@ cd -
 msggrep -Kie . --no-wrap ../trunk/po/bleachbit.pot  | grep ^msgid  | cut -c 8- | sort > /tmp/msgid-trunk
 msggrep -Kie . --no-wrap $OLDPO/bleachbit.pot  | grep ^msgid  | cut -c 8- | sort > /tmp/msgid-release-$1
 
-diff -u /tmp/msgid-{release-$1,trunk}
+diff /tmp/msgid-{release-$1,trunk}
 
 rm -f /tmp/msgid-trunk
 rm -f /tmp/msgid-release-$1
