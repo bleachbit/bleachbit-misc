@@ -1,4 +1,4 @@
-<0?xml version="1.0" ?>
+<?xml version="1.0" ?>
 <XML_DIZ_INFO>
 	<MASTER_PAD_VERSION_INFO>
 		<MASTER_PAD_VERSION>3.01</MASTER_PAD_VERSION>
@@ -84,8 +84,8 @@
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.4/BleachBit-0.6.5-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.4/BleachBit-0.6.5-Win32-install-full.zip</Secondary_Download_URL>
+			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.5/BleachBit-0.6.5-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.5/BleachBit-0.6.5-Win32-install-full.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1>http://bleachbit.sourceforge.net/download</Additional_Download_URL_1>
 			<Additional_Download_URL_2 />
 		</Download_URLs>
