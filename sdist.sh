@@ -39,7 +39,7 @@ python setup.py sdist --formats=bztar,gztar
 
 
 echo "creating LZMA tarball"
-bzcat $SVND/trunk/dist/$NAMEV.tar.bz2 | lzma -9 - > $SVND/trunk/dist/$NAMEV.tar.lzma
+bzcat $SVND/trunk/dist/$NAMEV.tar.bz2 | xz -9 - > $SVND/trunk/dist/$NAMEV.tar.lzma
 [[ -e "dist/$NAMEV.tar.lzma" ]] || echo dist/$NAMEV.tar.lzma missing
 [[ -e "dist/$NAMEV.tar.lzma" ]] || exit 1
 
