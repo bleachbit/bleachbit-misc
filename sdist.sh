@@ -9,9 +9,7 @@
 #
 
 
-VER=0.6.5
 NAME=bleachbit
-NAMEV=${NAME}-${VER}
 SVND=/tmp/bleachbit_svn
 
 
@@ -31,7 +29,9 @@ fi
 
 
 echo "python setup"
-rm dist/$NAMEV.tar.{bz2,gz,lzma}
+VER=`python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/'`
+NAMEV=${NAME}-${VER}
+rm -f dist/$NAMEV.tar.{bz2,gz,lzma}
 python setup.py sdist --formats=bztar,gztar
 
 [[ -e "dist/$NAMEV.tar.gz" ]] || echo dist/$NAMEV.tar.gz missing
@@ -48,7 +48,7 @@ bzcat $SVND/trunk/dist/$NAMEV.tar.bz2 | xz -9 - > $SVND/trunk/dist/$NAMEV.tar.lz
 echo "rpmbuild"
 rm -f ~/rpmbuild/SOURCES/$NAMEV.tar.gz
 cp $SVND/trunk/dist/$NAMEV.tar.gz ~/rpmbuild/SOURCES/
-rm ~/rpmbuild/RPMS/noarch/bleachbit*rpm
+rm -f ~/rpmbuild/RPMS/noarch/bleachbit*rpm
 rpmbuild -bb $NAME.spec
 
 
