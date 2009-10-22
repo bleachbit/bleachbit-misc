@@ -34,9 +34,9 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>BleachBit</Program_Name>
-		<Program_Version>0.6.5</Program_Version>
-		<Program_Release_Month>09</Program_Release_Month>
-		<Program_Release_Day>30</Program_Release_Day>
+		<Program_Version>0.7.0</Program_Version>
+		<Program_Release_Month>10</Program_Release_Month>
+		<Program_Release_Day>21</Program_Release_Day>
 		<Program_Release_Year>2009</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code />
@@ -45,15 +45,15 @@
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>WinXP,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
-		<Program_Language>English,Arabic,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
-		<Program_Change_Info>Support Google Chrome 3.  Vacuum Google Chrome.  Add portable app.  Fix bugs.  Update 18 translations.</Program_Change_Info>
+		<Program_Language>English,Arabic,Belarusian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
+		<Program_Change_Info>Add deep scan feature to delete widely-scattered junk.  Delete more cache, logs, history, and traces left by Windows. Fix bugs.  Update 22 translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>Windows XP, Vista or 7 or Linux.</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>6374418</File_Size_Bytes>
-			<File_Size_K>6225</File_Size_K>
-			<File_Size_MB>6.08</File_Size_MB>
+			<File_Size_Bytes>6659121</File_Size_Bytes>
+			<File_Size_K>6503</File_Size_K>
+			<File_Size_MB>6.35</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -79,13 +79,13 @@
 		<Application_URLs>
 			<Application_Info_URL>http://bleachbit.sourceforge.net</Application_Info_URL>
 			<Application_Order_URL />
-			<Application_Screenshot_URL>http://lh5.ggpht.com/_1XYQfEGGEIw/SirfzXVldWI/AAAAAAAAB-k/2GtanYsRyAM/s800/bleachbit-0.5.1-xp-shred.png</Application_Screenshot_URL>
+//			<Application_Screenshot_URL>http://lh5.ggpht.com/_1XYQfEGGEIw/StuMjlnDwNI/AAAAAAAACg4/EiIWsiqQkNM/s800/BleachBit-070-English-deep-scan-Windows-XP.png</Application_Screenshot_URL>
 			<Application_Icon_URL>http://launchpadlibrarian.net/21946427/bleachbit_logo_192.png</Application_Icon_URL>
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.5/BleachBit-0.6.5-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.6.5/BleachBit-0.6.5-Win32-install-full.zip</Secondary_Download_URL>
+			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.0/BleachBit-0.7.0-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.0/BleachBit-0.7.0-Win32-install-full.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1>http://bleachbit.sourceforge.net/download</Additional_Download_URL_1>
 			<Additional_Download_URL_2 />
 		</Download_URLs>
