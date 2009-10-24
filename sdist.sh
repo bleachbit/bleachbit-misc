@@ -31,7 +31,7 @@ fi
 echo "python setup"
 VER=`python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/'`
 NAMEV=${NAME}-${VER}
-rm -f dist/$NAMEV.tar.{bz2,gz,lzma}
+make clean
 python setup.py sdist --formats=bztar,gztar
 
 [[ -e "dist/$NAMEV.tar.gz" ]] || echo dist/$NAMEV.tar.gz missing
