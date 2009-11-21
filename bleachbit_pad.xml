@@ -44,7 +44,7 @@
 		<Program_Type>Freeware</Program_Type>
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
-		<Program_OS_Support>WinXP,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
+		<Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
 		<Program_Language>English,Arabic,Belarusian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
 		<Program_Change_Info>Cleans more junk and trace files.  Improves usability.  Fixes bugs.  Adds Japanese and Slovenian translations, and update 19 other translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
