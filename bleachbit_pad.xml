@@ -45,7 +45,8 @@
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
-		<Program_Language>English,Arabic,Belarusian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
+		<!--November 11, 2009: http://www.asp-shareware.org/pad/spec/spec.php requires Byelorussian instead of Belaurusian -->
+		<Program_Language>English,Arabic,Byelorussian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
 		<Program_Change_Info>Cleans more junk and trace files.  Improves usability.  Fixes bugs.  Adds Japanese and Slovenian translations, and update 19 other translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
@@ -86,7 +87,7 @@
 		<Download_URLs>
 			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.1/BleachBit-0.7.1-Win32-install-full.exe</Primary_Download_URL>
 			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.1/BleachBit-0.7.1-Win32-install-full.zip</Secondary_Download_URL>
-			<Additional_Download_URL_1>http://bleachbit.sourceforge.net/download</Additional_Download_URL_1>
+			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
 	</Web_Info>
