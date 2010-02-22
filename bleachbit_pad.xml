@@ -34,25 +34,26 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>BleachBit</Program_Name>
-		<Program_Version>0.7.2</Program_Version>
-		<Program_Release_Month>11</Program_Release_Month>
-		<Program_Release_Day>30</Program_Release_Day>
-		<Program_Release_Year>2009</Program_Release_Year>
+		<Program_Version>0.7.3</Program_Version>
+		<Program_Release_Month>2</Program_Release_Month>
+		<Program_Release_Day>21</Program_Release_Day>
+		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
 		<Program_Type>Freeware</Program_Type>
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
-		<Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
+		<Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>a
 		<!--November 11, 2009: http://www.asp-shareware.org/pad/spec/spec.php requires Byelorussian instead of Belaurusian -->
+		<!-- Asturian not in the spec -->
 		<Program_Language>English,Arabic,Byelorussian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
 		<Program_Change_Info>Cleans more junk and trace files.  Improves usability on Vista and Windows 7.  Fixes bugs. Update 19 other translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>Windows XP, Vista or 7 or Linux.</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>6697813</File_Size_Bytes>
+			<File_Size_Bytes>6698392</File_Size_Bytes>
 			<File_Size_K>6541</File_Size_K>
 			<File_Size_MB>6.38</File_Size_MB>
 		</File_Info>
@@ -73,7 +74,7 @@
 			<Char_Desc_80>Free valuable disk space and maintain your privacy with ease</Char_Desc_80>
 			<Char_Desc_250>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts.  Shred files.</Char_Desc_250>
 			<Char_Desc_450>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts.  Applications include Internet Explorer, Firefox, Flash, Google Chrome, Opera, Windows Media Player, and many others.  Securely shred files.  Wipe free disk space to hide previously deleted files.</Char_Desc_450>
-			<Char_Desc_2000>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts. Designed for Linux and Windows systems, it wipes clean Adobe Reader, APT, Bash, Beagle, Chromium, Epiphany, Firefox, Flash, GIMP, Google Chrome, Google Earth, Internet Explorer, Java, KDE, OpenOffice.org, Opera, RealPlayer, Safari, Skype, VIM, XChat, Yum, and more.  Securely shred files to prevent undelete.  Wipe free disk space to hide previously deleted files.  Automate cleaning in batch files.</Char_Desc_2000>
+			<Char_Desc_2000>BleachBit deletes unnecessary files to free valuable disk space, maintain privacy, and remove junk. Rid your system of old clutter including cache, cookies, Internet history, localizations, logs, temporary files, and broken shortcuts. Designed for Linux and Windows systems, it wipes clean Adobe Reader, APT, Bash, Beagle, Chromium, Epiphany, Firefox, Flash, GIMP, Google Chrome, Google Earth, Internet Explorer, Java, KDE, OpenOffice.org, Opera, RealPlayer, Safari, Skype, Thunderbird, VIM, XChat, Yum, and more.  Securely shred files to prevent undelete.  Wipe free disk space to hide previously deleted files.  Automate cleaning in batch files.</Char_Desc_2000>
 		</English>
 	</Program_Descriptions>
 	<Web_Info>
@@ -85,8 +86,8 @@
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.2/BleachBit-0.7.2-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.2/BleachBit-0.7.2-Win32-install-full.zip</Secondary_Download_URL>
+			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.3/BleachBit-0.7.3-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.3/BleachBit-0.7.3-Win32-install-full.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
