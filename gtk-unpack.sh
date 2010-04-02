@@ -41,7 +41,7 @@ find lib/gtk-2.0/2.10.0/loaders/ | grep dll$ | grep -v png | xargs rm
 echo strip
 # warning: do not strip zlib1.dll
 i686-pc-mingw32-strip --strip-debug --preserve-dates  -v bin/intl* bin/free* bin/lib*
-find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --preserve-dates  -v \{\} \+
+find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
 
 echo compress UPX
 find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
