@@ -31,12 +31,18 @@ mv zlib1.dll bin
 cp gtkrc etc/gtk-2.0/
 
 echo remove unnecessary
+find \( -name atk10.mo -o -name glib20.mo -o -name gtk20-properties.mo \) -exec rm -f \{\} \+
+find lib/gtk-2.0/2.10.0/loaders/ | grep dll$ | grep -v png | xargs rm -f 
+rm -f bin/*exe
+rm -f bin/libtiff-3.dll
+rm -f bin/libtiffxx-3.dll
+rm -f etc/gtk-2.0/gtk.immodules
+rm -f lib/charset.alias
+rm -f lib/gtk-2.0/2.10.0/engines/libpixmap.dll
+rm -rf etc/pangoa/
 rm -rf manifest
-rm bin/libtiff-3.dll
-rm bin/libtiffxx-3.dll
-rm lib/gtk-2.0/2.10.0/engines/libpixmap.dll
-rm bin/*exe
-find lib/gtk-2.0/2.10.0/loaders/ | grep dll$ | grep -v png | xargs rm
+rm -rf share/themes/{Default,Emacs,Raleigh}/
+
 
 echo strip
 # warning: do not strip zlib1.dll
