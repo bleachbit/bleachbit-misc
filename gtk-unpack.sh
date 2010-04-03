@@ -41,6 +41,7 @@ rm -f lib/charset.alias
 rm -f lib/gtk-2.0/2.10.0/engines/libpixmap.dll
 rm -rf etc/pangoa/
 rm -rf manifest
+rm -rf share/doc
 rm -rf share/themes/{Default,Emacs,Raleigh}/
 
 
