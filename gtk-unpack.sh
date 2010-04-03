@@ -9,25 +9,19 @@
 #
 
 echo pre-clean
-rm -rf bin etc lib manifest share
+rm -rf bin etc lib manifest share zlib-1.2.4
 
 echo unzip
 unzip -q atk_*zip
-unzip -q cairo_*zip
-unzip -q expat*zip
-unzip -q fontconfig*
-unzip -q freetype*
-#unzip -q jpeg_*_win32.zip
 unzip -q gettext-runtime-*zip
 unzip -q glib*zip
 unzip -q gtk+_2*zip
 unzip -q libpng*zip
-#unzip -q libtiff*zip
 unzip -q pango*zip
-unzip -q zlib*zip zlib1.dll
+unzip -q zlib*zip zlib-1.2.4/zlib1.dll
 
 echo move/copy
-mv zlib1.dll bin
+mv zlib-1.2.4/zlib1.dll bin
 cp gtkrc etc/gtk-2.0/
 
 echo remove unnecessary
@@ -47,10 +41,10 @@ rm -rf share/themes/{Default,Emacs,Raleigh}/
 
 echo strip
 # warning: do not strip zlib1.dll
-i686-pc-mingw32-strip --strip-debug --preserve-dates  -v bin/intl* bin/free* bin/lib*
+i686-pc-mingw32-strip --strip-debug --preserve-dates  -v bin/intl* bin/lib*
 find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
 
 echo compress UPX
 find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
 
-
+zip -r9q gtk216.zip ???
