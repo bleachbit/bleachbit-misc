@@ -5,7 +5,7 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 #
-# Unpack GTK+ Windows binaries and prepare for use
+# Unpack GTK+ Windows binaries, dependencies, and SQLite and prepare for use
 #
 
 echo pre-clean
@@ -20,6 +20,7 @@ unzip -q gtk+_2*zip
 unzip -q libpng_1.2.*zip
 unzip -q libpng_1.4.*zip
 unzip -q pango*zip
+unzip -q sqlitedll-*zip sqlite3.dll
 unzip -q zlib*zip zlib-1.?.?/zlib1.dll
 ls bin
 
@@ -45,7 +46,7 @@ rm -rf share/themes/{Default,Emacs,Raleigh}/
 
 echo strip
 # warning: do not strip zlib1.dll or *.pyd
-i686-pc-mingw32-strip --preserve-dates bin/intl.dll bin/lib*dll
+i686-pc-mingw32-strip --preserve-dates bin/intl.dll bin/lib*dll sqlite3.dll
 find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
 
 echo compress UPX
