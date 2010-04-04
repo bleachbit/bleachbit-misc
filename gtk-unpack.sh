@@ -51,5 +51,3 @@ find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --stri
 echo compress UPX
 find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
 
-
-zip -r9q gtk216.zip ???
