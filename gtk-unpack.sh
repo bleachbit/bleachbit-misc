@@ -9,24 +9,28 @@
 #
 
 echo pre-clean
-rm -rf bin etc lib manifest share zlib-1.2.4
+rm -rf bin etc lib manifest share zlib-1.?.?
 
 echo unzip
 unzip -q atk_*zip
+unzip -q cairo*.zip
 unzip -q gettext-runtime-*zip
 unzip -q glib*zip
 unzip -q gtk+_2*zip
-unzip -q libpng*zip
+unzip -q libpng_1.2.*zip
+unzip -q libpng_1.4.*zip
 unzip -q pango*zip
-unzip -q zlib*zip zlib-1.2.4/zlib1.dll
+unzip -q zlib*zip zlib-1.?.?/zlib1.dll
+ls bin
 
 echo move/copy
-mv zlib-1.2.4/zlib1.dll bin
+mv zlib-1.?.?/zlib1.dll bin
 cp gtkrc etc/gtk-2.0/
+rm -rf zlib-1.?.?
 
 echo remove unnecessary
 find \( -name atk10.mo -o -name glib20.mo -o -name gtk20-properties.mo \) -exec rm -f \{\} \+
-find lib/gtk-2.0/2.10.0/loaders/ | grep dll$ | grep -v png | xargs rm -f 
+#find lib/gtk-2.0/2.10.0/loaders/ | grep dll$ | grep -v png | xargs rm -f 
 rm -f bin/*exe
 rm -f bin/libtiff-3.dll
 rm -f bin/libtiffxx-3.dll
@@ -46,5 +50,6 @@ find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --stri
 
 echo compress UPX
 find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
+
 
 zip -r9q gtk216.zip ???
