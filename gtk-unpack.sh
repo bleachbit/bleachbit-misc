@@ -45,7 +45,7 @@ rm -rf share/themes/{Default,Emacs,Raleigh}/
 
 echo strip
 # warning: do not strip zlib1.dll
-i686-pc-mingw32-strip --strip-debug --preserve-dates  -v bin/intl* bin/lib*
+i686-pc-mingw32-strip --preserve-dates bin/intl.dll bin/lib*dll
 find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
 
 echo compress UPX
