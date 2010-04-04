@@ -14,10 +14,8 @@ wget \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/atk/1.30/atk_1.30.0-1_win32.zip \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/cairo_1.8.8-1_win32.zip \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-0.17-1.zip \
-	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/jpeg_7-1_win32.zip \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/libpng_1.2.40-1_win32.zip \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/libpng_1.4.0-1_win32.zip \
-	http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/libtiff_3.9.1-1_win32.zip \
 	http://ftp.gnome.org/pub/gnome/binaries/win32/pango/1.24/pango_1.24.2-1_win32.zip \
 	http://zlib.net/zlib124-dll.zip
 
