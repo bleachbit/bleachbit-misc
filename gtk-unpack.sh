@@ -9,7 +9,7 @@
 #
 
 echo pre-clean
-rm -rf bin etc lib manifest share zlib-1.?.?
+rm -rf bin etc lib manifest share zlib-1.?.? sqlite3.dll
 
 echo unzip
 unzip -q atk_*zip
@@ -22,7 +22,6 @@ unzip -q libpng_1.4.*zip
 unzip -q pango*zip
 unzip -q sqlitedll-*zip sqlite3.dll
 unzip -q zlib*zip zlib-1.?.?/zlib1.dll
-ls bin
 
 echo move/copy
 mv zlib-1.?.?/zlib1.dll bin
