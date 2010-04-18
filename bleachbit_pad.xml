@@ -34,9 +34,9 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>BleachBit</Program_Name>
-		<Program_Version>0.7.3</Program_Version>
-		<Program_Release_Month>2</Program_Release_Month>
-		<Program_Release_Day>21</Program_Release_Day>
+		<Program_Version>0.7.4</Program_Version>
+		<Program_Release_Month>4</Program_Release_Month>
+		<Program_Release_Day>15</Program_Release_Day>
 		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code />
@@ -48,14 +48,14 @@
 		<!--November 11, 2009: http://www.asp-shareware.org/pad/spec/spec.php requires Byelorussian instead of Belaurusian -->
 		<!-- Asturian not in the spec -->
 		<Program_Language>English,Arabic,Byelorussian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Thai,Turkish,Ukrainian</Program_Language>
-		<Program_Change_Info>Cleans more junk and trace files.  Improves usability on Vista and Windows 7.  Fixes bugs. Update 19 other translations.</Program_Change_Info>
+		<Program_Change_Info>Clean own settings.  Clean WordPad.  Fix many bugs. Add Low German translation.  Update 25 other translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>Windows XP, Vista or 7 or Linux.</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>6698392</File_Size_Bytes>
-			<File_Size_K>6541</File_Size_K>
-			<File_Size_MB>6.38</File_Size_MB>
+			<File_Size_Bytes>6266156</File_Size_Bytes>
+			<File_Size_K>6226</File_Size_K>
+			<File_Size_MB>6.23</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -86,8 +86,8 @@
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.3/BleachBit-0.7.3-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.3/BleachBit-0.7.3-Win32-install-full.zip</Secondary_Download_URL>
+			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.4/BleachBit-0.7.4-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.7.4/BleachBit-0.7.4-Win32-install-full.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
