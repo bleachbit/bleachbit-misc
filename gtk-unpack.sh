@@ -45,7 +45,8 @@ rm -rf share/themes/{Default,Emacs,Raleigh}/
 
 echo strip
 # warning: do not strip zlib1.dll or *.pyd
-i686-pc-mingw32-strip --preserve-dates bin/intl.dll bin/lib*dll sqlite3.dll
+# do not strip (?) sqlite3.dll because of http://bleachbit.sourceforge.net/forum/074-fails-errors
+i686-pc-mingw32-strip --preserve-dates bin/intl.dll bin/lib*dll
 find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
 
 echo compress UPX
