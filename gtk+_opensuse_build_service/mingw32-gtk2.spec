@@ -102,9 +102,7 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
         --disable-xinerama \
         --enable-debug=no \
         --enable-introspection=no \
-        --without-libjasper \
-        --without-libjpeg  \
-        --without-libtiff \
+        --without-libjasper
 
 rm -f gtk/gtk.def
 make %{?_smp_mflags} || make
