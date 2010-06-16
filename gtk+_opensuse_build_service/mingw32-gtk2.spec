@@ -39,7 +39,7 @@ BuildRequires:  mingw32-pango-devel >= 1.20
 BuildRequires:  mingw32-atk-devel >= 1.29.3
 BuildRequires:  pkgconfig autoconf automake
 BuildRequires:  libtool
-#BuildRequires:  gtk-doc
+BuildRequires:  gtk-doc
 # Native one for msgfmt
 BuildRequires:  gettext-tools
 # Native one for glib-genmarshal
@@ -93,7 +93,7 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
 %{_mingw32_configure} --disable-cups \
         --with-gdktarget=win32  \
         --with-included-loaders=yes --with-included-immodules=yes \
-        --disable-dependency-tracking
+        --disable-dependency-tracking \
         --disable-gdiplus \
         --disable-gtk-doc \
         --disable-gtk-doc-html \
