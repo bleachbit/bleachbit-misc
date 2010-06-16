@@ -33,7 +33,7 @@ BuildRequires:  mingw32-glib2-devel >= 2.19.7
 BuildRequires:  mingw32-cairo-devel >= 1.6.0
 #BuildRequires:  mingw32-libjasper-devel
 BuildRequires:  mingw32-libpng-devel
-#BuildRequires:  mingw32-libjpeg-devel
+BuildRequires:  mingw32-libjpeg-devel
 #BuildRequires:  mingw32-libtiff-devel
 BuildRequires:  mingw32-pango-devel >= 1.20
 BuildRequires:  mingw32-atk-devel >= 1.29.3
