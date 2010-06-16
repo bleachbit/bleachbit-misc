@@ -95,7 +95,9 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
         --with-included-loaders=yes --with-included-immodules=yes \
         --disable-dependency-tracking
         --disable-gdiplus \
+        --disable-gtk-doc \
         --disable-gtk-doc-html \
+        --disable-gtk-doc-pdf \
         --disable-papi \
         --disable-xinerama \
         --enable-debug=no \
