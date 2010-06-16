@@ -1,0 +1,5 @@
+addFilter("script-without-shebang")
+addFilter("arch-independent-package-contains-binary-or-object")
+addFilter("file-not-in-%lang")
+addFilter("mono-versioned-deps-missing")
+addFilter("spurious-executable-perm")

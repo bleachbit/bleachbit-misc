@@ -1,0 +1,1085 @@
+diff -uprN gtk+-2.20.1/gdk/gdk.def gtk+-2.20.1.az/gdk/gdk.def
+--- gtk+-2.20.1/gdk/gdk.def	2010-05-03 02:49:20 +0200
++++ gtk+-2.20.1.az/gdk/gdk.def	2010-06-08 12:47:29 +0200
+@@ -661,6 +661,8 @@ EXPORTS
+ 	gdk_spawn_on_screen_with_pipes
+ 	gdk_synthesize_window_state
+ 	gdk_window_destroy_notify
++	gdk_win32_gc_add_drawable_clip_libgtk_only
++	gdk_win32_gc_remove_drawable_clip_libgtk_only
+ 	gdk_win32_handle_table_lookup
+ 	gdk_win32_icon_to_pixbuf_libgtk_only
+ 	gdk_win32_pixbuf_to_hicon_libgtk_only
+@@ -669,6 +671,8 @@ EXPORTS
+ 	gdk_win32_hdc_get
+ 	gdk_win32_hdc_release
+ 	gdk_win32_selection_add_targets
++	gdk_win32_window_start_draw_libgtk_only
++	gdk_win32_window_end_draw_libgtk_only
+ 	gdk_app_launch_context_get_type 
+ 	gdk_app_launch_context_new
+ 	gdk_app_launch_context_set_display
+diff -uprN gtk+-2.20.1/gdk/gdkinternals.h gtk+-2.20.1.az/gdk/gdkinternals.h
+--- gtk+-2.20.1/gdk/gdkinternals.h	2010-04-10 04:19:53 +0200
++++ gtk+-2.20.1.az/gdk/gdkinternals.h	2010-06-08 13:01:27 +0200
+@@ -412,6 +412,8 @@ GdkPixmap *_gdk_gc_get_tile        (GdkG
+ GdkBitmap *_gdk_gc_get_stipple     (GdkGC *gc);
+ guint32    _gdk_gc_get_fg_pixel    (GdkGC *gc);
+ guint32    _gdk_gc_get_bg_pixel    (GdkGC *gc);
++
++guint32   _gdk_window_new_region_tag (void);
+ void      _gdk_gc_add_drawable_clip     (GdkGC     *gc,
+ 					 guint32    region_tag,
+ 					 GdkRegion *region,
+@@ -423,6 +425,31 @@ void       _gdk_gc_set_clip_region_inter
+ 					     gboolean reset_origin);
+ GdkSubwindowMode _gdk_gc_get_subwindow (GdkGC *gc);
+ 
++GdkDrawable *_gdk_window_start_draw_helper (GdkDrawable *drawable,
++                                            GdkGC *gc,
++                                            gint *x_offset_out,
++                                            gint *y_offset_out);
++
++#define GDK_WINDOW_BEGIN_DRAW			\
++  {							\
++    GdkDrawable *impl;					\
++    gint x_offset, y_offset;				\
++    gint old_clip_x = gc->clip_x_origin;		\
++    gint old_clip_y = gc->clip_y_origin;		\
++    gint old_ts_x = gc->ts_x_origin;			\
++    gint old_ts_y = gc->ts_y_origin;			\
++    impl = _gdk_window_start_draw_helper (drawable, gc,	\
++			      &x_offset, &y_offset);
++
++#define GDK_WINDOW_END_DRAW			    \
++    if (x_offset != 0 || y_offset != 0)			    \
++     {                                                      \
++       gdk_gc_set_clip_origin (gc, old_clip_x, old_clip_y); \
++       gdk_gc_set_ts_origin (gc, old_ts_x, old_ts_y);       \
++     }                                                      \
++  }
++
++
+ /*****************************************
+  * Interfaces provided by windowing code *
+  *****************************************/
+diff -uprN gtk+-2.20.1/gdk/gdkwindow.c gtk+-2.20.1.az/gdk/gdkwindow.c
+--- gtk+-2.20.1/gdk/gdkwindow.c	2010-05-03 01:33:18 +0200
++++ gtk+-2.20.1.az/gdk/gdkwindow.c	2010-06-08 13:00:55 +0200
+@@ -362,6 +362,12 @@ new_region_tag (void)
+   return ++tag;
+ }
+ 
++guint32
++_gdk_window_new_region_tag (void)
++{
++  return new_region_tag ();
++}
++
+ GType
+ gdk_window_object_get_type (void)
+ {
+@@ -3527,8 +3533,8 @@ gdk_window_get_internal_paint_info (GdkW
+     *y_offset = y_off;
+ }
+ 
+-static GdkDrawable *
+-start_draw_helper (GdkDrawable *drawable,
++GdkDrawable *
++_gdk_window_start_draw_helper (GdkDrawable *drawable,
+ 		   GdkGC *gc,
+ 		   gint *x_offset_out,
+ 		   gint *y_offset_out)
+@@ -3617,25 +3623,6 @@ start_draw_helper (GdkDrawable *drawable
+   return impl;
+ }
+ 
+-#define BEGIN_DRAW					\
+-  {							\
+-    GdkDrawable *impl;					\
+-    gint x_offset, y_offset;				\
+-    gint old_clip_x = gc->clip_x_origin;		\
+-    gint old_clip_y = gc->clip_y_origin;		\
+-    gint old_ts_x = gc->ts_x_origin;			\
+-    gint old_ts_y = gc->ts_y_origin;			\
+-    impl = start_draw_helper (drawable, gc,		\
+-			      &x_offset, &y_offset);
+-
+-#define END_DRAW					    \
+-    if (x_offset != 0 || y_offset != 0)			    \
+-     {                                                      \
+-       gdk_gc_set_clip_origin (gc, old_clip_x, old_clip_y); \
+-       gdk_gc_set_ts_origin (gc, old_ts_x, old_ts_y);       \
+-     }                                                      \
+-  }
+-
+ static GdkGC *
+ gdk_window_create_gc (GdkDrawable     *drawable,
+ 		      GdkGCValues     *values,
+@@ -3662,10 +3649,10 @@ gdk_window_draw_rectangle (GdkDrawable *
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_rectangle (impl, gc, filled,
+ 		      x - x_offset, y - y_offset, width, height);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -3682,11 +3669,11 @@ gdk_window_draw_arc (GdkDrawable *drawab
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_arc (impl, gc, filled,
+ 		x - x_offset, y - y_offset,
+ 		width, height, angle1, angle2);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -3701,7 +3688,7 @@ gdk_window_draw_polygon (GdkDrawable *dr
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -3722,7 +3709,7 @@ gdk_window_draw_polygon (GdkDrawable *dr
+   if (new_points != points)
+     g_free (new_points);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -3737,10 +3724,10 @@ gdk_window_draw_text (GdkDrawable *drawa
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_text (impl, font, gc,
+ 		 x - x_offset, y - y_offset, text, text_length);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -3755,10 +3742,10 @@ gdk_window_draw_text_wc (GdkDrawable
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_text_wc (impl, font, gc,
+ 		    x - x_offset, y - y_offset, text, text_length);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static GdkDrawable *
+@@ -3962,7 +3949,7 @@ gdk_window_draw_drawable (GdkDrawable *d
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   /* Call the method directly to avoid getting the composite drawable again */
+   GDK_DRAWABLE_GET_CLASS (impl)->draw_drawable_with_src (impl, gc,
+@@ -4031,7 +4018,7 @@ gdk_window_draw_drawable (GdkDrawable *d
+ 	}
+     }
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4045,7 +4032,7 @@ gdk_window_draw_points (GdkDrawable *dra
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -4066,7 +4053,7 @@ gdk_window_draw_points (GdkDrawable *dra
+   if (new_points != points)
+     g_free (new_points);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4080,7 +4067,7 @@ gdk_window_draw_segments (GdkDrawable *d
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -4103,7 +4090,7 @@ gdk_window_draw_segments (GdkDrawable *d
+   if (new_segs != segs)
+     g_free (new_segs);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4117,7 +4104,7 @@ gdk_window_draw_lines (GdkDrawable *draw
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -4138,7 +4125,7 @@ gdk_window_draw_lines (GdkDrawable *draw
+   if (new_points != points)
+     g_free (new_points);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4152,10 +4139,10 @@ gdk_window_draw_glyphs (GdkDrawable
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_glyphs (impl, gc, font,
+ 		   x - x_offset, y - y_offset, glyphs);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4172,7 +4159,7 @@ gdk_window_draw_glyphs_transformed (GdkD
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -4201,7 +4188,7 @@ gdk_window_draw_glyphs_transformed (GdkD
+ 
+   gdk_draw_glyphs_transformed (impl, gc, matrix, font, x, y, glyphs);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ typedef struct {
+@@ -4651,11 +4638,11 @@ gdk_window_draw_image (GdkDrawable *draw
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+   gdk_draw_image (impl, gc, image, xsrc, ysrc,
+ 		  xdest - x_offset, ydest - y_offset,
+ 		  width, height);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4683,7 +4670,7 @@ gdk_window_draw_pixbuf (GdkDrawable
+   if (!gc)
+     gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   klass = GDK_DRAWABLE_GET_CLASS (impl);
+ 
+@@ -4697,7 +4684,7 @@ gdk_window_draw_pixbuf (GdkDrawable
+ 			dest_x - x_offset, dest_y - y_offset,
+ 			width, height,
+ 			dither, x_dither, y_dither);
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+@@ -4711,7 +4698,7 @@ gdk_window_draw_trapezoids (GdkDrawable
+   if (GDK_WINDOW_DESTROYED (drawable))
+     return;
+ 
+-  BEGIN_DRAW;
++  GDK_WINDOW_BEGIN_DRAW;
+ 
+   if (x_offset != 0 || y_offset != 0)
+     {
+@@ -4735,7 +4722,7 @@ gdk_window_draw_trapezoids (GdkDrawable
+ 
+   g_free (new_trapezoids);
+ 
+-  END_DRAW;
++  GDK_WINDOW_END_DRAW;
+ }
+ 
+ static void
+diff -uprN gtk+-2.20.1/gdk/win32/gdkgc-win32.c gtk+-2.20.1.az/gdk/win32/gdkgc-win32.c
+--- gtk+-2.20.1/gdk/win32/gdkgc-win32.c	2010-04-09 06:06:59 +0200
++++ gtk+-2.20.1.az/gdk/win32/gdkgc-win32.c	2010-06-08 13:13:18 +0200
+@@ -1147,3 +1147,18 @@ _gdk_win32_gdkregion_to_hrgn (const GdkR
+ 
+   return (hrgn);
+ }
++
++void gdk_win32_gc_add_drawable_clip_libgtk_only (GdkGC *gc,
++						 GdkRegion *region,
++						 int offset_x,
++						 int offset_y)
++{
++  guint32 region_tag = _gdk_window_new_region_tag ();
++  
++  _gdk_gc_add_drawable_clip (gc, region_tag, region, offset_x, offset_y);
++}
++
++void gdk_win32_gc_remove_drawable_clip_libgtk_only (GdkGC *gc)
++{
++  _gdk_gc_remove_drawable_clip (gc);
++}
+diff -uprN gtk+-2.20.1/gdk/win32/gdkwin32.h gtk+-2.20.1.az/gdk/win32/gdkwin32.h
+--- gtk+-2.20.1/gdk/win32/gdkwin32.h	2010-04-09 04:29:56 +0200
++++ gtk+-2.20.1.az/gdk/win32/gdkwin32.h	2010-06-08 13:12:23 +0200
+@@ -103,10 +103,32 @@ void          gdk_win32_selection_add_ta
+ 					       GdkAtom    *targets);
+ 
+ /* For internal GTK use only */
++void          gdk_win32_gc_add_drawable_clip_libgtk_only (GdkGC *gc,
++							 GdkRegion *region,
++							 int offset_x,
++							 int offset_y);
++void          gdk_win32_gc_remove_drawable_clip_libgtk_only (GdkGC *gc);
+ GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
+ HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
+ void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
+ 
++GdkDrawable  *gdk_win32_window_start_draw_libgtk_only (GdkDrawable *drawable,
++						       GdkGC *gc,
++						       gint *x_offset_out,
++						       gint *y_offset_out,
++						       gint *clip_x_out,
++						       gint *clip_y_out,
++						       gint *ts_x_out,
++						       gint *ts_y_out);
++void          gdk_win32_window_end_draw_libgtk_only (GdkGC *gc,
++						     gint x_offset,
++						     gint y_offset,
++						     gint clip_x,
++						     gint clip_y,
++						     gint ts_x,
++						     gint ts_y);
++
++
+ G_END_DECLS
+ 
+ #endif /* __GDK_WIN32_H__ */
+diff -uprN gtk+-2.20.1/gdk/win32/gdkwindow-win32.c gtk+-2.20.1.az/gdk/win32/gdkwindow-win32.c
+--- gtk+-2.20.1/gdk/win32/gdkwindow-win32.c	2010-04-09 06:06:59 +0200
++++ gtk+-2.20.1.az/gdk/win32/gdkwindow-win32.c	2010-06-08 12:08:57 +0200
+@@ -3545,3 +3545,55 @@ gdk_window_impl_iface_init (GdkWindowImp
+   iface->input_window_destroy = _gdk_input_window_destroy;
+   iface->input_window_crossing = _gdk_input_crossing_event;
+ }
++
++#define GDK_WIN32_MACRO_BEGIN \
++  {
++
++#define GDK_WIN32_MACRO_END \
++  }
++
++GdkDrawable *gdk_win32_window_start_draw_libgtk_only (GdkDrawable *drawable,
++						   GdkGC *gc,
++						   gint *x_offset_out,
++						   gint *y_offset_out,
++						   gint *clip_x_out,
++						   gint *clip_y_out,
++						   gint *ts_x_out,
++						   gint *ts_y_out)
++{
++  if (GDK_WINDOW_DESTROYED (drawable))
++    return NULL;
++
++  GDK_WINDOW_BEGIN_DRAW;
++  
++  *x_offset_out = x_offset;
++  *y_offset_out = y_offset;
++  *clip_x_out = old_clip_x;
++  *clip_y_out = old_clip_y;
++  *ts_x_out = old_ts_x;
++  *ts_y_out = old_ts_y;
++  
++  return impl;
++  
++  GDK_WIN32_MACRO_END;
++  
++  return NULL;
++}
++
++void gdk_win32_window_end_draw_libgtk_only (GdkGC *gc,
++					    gint x_offset,
++					    gint y_offset,
++					    gint clip_x,
++					    gint clip_y,
++					    gint ts_x,
++					    gint ts_y)
++{
++  GDK_WIN32_MACRO_BEGIN;
++  
++  gint old_clip_x = clip_x;
++  gint old_clip_y = clip_y;
++  gint old_ts_x = ts_x;
++  gint old_ts_y = ts_y;
++  
++  GDK_WINDOW_END_DRAW;
++}
+diff -uprN gtk+-2.20.1/modules/engines/ms-windows/msw_style.c gtk+-2.20.1.az/modules/engines/ms-windows/msw_style.c
+--- gtk+-2.20.1/modules/engines/ms-windows/msw_style.c	2010-04-10 04:20:05 +0200
++++ gtk+-2.20.1.az/modules/engines/ms-windows/msw_style.c	2010-06-08 13:14:13 +0200
+@@ -47,11 +47,19 @@
+ #include "gdk/win32/gdkwin32.h"
+ #endif
+ 
++typedef struct {
++  GdkDrawable *drawable;
++  GdkRegion *clip_region;
++  gint x_offset, y_offset;
++  gint clip_x, clip_y;
++  gint ts_x, ts_y;
++} DRAW_INFO;
++
+ static HDC get_window_dc (GtkStyle *style, GdkWindow *window,
+-			  GtkStateType state_type, gint x, gint y, gint width,
++			  GtkStateType state_type, DRAW_INFO *draw_info, gint x, gint y, gint width,
+ 			  gint height, RECT *rect);
+ static void release_window_dc (GtkStyle *style, GdkWindow *window,
+-			       GtkStateType state_type);
++			       GtkStateType state_type, DRAW_INFO *draw_info);
+ 
+ 
+ /* Default values, not normally used
+@@ -1113,8 +1121,9 @@ combo_box_draw_arrow (GtkStyle *style,
+       DWORD border;
+       RECT rect;
+       HDC dc;
++      DRAW_INFO draw_info;
+ 
+-      dc = get_window_dc (style, window, state, area->x, area->y, area->width,
++      dc = get_window_dc (style, window, state, &draw_info, area->x, area->y, area->width,
+ 			  area->height, &rect);
+       border = (GTK_TOGGLE_BUTTON (widget->parent)->
+ 		active ? DFCS_PUSHED | DFCS_FLAT : 0);
+@@ -1122,7 +1131,7 @@ combo_box_draw_arrow (GtkStyle *style,
+       InflateRect (&rect, 1, 1);
+       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
+ 
+-      release_window_dc (style, window, state);
++      release_window_dc (style, window, state, &draw_info);
+ 
+       return TRUE;
+     }
+@@ -1270,8 +1279,9 @@ draw_expander (GtkStyle *style,
+       RECT rect;
+       HPEN pen;
+       HGDIOBJ old_pen;
++      DRAW_INFO draw_info;
+ 
+-      dc = get_window_dc (style, window, state, x, y, expander_size,
++      dc = get_window_dc (style, window, state, &draw_info, x, y, expander_size,
+ 			  expander_size, &rect);
+       FrameRect (dc, &rect, GetSysColorBrush (COLOR_GRAYTEXT));
+       InflateRect (&rect, -1, -1);
+@@ -1297,7 +1307,7 @@ draw_expander (GtkStyle *style,
+ 
+       SelectObject (dc, old_pen);
+       DeleteObject (pen);
+-      release_window_dc (style, window, state);
++      release_window_dc (style, window, state, &draw_info);
+     }
+ 
+   if (area)
+@@ -1510,6 +1520,7 @@ draw_arrow (GtkStyle *style,
+   const gchar *name;
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+ 
+   name = gtk_widget_get_name (widget);
+ 
+@@ -1601,13 +1612,13 @@ draw_arrow (GtkStyle *style,
+ 	    {
+ 	      sanitize_size (window, &width, &height);
+ 
+-	      dc = get_window_dc (style, window, state,
++	      dc = get_window_dc (style, window, state, &draw_info,
+ 				  box_x, box_y, box_width, box_height, &rect);
+ 	      DrawFrameControl (dc, &rect, DFC_SCROLL,
+ 				btn_type | (shadow ==
+ 					    GTK_SHADOW_IN ? (DFCS_PUSHED |
+ 							     DFCS_FLAT) : 0));
+-	      release_window_dc (style, window, state);
++	      release_window_dc (style, window, state, &draw_info);
+ 	    }
+ 	}
+     }
+@@ -1717,47 +1728,71 @@ is_menu_tool_button_child (GtkWidget *wi
+ }
+ 
+ HDC
+-get_window_dc (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
++get_window_dc (GtkStyle *style, GdkWindow *window, GtkStateType state_type, DRAW_INFO *draw_info,
+ 	       gint x, gint y, gint width, gint height, RECT *rect)
+ {
+-  int xoff, yoff;
+   GdkDrawable *drawable;
++  GdkGC *gc = style->dark_gc[state_type];
++  GdkRegion *clip_region = NULL;
++  gint x_offset, y_offset;
++  gint clip_x, clip_y;
++  gint ts_x, ts_y;
+ 
+   if (!GDK_IS_WINDOW (window))
+     {
+-      xoff = 0;
+-      yoff = 0;
++      x_offset = 0;
++      y_offset = 0;
+       drawable = window;
++
++      clip_region = gdk_drawable_get_clip_region (drawable);
++      if (clip_region)
++        gdk_win32_gc_add_drawable_clip_libgtk_only (gc, clip_region, x_offset, y_offset);
+     }
+   else
+     {
+-      gdk_window_get_internal_paint_info (window, &drawable, &xoff, &yoff);
++      drawable = gdk_win32_window_start_draw_libgtk_only(window,
++						     gc,
++						     &x_offset, &y_offset,
++						     &clip_x, &clip_y,
++						     &ts_x, &ts_y);
++      if (!drawable)
++        return FALSE;
+     }
+ 
+-  rect->left = x - xoff;
+-  rect->top = y - yoff;
++  rect->left = x - x_offset;
++  rect->top = y - y_offset;
+   rect->right = rect->left + width;
+   rect->bottom = rect->top + height;
+ 
+-  return gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
++  draw_info->drawable = drawable;
++  draw_info->clip_region = clip_region;
++  draw_info->x_offset = x_offset;
++  draw_info->y_offset = y_offset;
++  draw_info->clip_x = clip_x;
++  draw_info->clip_y = clip_y;
++  draw_info->ts_x = ts_x;
++  draw_info->ts_y = ts_y;
++
++  return gdk_win32_hdc_get (drawable, gc, 0);
+ }
+ 
+ void
+ release_window_dc (GtkStyle *style, GdkWindow *window,
+-		   GtkStateType state_type)
++		   GtkStateType state_type, DRAW_INFO *draw_info)
+ {
+-  GdkDrawable *drawable;
++  GdkDrawable *drawable = draw_info->drawable;
++  GdkGC *gc = style->dark_gc[state_type];
+ 
+-  if (!GDK_IS_WINDOW (window))
+-    {
+-      drawable = window;
+-    }
+-  else
+-    {
+-      gdk_window_get_internal_paint_info (window, &drawable, NULL, NULL);
+-    }
++  gdk_win32_hdc_release (drawable, gc, 0);
+ 
+-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
++  if (GDK_IS_WINDOW (window))
++    gdk_win32_window_end_draw_libgtk_only (gc,
++					   draw_info->x_offset, draw_info->y_offset,
++					   draw_info->clip_x, draw_info->clip_y,
++					   draw_info->ts_x, draw_info->ts_y);
++  else
++    if (draw_info->clip_region)
++      gdk_win32_gc_remove_drawable_clip_libgtk_only (gc);
+ }
+ 
+ static HPEN
+@@ -1823,6 +1858,7 @@ draw_menu_item (GdkWindow *window, GtkWi
+   GtkMenuShell *bar;
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+ 
+   if (xp_theme_is_active ())
+     {
+@@ -1835,14 +1871,14 @@ draw_menu_item (GdkWindow *window, GtkWi
+     {
+       bar = GTK_MENU_SHELL (parent);
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+       if (state_type == GTK_STATE_PRELIGHT)
+ 	{
+ 	  draw_3d_border (dc, &rect, bar->active);
+ 	}
+ 
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+ 
+       return TRUE;
+     }
+@@ -1883,6 +1919,7 @@ draw_tool_button (GdkWindow *window, Gtk
+ {
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+   gboolean is_toggled = FALSE;
+ 
+   if (xp_theme_is_active ())
+@@ -1905,7 +1942,7 @@ draw_tool_button (GdkWindow *window, Gtk
+       return FALSE;
+     }
+ 
+-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++  dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+   if (state_type == GTK_STATE_PRELIGHT)
+     {
+       if (is_toggled)
+@@ -1927,7 +1964,7 @@ draw_tool_button (GdkWindow *window, Gtk
+       draw_3d_border (dc, &rect, TRUE);
+     }
+ 
+-  release_window_dc (style, window, state_type);
++  release_window_dc (style, window, state_type, &draw_info);
+ 
+   return TRUE;
+ }
+@@ -1939,8 +1976,9 @@ draw_push_button (GdkWindow *window, Gtk
+ {
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+ 
+-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++  dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+   if (GTK_IS_TOGGLE_BUTTON (widget))
+     {
+@@ -1980,7 +2018,7 @@ draw_push_button (GdkWindow *window, Gtk
+       DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH);
+     }
+ 
+-  release_window_dc (style, window, state_type);
++  release_window_dc (style, window, state_type, &draw_info);
+ }
+ 
+ static void
+@@ -1995,15 +2033,16 @@ draw_box (GtkStyle *style,
+   if (is_combo_box_child (widget) && detail && !strcmp (detail, "button"))
+     {
+       RECT rect;
++      DRAW_INFO draw_info;
+       DWORD border;
+       HDC dc;
+       int cx;
+ 
+       border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+ 
+       if (xp_theme_is_active ()
+ 	  && xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
+@@ -2014,9 +2053,9 @@ draw_box (GtkStyle *style,
+       width = cx;
+ 
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width - cx, height, &rect);
+       FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+       return;
+ 	}
+     }
+@@ -2036,13 +2075,14 @@ draw_box (GtkStyle *style,
+ 	    {
+ 	      HDC dc;
+ 	      RECT rect;
+-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++	      DRAW_INFO draw_info;
++	      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+ 	      DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH |
+ 				(state_type ==
+ 				 GTK_STATE_ACTIVE ? (DFCS_PUSHED | DFCS_FLAT)
+ 				 : 0));
+-	      release_window_dc (style, window, state_type);
++	      release_window_dc (style, window, state_type, &draw_info);
+ 	    }
+ 	}
+       else if (is_toolbar_child (widget->parent)
+@@ -2092,14 +2132,15 @@ draw_box (GtkStyle *style,
+ 			  style, x, y, width, height, state_type, area))
+ 	{
+ 	  RECT rect;
++	  DRAW_INFO draw_info;
+ 	  HDC dc;
+ 
+-	  dc = get_window_dc (style, window, state_type,
++	  dc = get_window_dc (style, window, state_type, &draw_info,
+ 			      x, y, width, height, &rect);
+ 	  DrawEdge (dc, &rect,
+ 		    state_type ==
+ 		    GTK_STATE_ACTIVE ? EDGE_SUNKEN : EDGE_RAISED, BF_RECT);
+-	  release_window_dc (style, window, state_type);
++	  release_window_dc (style, window, state_type, &draw_info);
+ 	}
+       return;
+     }
+@@ -2208,15 +2249,16 @@ draw_box (GtkStyle *style,
+ 	    {
+ 	      HDC dc;
+ 	      RECT rect;
++	      DRAW_INFO draw_info;
+ 
+ 	      sanitize_size (window, &width, &height);
+-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++	      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+ 	      SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
+ 	      SetBkColor (dc, GetSysColor (COLOR_BTNFACE));
+ 	      FillRect (dc, &rect, get_dither_brush ());
+ 
+-	      release_window_dc (style, window, state_type);
++	      release_window_dc (style, window, state_type, &draw_info);
+ 
+ 	      return;
+ 	    }
+@@ -2326,9 +2368,10 @@ draw_box (GtkStyle *style,
+ 	    {
+ 	      HBRUSH brush;
+ 	      RECT rect;
++	      DRAW_INFO draw_info;
+ 	      HDC hdc;
+ 
+-	      hdc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++	      hdc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+ 	      brush = GetSysColorBrush (COLOR_3DDKSHADOW);
+ 
+@@ -2340,7 +2383,7 @@ draw_box (GtkStyle *style,
+ 	      InflateRect (&rect, -1, -1);
+ 	      FillRect (hdc, &rect, (HBRUSH) (COLOR_INFOBK + 1));
+ 
+-	      release_window_dc (style, window, state_type);
++	      release_window_dc (style, window, state_type, &draw_info);
+ 
+ 	      return;
+ 	    }
+@@ -2771,10 +2814,11 @@ draw_tab_button (GtkStyle *style,
+     {
+       /* experimental tab-drawing code from mozilla */
+       RECT rect;
++	  DRAW_INFO draw_info;
+       HDC dc;
+       gint32 aPosition;
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+       if (gap_side == GTK_POS_TOP)
+ 	aPosition = BF_TOP;
+@@ -2797,7 +2841,7 @@ draw_tab_button (GtkStyle *style,
+       if (area)
+ 	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+ 
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+       return TRUE;
+     }
+ 
+@@ -2949,9 +2993,10 @@ draw_menu_border (GdkWindow *win, GtkSty
+ 		  gint x, gint y, gint width, gint height)
+ {
+   RECT rect;
++  DRAW_INFO draw_info;
+   HDC dc;
+ 
+-  dc = get_window_dc (style, win, GTK_STATE_NORMAL, x, y, width, height, &rect);
++  dc = get_window_dc (style, win, GTK_STATE_NORMAL, &draw_info, x, y, width, height, &rect);
+ 
+   if (!dc)
+     return FALSE;
+@@ -2965,7 +3010,7 @@ draw_menu_border (GdkWindow *win, GtkSty
+       DrawEdge (dc, &rect, EDGE_RAISED, BF_RECT);
+     }
+ 
+-  release_window_dc (style, win, GTK_STATE_NORMAL);
++  release_window_dc (style, win, GTK_STATE_NORMAL, &draw_info);
+ 
+   return TRUE;
+ }
+@@ -2987,10 +3032,11 @@ draw_shadow (GtkStyle *style,
+ 
+       HDC dc;
+       RECT rect;
++      DRAW_INFO draw_info;
+ 
+ 
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+       if (is_combo_box_child (widget))
+         {
+           FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
+@@ -3028,7 +3074,7 @@ draw_shadow (GtkStyle *style,
+ 	    }
+ 	}
+ 
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+ 
+       return;
+     }
+@@ -3042,12 +3088,13 @@ draw_shadow (GtkStyle *style,
+ 	{
+ 	  HDC dc;
+ 	  RECT rect;
++	  DRAW_INFO draw_info;
+ 
+-	  dc = get_window_dc (style, window, state_type,
++	  dc = get_window_dc (style, window, state_type, &draw_info,
+ 			      x, y, width, height, &rect);
+ 
+ 	  DrawEdge (dc, &rect, EDGE_SUNKEN, BF_RECT);
+-	  release_window_dc (style, window, state_type);
++	  release_window_dc (style, window, state_type, &draw_info);
+ 	}
+ 
+       return;
+@@ -3090,6 +3137,7 @@ draw_shadow (GtkStyle *style,
+ 	{
+ 	  HDC dc;
+ 	  RECT rect;
++	  DRAW_INFO draw_info;
+ 	  HGDIOBJ old_pen = NULL;
+ 	  GtkPositionType pos;
+ 
+@@ -3142,7 +3190,7 @@ draw_shadow (GtkStyle *style,
+ 		}
+ 	    }
+ 
+-	  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++	  dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+ 	  if (pos != GTK_POS_LEFT)
+ 	    {
+@@ -3170,7 +3218,7 @@ draw_shadow (GtkStyle *style,
+ 	    }
+ 	  if (old_pen)
+ 	    SelectObject (dc, old_pen);
+-	  release_window_dc (style, window, state_type);
++	  release_window_dc (style, window, state_type, &draw_info);
+ 	}
+ 
+       return;
+@@ -3322,13 +3370,14 @@ draw_resize_grip (GtkStyle *style,
+       else
+ 	{
+ 	  RECT rect;
+-	  HDC dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++	  DRAW_INFO draw_info;
++	  HDC dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+ 	  if (area)
+ 	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+ 
+ 	  DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
+-	  release_window_dc (style, window, state_type);
++	  release_window_dc (style, window, state_type, &draw_info);
+ 
+ 	  if (area)
+ 	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+@@ -3354,6 +3403,7 @@ draw_handle (GtkStyle *style,
+ {
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+ 
+   if (is_toolbar_child (widget))
+     {
+@@ -3387,7 +3437,7 @@ draw_handle (GtkStyle *style,
+ 	  return;
+ 	}
+ 
+-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++      dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+ 
+       if (orientation == GTK_ORIENTATION_VERTICAL)
+ 	{
+@@ -3405,7 +3455,7 @@ draw_handle (GtkStyle *style,
+ 	}
+ 
+       draw_3d_border (dc, &rect, FALSE);
+-      release_window_dc (style, window, state_type);
++      release_window_dc (style, window, state_type, &draw_info);
+       return;
+     }
+ 
+@@ -3478,6 +3528,7 @@ draw_focus (GtkStyle *style,
+ {
+   HDC dc;
+   RECT rect;
++  DRAW_INFO draw_info;
+ 
+   if (!gtk_widget_get_can_focus (widget))
+     {
+@@ -3495,9 +3546,9 @@ draw_focus (GtkStyle *style,
+       return;
+     }
+ 
+-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
++  dc = get_window_dc (style, window, state_type, &draw_info, x, y, width, height, &rect);
+   DrawFocusRect (dc, &rect);
+-  release_window_dc (style, window, state_type);
++  release_window_dc (style, window, state_type, &draw_info);
+ /*
+     parent_class->draw_focus (style, window, state_type,
+ 						     area, widget, detail, x, y, width, height);
+diff -uprN gtk+-2.20.1/modules/engines/ms-windows/xp_theme.c gtk+-2.20.1.az/modules/engines/ms-windows/xp_theme.c
+--- gtk+-2.20.1/modules/engines/ms-windows/xp_theme.c	2010-04-09 04:29:59 +0200
++++ gtk+-2.20.1.az/modules/engines/ms-windows/xp_theme.c	2010-06-08 13:14:29 +0200
+@@ -856,10 +856,14 @@ xp_theme_draw (GdkWindow *win, XpThemeEl
+ {
+   HTHEME theme;
+   RECT rect, clip, *pClip;
+-  int xoff, yoff;
+   HDC dc;
+   GdkDrawable *drawable;
++  GdkGC *gc = style->dark_gc[state_type];
++  GdkRegion *clip_region = NULL;
+   int part_state;
++  gint x_offset, y_offset;
++  gint clip_x, clip_y;
++  gint ts_x, ts_y;
+ 
+   if (!xp_theme_is_drawable (element))
+     return FALSE;
+@@ -873,24 +877,34 @@ xp_theme_draw (GdkWindow *win, XpThemeEl
+ 
+   if (!GDK_IS_WINDOW (win))
+     {
+-      xoff = 0;
+-      yoff = 0;
++      x_offset = 0;
++      y_offset = 0;
+       drawable = win;
++
++      clip_region = gdk_drawable_get_clip_region (drawable);
++      if (clip_region)
++        gdk_win32_gc_add_drawable_clip_libgtk_only (gc, clip_region, x_offset, y_offset);
+     }
+   else
+     {
+-      gdk_window_get_internal_paint_info (win, &drawable, &xoff, &yoff);
++      drawable = gdk_win32_window_start_draw_libgtk_only(win,
++						     gc,
++						     &x_offset, &y_offset,
++						     &clip_x, &clip_y,
++						     &ts_x, &ts_y);
++      if (!drawable)
++        return FALSE;
+     }
+ 
+-  rect.left = x - xoff;
+-  rect.top = y - yoff;
++  rect.left = x - x_offset;
++  rect.top = y - y_offset;
+   rect.right = rect.left + width;
+   rect.bottom = rect.top + height;
+ 
+   if (area)
+     {
+-      clip.left = area->x - xoff;
+-      clip.top = area->y - yoff;
++      clip.left = area->x - x_offset;
++      clip.top = area->y - y_offset;
+       clip.right = clip.left + area->width;
+       clip.bottom = clip.top + area->height;
+ 
+@@ -901,8 +915,7 @@ xp_theme_draw (GdkWindow *win, XpThemeEl
+       pClip = NULL;
+     }
+ 
+-  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+-  dc = gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
++  dc = gdk_win32_hdc_get (drawable, gc, 0);
+   if (!dc)
+     return FALSE;
+ 
+@@ -911,17 +924,23 @@ xp_theme_draw (GdkWindow *win, XpThemeEl
+   draw_theme_background_func (theme, dc, element_part_map[element],
+ 			      part_state, &rect, pClip);
+ 
+-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
++  gdk_win32_hdc_release (drawable, gc, 0);
+ 
++  if (GDK_IS_WINDOW (win))
++    gdk_win32_window_end_draw_libgtk_only (gc,
++					   x_offset, y_offset,
++					   clip_x, clip_y,
++					   ts_x, ts_y);
++  else
++    if (clip_region)
++      gdk_win32_gc_remove_drawable_clip_libgtk_only (gc);
++  
+   return TRUE;
+ }
+ 
+ gboolean
+ xp_theme_is_active (void)
+ {
+-  /* Workaround for bug #598299 */
+-  return FALSE;
+-
+   return use_xp_theme;
+ }
+ 
