@@ -31,14 +31,15 @@ BuildRequires:  mingw32-win_iconv-devel
 BuildRequires:  mingw32-gettext-tools
 BuildRequires:  mingw32-glib2-devel >= 2.19.7
 BuildRequires:  mingw32-cairo-devel >= 1.6.0
-BuildRequires:  mingw32-libjasper-devel
+#BuildRequires:  mingw32-libjasper-devel
 BuildRequires:  mingw32-libpng-devel
-BuildRequires:  mingw32-libjpeg-devel
-BuildRequires:  mingw32-libtiff-devel
+#BuildRequires:  mingw32-libjpeg-devel
+#BuildRequires:  mingw32-libtiff-devel
 BuildRequires:  mingw32-pango-devel >= 1.20
 BuildRequires:  mingw32-atk-devel >= 1.29.3
 BuildRequires:  pkgconfig autoconf automake
-BuildRequires:  libtool gtk-doc
+BuildRequires:  libtool
+#BuildRequires:  gtk-doc
 # Native one for msgfmt
 BuildRequires:  gettext-tools
 # Native one for glib-genmarshal
@@ -58,10 +59,11 @@ MinGW Windows Gtk2 library.
 Summary:        MinGW Windows Gtk2 library
 Group:          Development/Libraries
 Requires:       mingw32-pango-devel >= 1.20 mingw32-glib2-devel >= 2.19.7
-Requires:       mingw32-libjasper-devel mingw32-libtiff-devel
+#Requires:       mingw32-libjasper-devel mingw32-libtiff-devel
 Requires:       mingw32-win_iconv-devel mingw32-gettext-tools
 Requires:       mingw32-cairo-devel >= 1.6.0 mingw32-libpng-devel
-Requires:       mingw32-libjpeg-devel mingw32-atk-devel >= 1.13.0
+#Requires:       mingw32-libjpeg-devel 
+Requires:       mingw32-atk-devel >= 1.13.0
 
 
 %description devel
@@ -88,9 +90,20 @@ export PATH="%{_mingw32_bindir}:$PATH"
 echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
 
 #cups is pointless for win32 and gdiplus based loaders are utterly broken
-%{_mingw32_configure} --disable-cups --enable-gdiplus \
-        --with-gdktarget=win32 --with-libjasper \
-        --with-included-loaders=yes --with-included-immodules=yes
+%{_mingw32_configure} --disable-cups \
+        --with-gdktarget=win32  \
+        --with-included-loaders=yes --with-included-immodules=yes \
+        --disable-dependency-tracking
+        --disable-gdiplus \
+        --disable-gtk-doc-html \
+        --disable-papi \
+        --disable-xinerama \
+        --enable-debug=no \
+        --enable-introspection=no \
+        --without-libjasper \
+        --without-libjpeg  \
+        --without-libtiff \
+
 rm -f gtk/gtk.def
 make %{?_smp_mflags} || make
 
@@ -134,10 +147,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(-,root,root)
-%{_mingw32_datadir}/gtk-doc/html/gail-libgail-util
-%{_mingw32_datadir}/gtk-doc/html/gdk-pixbuf
-%{_mingw32_datadir}/gtk-doc/html/gdk
-%{_mingw32_datadir}/gtk-doc/html/gtk
+#%{_mingw32_datadir}/gtk-doc/html/gail-libgail-util
+#%{_mingw32_datadir}/gtk-doc/html/gdk-pixbuf
+#%{_mingw32_datadir}/gtk-doc/html/gdk
+#%{_mingw32_datadir}/gtk-doc/html/gtk
 %{_mingw32_bindir}/gdk-pixbuf-csource.exe
 %{_mingw32_bindir}/gtk-demo.exe
 %{_mingw32_libdir}/libgailutil.dll.a
