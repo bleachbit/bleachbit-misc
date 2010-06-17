@@ -31,7 +31,6 @@ BuildRequires:  mingw32-win_iconv-devel
 BuildRequires:  mingw32-gettext-tools
 BuildRequires:  mingw32-glib2-devel >= 2.19.7
 BuildRequires:  mingw32-cairo-devel >= 1.6.0
-BuildRequires:  mingw32-libjasper-devel
 BuildRequires:  mingw32-libpng-devel
 BuildRequires:  mingw32-libjpeg-devel
 BuildRequires:  mingw32-libtiff-devel
@@ -59,10 +58,8 @@ MinGW Windows Gtk2 library.
 Summary:        MinGW Windows Gtk2 library
 Group:          Development/Libraries
 Requires:       mingw32-pango-devel >= 1.20 mingw32-glib2-devel >= 2.19.7
-#Requires:       mingw32-libjasper-devel mingw32-libtiff-devel
 Requires:       mingw32-win_iconv-devel mingw32-gettext-tools
 Requires:       mingw32-cairo-devel >= 1.6.0 mingw32-libpng-devel
-#Requires:       mingw32-libjpeg-devel 
 Requires:       mingw32-atk-devel >= 1.13.0
 
 
