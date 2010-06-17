@@ -147,10 +147,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(-,root,root)
-#%{_mingw32_datadir}/gtk-doc/html/gail-libgail-util
-#%{_mingw32_datadir}/gtk-doc/html/gdk-pixbuf
-#%{_mingw32_datadir}/gtk-doc/html/gdk
-#%{_mingw32_datadir}/gtk-doc/html/gtk
+%{_mingw32_datadir}/gtk-doc/html/gail-libgail-util
+%{_mingw32_datadir}/gtk-doc/html/gdk-pixbuf
+%{_mingw32_datadir}/gtk-doc/html/gdk
+%{_mingw32_datadir}/gtk-doc/html/gtk
 %{_mingw32_bindir}/gdk-pixbuf-csource.exe
 %{_mingw32_bindir}/gtk-demo.exe
 %{_mingw32_libdir}/libgailutil.dll.a
