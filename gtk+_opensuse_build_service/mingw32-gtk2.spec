@@ -78,6 +78,23 @@ MinGW Windows Gtk2 library.
 %patch2 -p1 -b .libpng
 %patch3 -p1 -b .xptheme
 
+# remove the GTK file chooser, path bar, and file system
+sed -i '/gtk_file_chooser/ d' gtk/gtk.symbols
+sed -i '/gtk_path_bar_get_type/ d' gtk/gtk.symbols
+
+sed  -i 's/rm -f xgen-gtf/rm -f xgen-gtf \&\& sed -i "\/gtk_file_chooser\/ d" gtktypefuncs.c/' gtk/Makefile.am
+
+sed -i '/gtkfilechooser[a-z]*\.c/ d' gtk/Makefile.am
+sed -i '/gtkfilesystem\.c/ d' gtk/Makefile.am
+sed -i '/gtkfilesystemmodel\.c/ d' gtk/Makefile.am
+sed -i '/gtkpathbar\.c/ d' gtk/Makefile.am
+
+# don't build the demo or tests because they require pieces we removed
+sed -i '/demos\/Makefile/ d' configure.in
+sed -i '/demos\/gtk-demo/ d' configure.in
+sed -i 's/modules demos tests/modules /' Makefile.am
+
+
 %build
 libtoolize --force --copy --install
 autoreconf -f -i 
@@ -85,6 +102,9 @@ autoreconf -f -i
 export PATH="%{_mingw32_bindir}:$PATH"
 
 echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
+
+# FIXME: this doesn't work
+export CFLAGS=-Os
 
 #cups is pointless for win32 and gdiplus based loaders are utterly broken
 %{_mingw32_configure} --disable-cups \
@@ -100,6 +120,9 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
         --enable-debug=no \
         --enable-introspection=no \
         --without-libjasper
+
+grep "\-O2" Makefile
+sed "s/-O2/-Os/g" Makefile
 
 rm -f gtk/gtk.def
 make %{?_smp_mflags} || make
@@ -149,7 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_datadir}/gtk-doc/html/gdk
 %{_mingw32_datadir}/gtk-doc/html/gtk
 %{_mingw32_bindir}/gdk-pixbuf-csource.exe
-%{_mingw32_bindir}/gtk-demo.exe
+#%{_mingw32_bindir}/gtk-demo.exe
 %{_mingw32_libdir}/libgailutil.dll.a
 %{_mingw32_libdir}/libgdk-win32-2.0.dll.a
 %{_mingw32_libdir}/libgdk_pixbuf-2.0.dll.a
@@ -170,7 +193,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_libdir}/gtk-2.0/include/
 %{_mingw32_includedir}/gail-1.0/
 %{_mingw32_datadir}/aclocal/gtk-2.0.m4
-%{_mingw32_datadir}/gtk-2.0/
+#%{_mingw32_datadir}/gtk-2.0/
 %{_mingw32_mandir}
 
 
