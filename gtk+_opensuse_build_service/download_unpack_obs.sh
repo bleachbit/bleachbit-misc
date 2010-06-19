@@ -22,6 +22,31 @@ wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '
 mkdir -p $EXTRACTDIR
 [[ -d "$CACHEDIR" ]] || mkdir -p $CACHEDIR
 
+echo
+
+echo cleaning up packages in cache that no longer exist online
+for f in `ls "$CACHEDIR"`
+do
+    FOUND=0
+    for f2 in `cat $REPOTMP`
+    do
+        if [ "$f" = "$f2" ]
+        then
+            FOUND=1
+            break
+        else
+            FOUND=0
+        fi
+    done
+    if [[ "$FOUND" -eq "0" ]]
+    then
+        echo "$f no longer exists online: deleting"
+        rm -rf "$CACHEDIR$f"
+    fi
+done
+
+echo
+
 for f in `cat "$REPOTMP"`
 do
     echo "downloading and extracting $f"
@@ -32,6 +57,8 @@ done
 
 mv "${EXTRACTDIR}"usr/i686-pc-mingw32/sys-root/mingw/* "$EXTRACTDIR"
 rm -rf "${EXTRACTDIR}usr"
+
+echo
 
 echo removing unnecessary
 rm -rf "${EXTRACTDIR}"bin/*exe
