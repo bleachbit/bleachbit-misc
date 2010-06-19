@@ -34,8 +34,6 @@ do
         then
             FOUND=1
             break
-        else
-            FOUND=0
         fi
     done
     if [[ "$FOUND" -eq "0" ]]
