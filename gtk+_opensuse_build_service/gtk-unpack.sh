@@ -38,6 +38,6 @@ rm -rf "${EXTRACTDIR}"etc/fonts
 rm -rf "${EXTRACTDIR}"include
 rm -rf "${EXTRACTDIR}"lib/gettext
 rm -rf "${EXTRACTDIR}"lib/pango
-rm -rf "${EXTRACTDIR}"lib/*dll.a
+rm -rf "${EXTRACTDIR}"lib/*\.a
 rm -rf "${EXTRACTDIR}"share/{aclocal,doc,gettext,info,man}
 rm -rf "${EXTRACTDIR}"share/themes/{Default,Emacs,Raleigh}
