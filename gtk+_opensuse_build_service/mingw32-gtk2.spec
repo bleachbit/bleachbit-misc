@@ -141,6 +141,11 @@ echo 'gtk-fallback-icon-theme = "Tango"') >$RPM_BUILD_ROOT%{_mingw32_sysconfdir}
 %find_lang gtk20
 %find_lang gtk20-properties gtk20.lang
 
+# check the size of the DLLs
+find $RPM_BUILD_ROOT -name '*dll' | xargs du -bcs
+
+# check the size of the bin directory
+du -bcs $RPM_BUILD_ROOT%{_mingw32_bindir}/
 
 
 %clean
@@ -172,7 +177,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_datadir}/gtk-doc/html/gdk
 %{_mingw32_datadir}/gtk-doc/html/gtk
 %{_mingw32_bindir}/gdk-pixbuf-csource.exe
-#%{_mingw32_bindir}/gtk-demo.exe
 %{_mingw32_libdir}/libgailutil.dll.a
 %{_mingw32_libdir}/libgdk-win32-2.0.dll.a
 %{_mingw32_libdir}/libgdk_pixbuf-2.0.dll.a
@@ -193,7 +197,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_libdir}/gtk-2.0/include/
 %{_mingw32_includedir}/gail-1.0/
 %{_mingw32_datadir}/aclocal/gtk-2.0.m4
-#%{_mingw32_datadir}/gtk-2.0/
 %{_mingw32_mandir}
 
 
