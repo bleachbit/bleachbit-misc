@@ -10,45 +10,15 @@
 #
 
 
-REPOURL=http://download.opensuse.org/repositories/home:/andrew_z:/mingw32-gtk2/openSUSE_Factory/noarch/
-REPOTMP=/tmp/repo.html
 CACHEDIR=/tmp/gtk-obs/cache/
 EXTRACTDIR=/tmp/gtk-obs/extract/
 
-rm -f "$REPOTMP"
-wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '(debug|devel|gcc|glib|filesystem|cpp|gmp|mpfr|pixmap|runtime|termcap|pixman|headers|mingw32-jpeg|iconv|mingw32-tiff|mingw32-jasper)' > "$REPOTMP"
-
 [[ -d "$EXTRACTDIR" ]] && rm -rf $EXTRACTDIR
 mkdir -p $EXTRACTDIR
-[[ -d "$CACHEDIR" ]] || mkdir -p $CACHEDIR
 
-echo
-
-echo cleaning up packages in cache that no longer exist online
 for f in `ls "$CACHEDIR"`
 do
-    FOUND=0
-    for f2 in `cat $REPOTMP`
-    do
-        if [ "$f" = "$f2" ]
-        then
-            FOUND=1
-            break
-        fi
-    done
-    if [[ "$FOUND" -eq "0" ]]
-    then
-        echo "$f no longer exists online: deleting"
-        rm -rf "$CACHEDIR$f"
-    fi
-done
-
-echo
-
-for f in `cat "$REPOTMP"`
-do
-    echo "downloading and extracting $f"
-    [[ -e "$CACHEDIR$f" ]] || wget "$REPOURL$f" -nv -O "$CACHEDIR$f"
+    echo "extracting $f"
     cd "$EXTRACTDIR"
     rpm2cpio "$CACHEDIR$f" | cpio -id
 done
