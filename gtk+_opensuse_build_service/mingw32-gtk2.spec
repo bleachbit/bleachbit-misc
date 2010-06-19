@@ -32,8 +32,6 @@ BuildRequires:  mingw32-gettext-tools
 BuildRequires:  mingw32-glib2-devel >= 2.19.7
 BuildRequires:  mingw32-cairo-devel >= 1.6.0
 BuildRequires:  mingw32-libpng-devel
-BuildRequires:  mingw32-libjpeg-devel
-BuildRequires:  mingw32-libtiff-devel
 BuildRequires:  mingw32-pango-devel >= 1.20
 BuildRequires:  mingw32-atk-devel >= 1.29.3
 BuildRequires:  pkgconfig autoconf automake
@@ -78,17 +76,6 @@ MinGW Windows Gtk2 library.
 %patch2 -p1 -b .libpng
 %patch3 -p1 -b .xptheme
 
-# remove the GTK file chooser, path bar, and file system
-sed -i '/gtk_file_chooser/ d' gtk/gtk.symbols
-sed -i '/gtk_path_bar_get_type/ d' gtk/gtk.symbols
-
-sed  -i 's/rm -f xgen-gtf/rm -f xgen-gtf \&\& sed -i "\/gtk_file_chooser\/ d" gtktypefuncs.c/' gtk/Makefile.am
-
-sed -i '/gtkfilechooser[a-z]*\.c/ d' gtk/Makefile.am
-sed -i '/gtkfilesystem\.c/ d' gtk/Makefile.am
-sed -i '/gtkfilesystemmodel\.c/ d' gtk/Makefile.am
-sed -i '/gtkpathbar\.c/ d' gtk/Makefile.am
-
 # don't build the demo or tests because they require pieces we removed
 sed -i '/demos\/Makefile/ d' configure.in
 sed -i '/demos\/gtk-demo/ d' configure.in
@@ -109,7 +96,8 @@ export CFLAGS=-Os
 #cups is pointless for win32 and gdiplus based loaders are utterly broken
 %{_mingw32_configure} --disable-cups \
         --with-gdktarget=win32  \
-        --with-included-loaders=yes --with-included-immodules=yes \
+        --with-included-loaders=png \
+        --with-included-immodules=yes \
         --disable-dependency-tracking \
         --disable-gdiplus \
         --disable-gtk-doc \
@@ -119,7 +107,11 @@ export CFLAGS=-Os
         --disable-xinerama \
         --enable-debug=no \
         --enable-introspection=no \
-        --without-libjasper
+        --without-libjasper \
+        --without-libjpeg \
+        --without-libtiff
+
+# --with-included-loaders: specified will be built into gdk-pixbuf.  The others will be separate DLLs.
 
 grep "\-O2" Makefile
 sed "s/-O2/-Os/g" Makefile
@@ -164,6 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_bindir}/libgdk_pixbuf-2.0-0.dll
 %{_mingw32_bindir}/libgtk-win32-2.0-0.dll
 %{_mingw32_libdir}/gtk-2.0/2.10.0/engines/*.dll
+%{_mingw32_libdir}/gtk-2.0/2.10.0/loaders/*.dll
 %{_mingw32_libdir}/gtk-2.0/modules/*.dll
 %{_mingw32_sysconfdir}/gtk-2.0/
 
@@ -192,6 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mingw32_libdir}/pkgconfig/gtk+-2.0.pc
 %{_mingw32_libdir}/pkgconfig/gtk+-win32-2.0.pc
 %exclude %{_mingw32_libdir}/gtk-2.0/2.10.0/engines/*.dll.a
+%exclude %{_mingw32_libdir}/gtk-2.0/2.10.0/loaders/*.dll.a
 %exclude %{_mingw32_libdir}/gtk-2.0/modules/*.dll.a
 %{_mingw32_includedir}/gtk-2.0/
 %{_mingw32_libdir}/gtk-2.0/include/
