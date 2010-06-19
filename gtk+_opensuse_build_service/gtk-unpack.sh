@@ -29,15 +29,17 @@ rm -rf "${EXTRACTDIR}usr"
 echo
 
 echo removing unnecessary
-rm -rf "${EXTRACTDIR}"bin/*exe
-rm -rf "${EXTRACTDIR}"bin/*manifest
-rm -rf "${EXTRACTDIR}"bin/autopoint
-rm -rf "${EXTRACTDIR}"bin/gettextize
-rm -rf "${EXTRACTDIR}"bin/gtk-builder-convert
-rm -rf "${EXTRACTDIR}"etc/fonts
-rm -rf "${EXTRACTDIR}"include
-rm -rf "${EXTRACTDIR}"lib/gettext
-rm -rf "${EXTRACTDIR}"lib/pango
-rm -rf "${EXTRACTDIR}"lib/*\.a
-rm -rf "${EXTRACTDIR}"share/{aclocal,doc,gettext,info,man}
-rm -rf "${EXTRACTDIR}"share/themes/{Default,Emacs,Raleigh}
+rm -f "${EXTRACTDIR}"bin/*exe
+rm -f "${EXTRACTDIR}"bin/*manifest
+rm -f "${EXTRACTDIR}"bin/autopoint
+rm -f "${EXTRACTDIR}"bin/gettext.sh
+rm -f "${EXTRACTDIR}"bin/gettextize
+rm -f "${EXTRACTDIR}"bin/gtk-builder-convert
+rm -rf "${EXTRACTDIR}"etc/fonts/
+rm -rf "${EXTRACTDIR}"include/
+rm -f "${EXTRACTDIR}"lib/*\.a
+rm -rf "${EXTRACTDIR}"lib/gettext/
+rm -f lib/gtk-2.0/2.10.0/engines/libpixmap.dll
+rm -rf "${EXTRACTDIR}"lib/pango/
+rm -rf "${EXTRACTDIR}"share/themes/{Default,Emacs,Raleigh}/
+rm -rf "${EXTRACTDIR}"share/{aclocal,doc,gettext,info,man}/
