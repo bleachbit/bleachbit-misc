@@ -15,7 +15,7 @@ REPOTMP=/tmp/repo.html
 CACHEDIR=/tmp/gtk-obs/cache/
 
 rm -f "$REPOTMP"
-wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '(debug|devel|gcc|filesystem|cpp|gmp|mpfr|mingw32-runtime|termcap|headers|mingw32-jpeg|iconv|mingw32-tiff|mingw32-jasper|gettext-tools)' > "$REPOTMP"
+wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '(debug|devel|gcc|filesystem|cpp|gmp|mpfr|mingw32-runtime|termcap|headers|mingw32-jpeg|iconv|mingw32-tiff|gettext-tools)' > "$REPOTMP"
 
 [[ -d "$CACHEDIR" ]] || mkdir -p $CACHEDIR
 

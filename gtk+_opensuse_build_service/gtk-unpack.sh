@@ -35,6 +35,8 @@ rm -f "${EXTRACTDIR}"bin/autopoint
 rm -f "${EXTRACTDIR}"bin/gettext.sh
 rm -f "${EXTRACTDIR}"bin/gettextize
 rm -f "${EXTRACTDIR}"bin/gtk-builder-convert
+rm -f "${EXTRACTDIR}"bin/libasprintf-0.dll
+rm -f "${EXTRACTDIR}"bin/libgettext*dll
 rm -rf "${EXTRACTDIR}"etc/fonts/
 rm -rf "${EXTRACTDIR}"include/
 rm -f "${EXTRACTDIR}"lib/*\.a
