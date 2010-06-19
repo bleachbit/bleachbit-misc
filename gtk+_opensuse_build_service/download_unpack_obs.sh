@@ -16,7 +16,7 @@ CACHEDIR=/tmp/gtk-obs/cache/
 EXTRACTDIR=/tmp/gtk-obs/extract/
 
 rm -f "$REPOTMP"
-wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '(debug|devel|gcc|glib|filesystem|cpp|gmp|mpfr|pixmap|runtime|termcap|pixman|headers|mingw32-jpeg)' > "$REPOTMP"
+wget "$REPOURL" -nv -O - | grep -Eo \"m.*rpm\" | grep -Eo ming.*rpm | grep -vE '(debug|devel|gcc|glib|filesystem|cpp|gmp|mpfr|pixmap|runtime|termcap|pixman|headers|mingw32-jpeg|iconv)' > "$REPOTMP"
 
 [[ -d "$EXTRACTDIR" ]] && rm -rf $EXTRACTDIR
 mkdir -p $EXTRACTDIR
