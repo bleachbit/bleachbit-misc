@@ -45,3 +45,16 @@ rm -f lib/gtk-2.0/2.10.0/engines/libpixmap.dll
 rm -rf "${EXTRACTDIR}"lib/pango/
 rm -rf "${EXTRACTDIR}"share/themes/{Default,Emacs,Raleigh}/
 rm -rf "${EXTRACTDIR}"share/{aclocal,doc,gettext,info,man}/
+
+
+echo
+
+echo striping
+# warning: do not strip zlib1.dll or *.pyd
+# do not strip (?) sqlite3.dll because of http://bleachbit.sourceforge.net/forum/074-fails-errors
+i686-pc-mingw32-strip --preserve-dates "${EXTRACTDIR}"bin/lib*dll
+find "${EXTRACTDIR}"lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --strip-debug --discard-all --preserve-dates  -v \{\} \+
+
+echo compress UPX
+find "${EXTRACTDIR}" \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
+
