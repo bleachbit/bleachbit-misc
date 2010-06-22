@@ -51,7 +51,8 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
 %{_mingw32_configure} --disable-xlib --disable-xcb \
 	--enable-win32 --enable-png \
 	--disable-static --enable-shared \
-	--enable-ps=no --enable-pdf=no --enable-svg=no
+	--enable-svg=no
+
 %{_mingw32_make} %{?_smp_mflags} || %{_mingw32_make}
 
 
@@ -75,12 +76,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_mingw32_includedir}/cairo/
 %{_mingw32_libdir}/libcairo.dll.a
-%{_mingw32_libdir}/pkgconfig/cairo-pdf.pc
 %{_mingw32_libdir}/pkgconfig/cairo-png.pc
-%{_mingw32_libdir}/pkgconfig/cairo-ps.pc
-%{_mingw32_libdir}/pkgconfig/cairo-svg.pc
 %{_mingw32_libdir}/pkgconfig/cairo-win32-font.pc
 %{_mingw32_libdir}/pkgconfig/cairo-win32.pc
+%{_mingw32_libdir}/pkgconfig/cairo-pdf.pc
+%{_mingw32_libdir}/pkgconfig/cairo-ps.pc
 %{_mingw32_libdir}/pkgconfig/cairo.pc
 %{_mingw32_datadir}/gtk-doc/html/cairo/
 
