@@ -93,7 +93,13 @@ export config_TARGET_EXEEXT=.exe
 echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
 perl -pi -e 's#archive_cmds_need_lc=yes#archive_cmds_need_lc=no#g' configure
 %{_mingw32_configure} --enable-shared --disable-static \
-	--disable-tcl --disable-readline
+	--disable-tcl --disable-readline \
+	--disable-debug --disable-load-extension --disable-gcov
+
+grep "\-O2" Makefile
+sed -i "s/-O2 -g/-Os/g" Makefile
+
+
 %{_mingw32_make} %{?_smp_mflags} || %{_mingw32_make}
 
 
@@ -103,8 +109,9 @@ rm -rf $RPM_BUILD_ROOT
 
 mkdir -p $RPM_BUILD_ROOT%{_mingw32_mandir}/man1
 install sqlite3.1 $RPM_BUILD_ROOT%{_mingw32_mandir}/man1/
-mv $RPM_BUILD_ROOT%{_mingw32_libdir}/*.dll $RPM_BUILD_ROOT%{_mingw32_bindir}
+test -e $RPM_BUILD_ROOT%{_mingw32_libdir}/*.dll && mv $RPM_BUILD_ROOT%{_mingw32_libdir}/*.dll $RPM_BUILD_ROOT%{_mingw32_bindir}
 
+du -bcs $RPM_BUILD_ROOT%{_mingw32_bindir}/*.dll
 
 %clean
 rm -rf $RPM_BUILD_ROOT
