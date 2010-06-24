@@ -53,6 +53,9 @@ echo "lt_cv_deplibs_check_method='pass_all'" >>%{_mingw32_cache}
 	--disable-static --enable-shared \
 	--enable-svg=no
 
+grep "\-O2" Makefile
+sed "s/-O2 -g/-Os/g" Makefile
+
 %{_mingw32_make} %{?_smp_mflags} || %{_mingw32_make}
 
 
