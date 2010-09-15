@@ -86,8 +86,8 @@
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.8.0/BleachBit-0.8.0-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/bleachbit/BleachBit-0.8.0-Win32-install-full.exe</Secondary_Download_URL>
+			<Primary_Download_URL>http://sourceforge.net/projects/bleachbit/files/bleachbit/0.8.0/BleachBit-0.8.0-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.8.0/BleachBit-0.8.0-Win32-install-full.exe?r=&amp;ts=1284513435&amp;use_mirror=voxel</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
