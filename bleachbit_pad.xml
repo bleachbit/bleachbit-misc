@@ -34,8 +34,8 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>BleachBit</Program_Name>
-		<Program_Version>0.8.0</Program_Version>
-		<Program_Release_Month>6</Program_Release_Month>
+		<Program_Version>0.8.1</Program_Version>
+		<Program_Release_Month>10</Program_Release_Month>
 		<Program_Release_Day>5</Program_Release_Day>
 		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
@@ -47,15 +47,15 @@
 		<Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Linux,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>a
 		<!--November 11, 2009: http://www.asp-shareware.org/pad/spec/spec.php requires Byelorussian instead of Belaurusian -->
 		<!-- Asturian and Faroese not in the spec -->
-		<Program_Language>English,Arabic,Byelorussian,Bulgarian,Catalan,Chinese,ChineseSimplified,Croatian,Czech,Danish,Dutch,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Tamil,Thai,Turkish,Ukrainian</Program_Language>
+		<Program_Language>English,Arabic,Byelorussian,Bulgarian,Catalan,ChineseTraditional,ChineseSimplified,Croatian,Czech,Danish,Dutch,Faeroese,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Tamil,Thai,Turkish,Ukrainian</Program_Language>
 		<Program_Change_Info>Add whitelist feature. Add Faroese and Tamil translations.  Update 25 other translations.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>Windows XP, Vista or 7 or Linux.</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>6478944</File_Size_Bytes>
-			<File_Size_K>6327</File_Size_K>
-			<File_Size_MB>6.32</File_Size_MB>
+			<File_Size_Bytes>6320216</File_Size_Bytes>
+			<File_Size_K>6172</File_Size_K>
+			<File_Size_MB>6.02</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -81,13 +81,13 @@
 		<Application_URLs>
 			<Application_Info_URL>http://bleachbit.sourceforge.net</Application_Info_URL>
 			<Application_Order_URL />
-//			<Application_Screenshot_URL>http://lh5.ggpht.com/_1XYQfEGGEIw/StuMjlnDwNI/AAAAAAAACg4/EiIWsiqQkNM/s800/BleachBit-070-English-deep-scan-Windows-XP.png</Application_Screenshot_URL>
+//			<Application_Screenshot_URL>http://lh6.ggpht.com/_1XYQfEGGEIw/TKolPJcHqtI/AAAAAAAACuo/QXbhwYGA0iI/s800/bleachbit-081-Windows-7-en-Firefox.png</Application_Screenshot_URL>
 			<Application_Icon_URL>http://bleachbit.sourceforge.net/images/bleachbit_logo_32.png</Application_Icon_URL>
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://sourceforge.net/projects/bleachbit/files/bleachbit/0.8.0/BleachBit-0.8.0-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.8.0/BleachBit-0.8.0-Win32-install-full.exe?r=&amp;ts=1284513435&amp;use_mirror=voxel</Secondary_Download_URL>
+			<Primary_Download_URL>http://sourceforge.net/projects/bleachbit/files/bleachbit/0.8.1/BleachBit-0.8.1-Win32-install-full.exe</Primary_Download_URL>
+			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.8.1/BleachBit-0.8.1-Win32-install-full.exe?r=&amp;ts=1284513435&amp;use_mirror=voxel</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
