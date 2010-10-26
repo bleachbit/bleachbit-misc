@@ -17,15 +17,15 @@
 		<Contact_Info>
 			<Author_First_Name>Andrew</Author_First_Name>
 			<Author_Last_Name>Ziem</Author_Last_Name>
-			<Author_Email>ahz001@gmail.com</Author_Email>
+			<Author_Email>bleachbit.app@gmail.com</Author_Email>
 			<Contact_First_Name>Andrew</Contact_First_Name>
 			<Contact_Last_Name>Ziem</Contact_Last_Name>
-			<Contact_Email>ahz001@gmail.com</Contact_Email>
+			<Contact_Email>bleachbit.app@gmail.com</Contact_Email>
 		</Contact_Info>
 		<Support_Info>
-			<Sales_Email>ahz001@gmail.com</Sales_Email>
-			<Support_Email>ahz001@gmail.com</Support_Email>
-			<General_Email>ahz001@gmail.com</General_Email>
+			<Sales_Email>bleachbit.app@gmail.com</Sales_Email>
+			<Support_Email>bleachbit.app@gmail.com</Support_Email>
+			<General_Email>bleachbit.app@gmail.com</General_Email>
 			<Sales_Phone />
 			<Support_Phone />
 			<General_Phone />
@@ -87,7 +87,7 @@
 		</Application_URLs>
 		<Download_URLs>
 			<Primary_Download_URL>http://sourceforge.net/projects/bleachbit/files/bleachbit/0.8.1/BleachBit-0.8.1-Win32-install-full.exe</Primary_Download_URL>
-			<Secondary_Download_URL>http://downloads.sourceforge.net/project/bleachbit/bleachbit/0.8.1/BleachBit-0.8.1-Win32-install-full.exe?r=&amp;ts=1284513435&amp;use_mirror=voxel</Secondary_Download_URL>
+			<Secondary_Download_URL>http://katana.oooninja.com/bleachbit/pad/BleachBit-0.8.1-Win32-install-full.exe</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
