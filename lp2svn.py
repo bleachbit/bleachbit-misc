@@ -122,9 +122,9 @@ def download_po_files(urls):
     for url in urls:
         print 'debug: downloading url %s' % url
         doc = urlopen(url).read()
-        ret = re.search('-([a-z]{2,3}(_[A-Z}{2}))', url, re.I)
-        lang_id = ret.groups(0)
-        f = file(lang_id + '_new.po')
+        ret = re.search('-([a-z]{2,3}(_[A-Z]{2})?).po$', url, re.I)
+        lang_id = ret.groups(0)[0]
+        f = file(lang_id + '_new.po', 'w')
         f.write(doc)
         f.close()
         process_po(lang_id)
