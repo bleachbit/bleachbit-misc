@@ -114,12 +114,12 @@ def process_po(lang_id):
     lang_name = po_new.metadata['Language-Team'].split('<')[0].strip()
     cmd = 'svn ci %s.po -m "Updated %s thanks to %s"' % \
         (lang_id, lang_name, ', '.join(set(names)))
-    print cmd
     return cmd
 
 
 def download_po_files(urls):
     """Download .po files from Launchpad and prepare for SVN"""
+    langs = {}
     for url in urls:
         print 'debug: downloading url %s' % url
         doc = urlopen(url).read()
@@ -128,6 +128,11 @@ def download_po_files(urls):
         f = file(lang_id + '_new.po', 'w')
         f.write(doc)
         f.close()
-        process_po(lang_id)
+        cmd = process_po(lang_id)
+        langs[lang_id] = cmd
+
+    for lang_id, cmd in langs.iteritems():
+        print 'mv %s_new.po %s.po' % (lang_id, lang_id)
+        print cmd
 
 download_po_files(sys.argv[1:])
