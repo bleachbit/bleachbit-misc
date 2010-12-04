@@ -29,7 +29,7 @@ def parse_search_html(lang_id, search, start):
         'start' : start } )
     url = 'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/%s/+translate?%s' \
         % (lang_id, param)
-    #print 'debug: fetch url %s ' % url
+    print 'debug: fetch url %s ' % url
     doc = urlopen(url).read()
     soup = BeautifulSoup(doc)
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
@@ -85,8 +85,9 @@ def who_translated(lang_id, msgctxt, msgid):
     start = 0
     while True:
         start = parse_search_html(lang_id, msgid, start)
-        if translations[lang_id].has_key(msgid):
-            url = translations[lang_id][msgid]
+        msgid2 = msgid.replace('\n', '')
+        if translations[lang_id].has_key(msgid2):
+            url = translations[lang_id][msgid2]
             return parse_detail_html(url)
         if None == start:
             raise RuntimeError('not found "%s"' % msgid)
@@ -112,7 +113,7 @@ def process_po(lang_id):
         names = names + who_translated(lang_id, msgctxt, msgid)
     lang_name = po_new.metadata['Language-Team'].split('<')[0].strip()
     cmd = 'svn ci %s.po -m "Updated %s thanks to %s"' % \
-        (lang_id, lang_name, ','.join(set(names)))
+        (lang_id, lang_name, ', '.join(set(names)))
     print cmd
     return cmd
 
