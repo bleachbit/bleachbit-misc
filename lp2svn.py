@@ -101,6 +101,9 @@ def process_po(lang_id):
     for new_entry in po_new.translated_entries():
         msgids.append([ new_entry.msgctxt, new_entry.msgid ])
         for old_entry in po_old.translated_entries():
+            if 'translator-credits' == new_entry.msgid:
+                msgids.pop()
+                break
             if new_entry.msgctxt == old_entry.msgctxt and \
                 new_entry.msgid == old_entry.msgid and \
                 new_entry.msgstr == old_entry.msgstr:
