@@ -18,7 +18,7 @@ import sys
 
 dir_bb_root = os.path.abspath('../trunk')
 dir_bb_locale = os.path.abspath('../trunk/locale')
-dir_bb_locale = os.path.abspath('../trunk/po')
+dir_bb_po = os.path.abspath('../trunk/po')
 
 os.chdir(dir_bb_root)
 sys.path.append(dir_bb_root)
