@@ -115,7 +115,7 @@ def process_po(lang_id):
             (msgctxt, msgid, lang_id)
         names = names + who_translated(lang_id, msgctxt, msgid)
     lang_name = po_new.metadata['Language-Team'].split('<')[0].strip()
-    cmd = 'svn ci %s.po -m "Updated %s thanks to %s"' % \
+    cmd = 'svn ci %s.po -m "Update %s thanks to %s"' % \
         (lang_id, lang_name, ', '.join(set(names)))
     return cmd
 
