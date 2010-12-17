@@ -11,20 +11,23 @@
 
 NAME=bleachbit
 SVND=/tmp/bleachbit_svn
+BRANCH=/releases/0.8.4
+BRANCHD=$SVND/0.8.4
 
 
 if [[ -d $SVND ]]; then
 	echo "svn update"
-	cd $SVND/trunk
+	cd $SVND
 	svn update
+	cd $BRANCHD
 else
 	echo "mkdir $SVND"
 	mkdir $SVND
 	cd $SVND
 	echo "svn checkout"
-	svn co https://bleachbit.svn.sourceforge.net/svnroot/bleachbit/trunk
+	svn co https://bleachbit.svn.sourceforge.net/svnroot/bleachbit/$BRANCH
 	cd -
-	cd $SVND/trunk
+	cd $BRANCHD
 fi
 
 
@@ -39,7 +42,7 @@ python setup.py sdist --formats=bztar,gztar
 
 
 echo "creating LZMA tarball"
-bzcat $SVND/trunk/dist/$NAMEV.tar.bz2 | xz -9 - > $SVND/trunk/dist/$NAMEV.tar.lzma
+bzcat $BRANCHD/dist/$NAMEV.tar.bz2 | xz -9 - > $BRANCHD/dist/$NAMEV.tar.lzma
 [[ -e "dist/$NAMEV.tar.lzma" ]] || echo dist/$NAMEV.tar.lzma missing
 [[ -e "dist/$NAMEV.tar.lzma" ]] || exit 1
 
@@ -47,7 +50,7 @@ bzcat $SVND/trunk/dist/$NAMEV.tar.bz2 | xz -9 - > $SVND/trunk/dist/$NAMEV.tar.lz
 
 echo "rpmbuild"
 rm -f ~/rpmbuild/SOURCES/$NAMEV.tar.gz
-cp $SVND/trunk/dist/$NAMEV.tar.gz ~/rpmbuild/SOURCES/
+cp $BRANCHD/dist/$NAMEV.tar.gz ~/rpmbuild/SOURCES/
 rm -f ~/rpmbuild/RPMS/noarch/bleachbit*rpm
 rpmbuild -bb $NAME.spec
 
@@ -61,6 +64,6 @@ echo "copying to ~/tmp/vm"
 rm -f ~/tmp/vm/bleachbit-*.tar.{gz,bz2}
 rm -rf ~/tmp/vm/debian/
 mkdir -p ~/tmp/vm/
-cp $SVND/trunk/dist/bleachbit-${VER}.tar.gz ~/tmp/vm/
-cp -a $SVND/trunk/debian ~/tmp/vm/
-cp -a $SVND/trunk/bleachbit.spec ~/tmp/vm/
+cp $BRANCHD/dist/bleachbit-${VER}.tar.gz ~/tmp/vm/
+cp -a $BRANCHD/debian ~/tmp/vm/
+cp -a $BRANCHD/bleachbit.spec ~/tmp/vm/
