@@ -23,9 +23,9 @@ import sys
 # example : translations['es']['Preview'] = https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
 translations = {}
 
-def parse_search_html(lang_id, search, start):
+def parse_search_html(lang_id, msgctxt, msgid, start):
     param = urlencode( { 'show' : 'all', \
-        'search' : search, \
+        'search' : msgid, \
         'start' : start } )
     url = 'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/%s/+translate?%s' \
         % (lang_id, param)
@@ -33,12 +33,21 @@ def parse_search_html(lang_id, search, start):
     doc = urlopen(url).read()
     soup = BeautifulSoup(doc)
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
-        div = tr.find('div', attrs={'id' : re.compile("^msgset_[0-9]+_")})
-        english = div.text
+        en_div = tr.find('div', attrs={'id' : re.compile("^msgset_[0-9]+_")})
+        en_txt = en_div.text
+        en_div_id = [x[1] for x in en_div.attrs if x[0]=='id'][0]
+        en_ctxt_div = soup.findAll(id = en_div_id.replace('singular', 'context'))
+        if en_ctxt_div:
+            en_ctxt = en_ctxt_div[0].text
+        else:
+            en_ctxt = "none"
         for attr in tr.find('a').attrs:
             if attr[0] == 'href':
                 href = attr[1]
-        translations[lang_id][english] = href
+        if not en_ctxt  in translations[lang_id].keys():
+            # initialize the context
+            translations[lang_id][en_ctxt] = {}
+        translations[lang_id][en_ctxt][en_txt] = href
     ret = re.search('rel="next".*start=([0-9]+)"', doc, re.MULTILINE & re.DOTALL)
     if ret:
         # more results
@@ -79,16 +88,15 @@ def who_translated(lang_id, msgctxt, msgid):
         # initialize the language
         translations[lang_id] = {}
 
-    if msgctxt:
-        raise RuntimeError('msgctxt not suppirted')
-
     start = 0
     while True:
-        start = parse_search_html(lang_id, msgid, start)
-        msgid2 = msgid.replace('\n', '')
-        if translations[lang_id].has_key(msgid2):
-            url = translations[lang_id][msgid2]
-            return parse_detail_html(url)
+        start = parse_search_html(lang_id, msgctxt, msgid, start)
+        msgid2 = msgid.replace('\n', '').rstrip()
+        msgctxt_key = "none" if msgctxt == None else msgctxt
+        if translations[lang_id].has_key(msgctxt_key):
+            if translations[lang_id][msgctxt_key].has_key(msgid2):
+                url = translations[lang_id][msgctxt_key][msgid2]
+                return parse_detail_html(url)
         if None == start:
             raise RuntimeError('not found "%s"' % msgid)
 
@@ -109,6 +117,7 @@ def process_po(lang_id):
                 new_entry.msgstr == old_entry.msgstr:
                 msgids.pop()
                 break
+
     names = []
     for (msgctxt, msgid) in msgids:
         print "looking for msgctxt '%s' msgid '%s' for lang '%s'" % \
