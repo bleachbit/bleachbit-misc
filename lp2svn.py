@@ -14,7 +14,6 @@
 from BeautifulSoup import BeautifulSoup
 from polib import pofile
 from urllib import urlencode
-from urllib2 import urlopen
 import os
 import re
 import sys
@@ -23,6 +22,13 @@ import sys
 # example : translations['es']['Preview'] = https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
 translations = {}
 
+
+def read_http(url):
+    import urllib2
+    opener = urllib2.build_opener()
+    opener.addheaders = [ ('User-agent', 'lp2svn') ]
+    return opener.open(url).read()
+
 def parse_search_html(lang_id, msgctxt, msgid, start):
     param = urlencode( { 'show' : 'all', \
         'search' : msgid, \
@@ -30,7 +36,7 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
     url = 'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/%s/+translate?%s' \
         % (lang_id, param)
     print 'debug: fetch url %s ' % url
-    doc = urlopen(url).read()
+    doc = read_http(url)
     soup = BeautifulSoup(doc)
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
         en_div = tr.find('div', attrs={'id' : re.compile("^msgset_[0-9]+_")})
@@ -61,7 +67,7 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
 def parse_detail_html(url):
     """Parse a Launchpad page for an individual translation message"""
     print 'debug: fetch url %s ' % url
-    doc = urlopen(url).read()
+    doc = read_http(url)
     soup = BeautifulSoup(doc)
     label = soup.find('label', 'no-translation')
     if label:
@@ -134,7 +140,7 @@ def download_po_files(urls):
     langs = {}
     for url in urls:
         print 'debug: downloading url %s' % url
-        doc = urlopen(url).read()
+        doc = read_http(url)
         ret = re.search('-([a-z]{2,3}(_[A-Z]{2})?).po$', url, re.I)
         lang_id = ret.groups(0)[0]
         f = file(lang_id + '_new.po', 'w')
