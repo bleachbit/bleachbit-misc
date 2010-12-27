@@ -11,8 +11,10 @@
 
 NAME=bleachbit
 SVND=/tmp/bleachbit_svn
-BRANCH=/releases/0.8.4
-BRANCHD=$SVND/0.8.4
+#BRANCH=/releases/0.8.4
+#BRANCHD=$SVND/0.8.4
+BRANCH=/trunk
+BRANCHD=$SVND/trunk
 
 
 if [[ -d $SVND ]]; then
