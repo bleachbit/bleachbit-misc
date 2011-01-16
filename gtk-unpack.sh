@@ -14,17 +14,21 @@ rm -rf bin etc lib manifest share zlib-1.?.? sqlite3.dll
 echo unzip
 unzip -q atk_*zip
 unzip -q cairo*.zip
-unzip -q gettext-runtime-*zip
+unzip -q expat*.zip
+unzip -q fontconfig*.zip
+unzip -q freetype*.zip
+unzip -q gdk-pixbuf_*zip
+unzip -q gettext-runtime*zip
 unzip -q glib*zip
 unzip -q gtk+_2*zip
-unzip -q libpng_1.2.*zip
-unzip -q libpng_1.4.*zip
+unzip -q libpng*zip
 unzip -q pango*zip
 unzip -q sqlitedll-*zip sqlite3.dll
-unzip -q zlib*zip zlib-1.?.?/zlib1.dll
+unzip -q zlib*zip zlib-1.?.?/zlib1.dll # zlib 1.2.4
+unzip -q zlib*zip bin/zlib1.dll # zlib 1.2.5
 
 echo move/copy
-mv zlib-1.?.?/zlib1.dll bin
+mv zlib-1.?.?/zlib1.dll bin # zlib 1.2.4
 cp gtkrc etc/gtk-2.0/
 rm -rf zlib-1.?.?
 
