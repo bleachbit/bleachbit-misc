@@ -45,6 +45,7 @@ rm -rf etc/pango/
 rm -rf manifest
 rm -rf share/doc
 rm -rf share/themes/{Default,Emacs,Raleigh}/
+rm -rf share/local/*/LC_MESSAGES/gdk-pixbuf.mo
 
 
 echo strip
