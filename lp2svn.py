@@ -54,14 +54,14 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
             # initialize the context
             translations[lang_id][en_ctxt] = {}
         translations[lang_id][en_ctxt][en_txt] = href
-    ret = re.search('rel="next".*start=([0-9]+)"', doc, re.MULTILINE & re.DOTALL)
-    if ret:
+    more = soup.findAll('a', attrs = { 'class' : 'next'})
+    if more:
         # more results
-        next_n = ret.groups(0)
-        return int(next_n)
-    else:
-        # no more results
-        return None
+        ret = re.search('start=([0-9]+)', more[0]['href'])
+        if ret:
+            return int(ret.groups()[0])
+    # no more results
+    return None
 
 
 def parse_detail_html(url):
