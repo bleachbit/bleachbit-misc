@@ -57,3 +57,6 @@ find lib \( -iname '*dll' -o -iname '*exe' \) -exec i686-pc-mingw32-strip --stri
 echo compress UPX
 find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv2e \{\} \+
 
+echo setup theme
+echo 'gtk-theme-name = "MS-Windows"' > etc/gtk-2.0/gtkrc
+
