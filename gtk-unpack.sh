@@ -21,7 +21,8 @@ unzip -q gdk-pixbuf_*zip
 unzip -q gettext-runtime*zip
 unzip -q glib*zip
 unzip -q gtk+_2*zip
-unzip -q libpng*zip
+unzip -q libpng_1.2*zip
+unzip -q libpng_1.4*zip
 unzip -q pango*zip
 unzip -q sqlitedll-*zip sqlite3.dll
 unzip -q zlib*zip zlib-1.?.?/zlib1.dll # zlib 1.2.4
@@ -59,4 +60,3 @@ find \( -iname '*dll' -o -iname '*exe' \) -exec upx --best --crp-ms=999999 --nrv
 
 echo setup theme
 echo 'gtk-theme-name = "MS-Windows"' > etc/gtk-2.0/gtkrc
-
