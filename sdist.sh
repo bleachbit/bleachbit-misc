@@ -18,19 +18,16 @@ BRANCHD=$SVND/trunk
 
 
 if [[ -d $SVND ]]; then
-	echo "svn update"
-	cd $SVND
-	svn update
-	cd $BRANCHD
-else
-	echo "mkdir $SVND"
-	mkdir $SVND
-	cd $SVND
-	echo "svn checkout"
-	svn co https://bleachbit.svn.sourceforge.net/svnroot/bleachbit/$BRANCH
-	cd -
-	cd $BRANCHD
+	echo "rm -rf $SVND"
+	rm -rf "$SVND"
 fi
+echo "mkdir $SVND"
+mkdir $SVND
+cd $SVND
+echo "svn checkout"
+svn co https://bleachbit.svn.sourceforge.net/svnroot/bleachbit/$BRANCH
+cd -
+cd $BRANCHD
 
 
 echo "python setup"
