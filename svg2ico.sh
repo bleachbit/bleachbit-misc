@@ -14,7 +14,7 @@ DIR=/tmp/
 function svg2ico {
         echo svg2ico $1
         rm -f $DIR/icon.png
-        convert -background none bleachbit.svg -resize $1x$1 -depth 7 $DIR/icon.png
+        convert -filter Box -background none bleachbit.svg -resize $1x$1 -depth 7 $DIR/icon.png
         optipng -quiet -o7 $DIR/icon.png
         pngcrush -rem allb -reduce -brute -q $DIR/icon.png $DIR/bleachbit_$1.png
 }
