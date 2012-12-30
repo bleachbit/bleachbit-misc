@@ -13,8 +13,8 @@ DIR=/tmp/
 
 function svg2ico {
         echo svg2ico $1
-        rm -f $DIR/icon.png
-        convert -filter Box -background none bleachbit.svg -resize $1x$1 -depth 7 $DIR/icon.png
+        rm -f $DIR/icon.png $DIR/bleachbit_$1.png
+        convert -filter Box -background none bleachbit.svg -resize $1x$1 $DIR/icon.png
         optipng -quiet -o7 $DIR/icon.png
         pngcrush -rem allb -reduce -brute -q $DIR/icon.png $DIR/bleachbit_$1.png
 }
@@ -22,7 +22,7 @@ function svg2ico {
 svg2ico 16
 svg2ico 32
 svg2ico 48
-svg2ico 256
+svg2ico 128
 
-convert $DIR/bleachbit_{256,48,32,16}.png $DIR/bleachbit.ico
+png2ico $DIR/bleachbit.ico $DIR/bleachbit_{128,48,32,16}.png
 
