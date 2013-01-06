@@ -15,7 +15,7 @@ SVND=/tmp/bleachbit_svn
 #BRANCHD=$SVND/0.8.4
 BRANCH=/trunk
 BRANCHD=$SVND/trunk
-
+SVNBASE=svn://svn.code.sf.net/p/bleachbit/code/
 
 if [[ -d $SVND ]]; then
 	echo "rm -rf $SVND"
@@ -25,7 +25,7 @@ echo "mkdir $SVND"
 mkdir $SVND
 cd $SVND
 echo "svn checkout"
-svn co https://bleachbit.svn.sourceforge.net/svnroot/bleachbit/$BRANCH
+svn co $SVNBASE/$BRANCH
 cd -
 cd $BRANCHD
 
