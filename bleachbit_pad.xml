@@ -34,10 +34,10 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>BleachBit</Program_Name>
-		<Program_Version>0.9.4</Program_Version>
-		<Program_Release_Month>12</Program_Release_Month>
-		<Program_Release_Day>4</Program_Release_Day>
-		<Program_Release_Year>2012</Program_Release_Year>
+		<Program_Version>0.9.6</Program_Version>
+		<Program_Release_Month>7</Program_Release_Month>
+		<Program_Release_Day>3</Program_Release_Day>
+		<Program_Release_Year>2013</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
@@ -48,14 +48,14 @@
 		<!--November 11, 2009: http://www.asp-shareware.org/pad/spec/spec.php requires Byelorussian instead of Belaurusian -->
 		<!-- Asturian and Faroese not in the spec -->
 		<Program_Language>English,Arabic,Armenian,Bengali,Byelorussian,Bulgarian,Catalan,ChineseTraditional,ChineseSimplified,Croatian,Czech,Danish,Dutch,Estonian,Esperanto,Faeroese,Finnish,French,Galician,German,Hebrew,Hindi,Hungarian,Indonesian,Italian,Korean,Kurdish,Lithuanian,Malay,Norwegian,Polish,Portuguese,Romanian,Russian,Serbian,Slovak,Slovenian,Spanish,Swedish,Tamil,Telugu,Thai,Turkish,Ukrainian</Program_Language>
-		<Program_Change_Info>Easy new way to clean the same files and folders.  Supports Windows 8.  Updates for Firefox and Google Chrome.</Program_Change_Info>
+		<Program_Change_Info>Cleans LibreOffice.  Better wipes free disk space, Google Chrome, Firefox, and more.</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>Windows XP, Vista, 7, 8 or Linux.</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>6294945</File_Size_Bytes>
-			<File_Size_K>6294</File_Size_K>
-			<File_Size_MB>6.29</File_Size_MB>
+			<File_Size_Bytes>6196758</File_Size_Bytes>
+			<File_Size_K>6196</File_Size_K>
+			<File_Size_MB>6.19</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -86,7 +86,7 @@
 			<Application_XML_File_URL>http://bleachbit.sourceforge.net/bleachbit_pad.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://katana.oooninja.com/bleachbit/pad/BleachBit-0.9.4-setup.exe</Primary_Download_URL>
+			<Primary_Download_URL>http://katana.oooninja.com/bleachbit/pad/BleachBit-0.9.6-ns-setup.exe</Primary_Download_URL>
 			<Secondary_Download_URL>http://sourceforge.net/projects/bleachbit/files/bleachbit/0.9.4/BleachBit-0.9.4-setup.exe</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
