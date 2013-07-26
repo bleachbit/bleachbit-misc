@@ -17,6 +17,7 @@ from urllib import urlencode
 import os
 import re
 import sys
+import HTMLParser
 
 
 # example : translations['es']['Preview'] = https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
@@ -38,9 +39,10 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
     print 'debug: fetch url %s ' % url
     doc = read_http(url)
     soup = BeautifulSoup(doc)
+    h = HTMLParser.HTMLParser()
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
         en_div = tr.find('div', attrs={'id' : re.compile("^msgset_[0-9]+_")})
-        en_txt = en_div.text
+        en_txt = h.unescape(en_div.text) # unescape for example for "environment&#x27;s"
         en_div_id = [x[1] for x in en_div.attrs if x[0]=='id'][0]
         en_ctxt_div = soup.findAll(id = en_div_id.replace('singular', 'context'))
         if en_ctxt_div:
