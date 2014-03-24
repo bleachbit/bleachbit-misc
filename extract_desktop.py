@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
-# Copyright (C) 2009 by Andrew Ziem.  All rights reserved.
+# Copyright (C) 2014 by Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -22,7 +22,7 @@ import sys
 import subprocess
 import re
 
-os.chdir('../trunk')
+os.chdir('../bleachbit')
 sys.path.append(".")
 
 import setup
