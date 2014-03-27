@@ -108,6 +108,18 @@ def who_translated(lang_id, msgctxt, msgid):
         if None == start:
             raise RuntimeError('not found "%s"' % msgid)
 
+
+def get_lang_name(po, lang_id):
+    """Given a pofile, return the human-readable language name"""
+    # workaround inconsistent data
+    if 'sr' == lang_id:
+        return 'Serbian'
+    if 'pl' == lang_id:
+        return 'Polish'
+    if 'bg' == lang_id:
+        return 'Bulgarian'
+    return po.metadata['Language-Team'].split('<')[0].strip()
+
 def process_po(lang_id):
     new_fn = lang_id + '_new.po'
     old_fn = lang_id + '.po'
@@ -131,7 +143,7 @@ def process_po(lang_id):
         print "looking for msgctxt '%s' msgid '%s' for lang '%s'" % \
             (msgctxt, msgid, lang_id)
         names = names + who_translated(lang_id, msgctxt, msgid)
-    lang_name = po_new.metadata['Language-Team'].split('<')[0].strip()
+    lang_name = get_lang_name(po_new, lang_id)
     cmd = 'git commit %s.po -m "Update %s thanks to %s"' % \
         (lang_id, lang_name, ', '.join(set(names)))
     return cmd
