@@ -8,11 +8,9 @@
 # There is NO WARRANTY, to the extent permitted by law.
 
 
-
 """
 List all cleaners in HTML format
 """
-
 
 
 import gettext
@@ -27,7 +25,6 @@ from bleachbit.Cleaner import backends
 from bleachbit.CleanerML import load_cleaners
 
 
-
 def main():
     bleachbit.Common.personal_cleaners_dir = '../bonus/cleaners'
     load_cleaners()
@@ -38,7 +35,6 @@ def main():
             options.append(name)
 
         print '<li title="%s">%s</li>' % (", ".join(options), backends[key].get_name())
-
 
 
 main()

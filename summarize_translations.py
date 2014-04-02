@@ -31,25 +31,28 @@ gettext.textdomain('bleachbit')
 gettext.install('bleachbit', dir_bb_locale, unicode=1)
 
 strs = [
-    'Delete', \
-    'Unnecessary file cleaner', \
-    'Free space and maintain privacy', \
-    'Program to clean unnecessary files', \
-    'translator-credits' ]
+    'Delete',
+    'Unnecessary file cleaner',
+    'Free space and maintain privacy',
+    'Program to clean unnecessary files',
+    'translator-credits']
 
 summary_str = 'Free space and maintain privacy'
+
 
 def get_translation_progress(lang):
     """Get the progress for a translation"""
     assert (type(lang) is str)
     oldcwd = os.getcwd()
     os.chdir(dir_bb_po)
-    args = ['msgfmt', '--statistics', '-o', lang +'.mo', lang + '.po']
-    outputs = subprocess.Popen(args, stdout=subprocess.PIPE, stderr = subprocess.PIPE).communicate()
+    args = ['msgfmt', '--statistics', '-o', lang + '.mo', lang + '.po']
+    outputs = subprocess.Popen(
+        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
     output = outputs[1]
     os.chdir(oldcwd)
-    #53 translated messages, 82 untranslated messages.
-    match = re.search('([0-9]+) translated messages.* ([0-9]+) untranslated message', output)
+    # 53 translated messages, 82 untranslated messages.
+    match = re.search(
+        '([0-9]+) translated messages.* ([0-9]+) untranslated message', output)
     if match:
         # you should run 'make refresh-po' to update untranslated
         translated = int(match.group(1))
@@ -78,12 +81,13 @@ def main():
         native_name = bleachbit.Unix.locales.native_name(langid)
         print '<td>%s</td>' % langid
         print '<td>%s</td>' % (native_name)
-        lang = gettext.translation('bleachbit', localedir=dir_bb_locale, languages=[langid])
+        lang = gettext.translation(
+            'bleachbit', localedir=dir_bb_locale, languages=[langid])
         lang.install()
-        stats= get_translation_progress(langid)
+        stats = get_translation_progress(langid)
         print '<td>%s</td>' % (stats)
         free_space = lang.gettext(summary_str)
-        #print 'free_space =', free_space
+        # print 'free_space =', free_space
         if free_space == summary_str:
             free_space = '&nbsp;'
         print '<td>%s</td>' % free_space
@@ -91,4 +95,3 @@ def main():
     print '</table>'
 
 main()
-

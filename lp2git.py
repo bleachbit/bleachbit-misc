@@ -20,20 +20,22 @@ import sys
 import HTMLParser
 
 
-# example : translations['es']['Preview'] = https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
+# example : translations['es']['Preview'] =
+# https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
 translations = {}
 
 
 def read_http(url):
     import urllib2
     opener = urllib2.build_opener()
-    opener.addheaders = [ ('User-agent', 'lp2git') ]
+    opener.addheaders = [('User-agent', 'lp2git')]
     return opener.open(url).read()
 
+
 def parse_search_html(lang_id, msgctxt, msgid, start):
-    param = urlencode( { 'show' : 'all', \
-        'search' : msgid, \
-        'start' : start } )
+    param = urlencode({'show': 'all',
+                       'search': msgid,
+                       'start': start})
     url = 'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/%s/+translate?%s' \
         % (lang_id, param)
     print 'debug: fetch url %s ' % url
@@ -41,10 +43,12 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
     soup = BeautifulSoup(doc)
     h = HTMLParser.HTMLParser()
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
-        en_div = tr.find('div', attrs={'id' : re.compile("^msgset_[0-9]+_")})
-        en_txt = h.unescape(en_div.text) # unescape for example for "environment&#x27;s"
-        en_div_id = [x[1] for x in en_div.attrs if x[0]=='id'][0]
-        en_ctxt_div = soup.findAll(id = en_div_id.replace('singular', 'context'))
+        en_div = tr.find('div', attrs={'id': re.compile("^msgset_[0-9]+_")})
+        en_txt = h.unescape(en_div.text)
+                            # unescape for example for "environment&#x27;s"
+        en_div_id = [x[1] for x in en_div.attrs if x[0] == 'id'][0]
+        en_ctxt_div = soup.findAll(
+            id=en_div_id.replace('singular', 'context'))
         if en_ctxt_div:
             en_ctxt = en_ctxt_div[0].text
         else:
@@ -52,11 +56,11 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
         for attr in tr.find('a').attrs:
             if attr[0] == 'href':
                 href = attr[1]
-        if not en_ctxt  in translations[lang_id].keys():
+        if not en_ctxt in translations[lang_id].keys():
             # initialize the context
             translations[lang_id][en_ctxt] = {}
         translations[lang_id][en_ctxt][en_txt] = href
-    more = soup.findAll('a', attrs = { 'class' : 'next'})
+    more = soup.findAll('a', attrs={'class': 'next'})
     if more:
         # more results
         ret = re.search('start=([0-9]+)', more[0]['href'])
@@ -75,13 +79,13 @@ def parse_detail_html(url):
     if label:
         raise RuntimeError('not translated')
     ret = []
-    td_tr = soup.find('td', attrs = { 'id' : 'translated_and_reviewed_by' } )
+    td_tr = soup.find('td', attrs={'id': 'translated_and_reviewed_by'})
     if td_tr:
         ret.append(td_tr.a.text)
-    td_t = soup.find('td', attrs = { 'id' : 'translated_by' } )
+    td_t = soup.find('td', attrs={'id': 'translated_by'})
     if td_t:
         ret.append(td_t.a.text)
-    td_r = soup.find('td', attrs = { 'id' : 'reviewed_by' } )
+    td_r = soup.find('td', attrs={'id': 'reviewed_by'})
     if td_r:
         ret.append(td_r.a.text)
     if 0 == len(ret):
@@ -120,6 +124,7 @@ def get_lang_name(po, lang_id):
         return 'Bulgarian'
     return po.metadata['Language-Team'].split('<')[0].strip()
 
+
 def process_po(lang_id):
     new_fn = lang_id + '_new.po'
     old_fn = lang_id + '.po'
@@ -127,14 +132,14 @@ def process_po(lang_id):
     po_old = pofile(old_fn)
     msgids = []
     for new_entry in po_new.translated_entries():
-        msgids.append([ new_entry.msgctxt, new_entry.msgid ])
+        msgids.append([new_entry.msgctxt, new_entry.msgid])
         for old_entry in po_old.translated_entries():
             if 'translator-credits' == new_entry.msgid:
                 msgids.pop()
                 break
             if new_entry.msgctxt == old_entry.msgctxt and \
                 new_entry.msgid == old_entry.msgid and \
-                new_entry.msgstr == old_entry.msgstr:
+                    new_entry.msgstr == old_entry.msgstr:
                 msgids.pop()
                 break
 
