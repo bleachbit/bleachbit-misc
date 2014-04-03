@@ -149,7 +149,7 @@ def process_po(lang_id):
             (msgctxt, msgid, lang_id)
         names = names + who_translated(lang_id, msgctxt, msgid)
     lang_name = get_lang_name(po_new, lang_id)
-    cmd = 'git commit %s.po -m "Update %s thanks to %s"' % \
+    cmd = 'git commit %s.po -m "Update %s translation thanks to %s"' % \
         (lang_id, lang_name, ', '.join(set(names)))
     return cmd
 
