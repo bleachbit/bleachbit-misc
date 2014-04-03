@@ -42,7 +42,7 @@ summary_str = 'Free space and maintain privacy'
 
 def get_translation_progress(lang):
     """Get the progress for a translation"""
-    assert (type(lang) is str)
+    assert (isinstance(lang, str))
     oldcwd = os.getcwd()
     os.chdir(dir_bb_po)
     args = ['msgfmt', '--statistics', '-o', lang + '.mo', lang + '.po']
@@ -76,7 +76,7 @@ def main():
     print '<table>\n'
     print '<tr><td>Code</td><td>Name</td><td>Percentage translated</td><td>"%s"</td></tr>\n' % summary_str
     for langid in sorted(setup.supported_languages()):
-        assert (type(langid) is str)
+        assert (isinstance(langid, str))
         print '<tr lang="%s">' % (langid)
         native_name = bleachbit.Unix.locales.native_name(langid)
         print '<td>%s</td>' % langid

@@ -104,9 +104,9 @@ def who_translated(lang_id, msgctxt, msgid):
     while True:
         start = parse_search_html(lang_id, msgctxt, msgid, start)
         msgid2 = msgid.replace('\n', '').rstrip()
-        msgctxt_key = "none" if msgctxt == None else msgctxt
-        if translations[lang_id].has_key(msgctxt_key):
-            if translations[lang_id][msgctxt_key].has_key(msgid2):
+        msgctxt_key = "none" if msgctxt is None else msgctxt
+        if msgctxt_key in translations[lang_id]:
+            if msgid2 in translations[lang_id][msgctxt_key]:
                 url = translations[lang_id][msgctxt_key][msgid2]
                 return parse_detail_html(url)
         if None == start:
