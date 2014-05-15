@@ -1,34 +1,28 @@
 #!/bin/bash
 
-# Copyright (C) 2009 by Andrew Ziem.  All rights reserved.
+# Copyright (C) 2014 by Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 #
-# Build clean source tarball and copy for building in virtual machine
+# Build clean source tarball
 #
 
 
 NAME=bleachbit
-SVND=/tmp/bleachbit_svn
-#BRANCH=/releases/0.8.4
-#BRANCHD=$SVND/0.8.4
-BRANCH=/trunk
-BRANCHD=$SVND/trunk
-SVNBASE=svn://svn.code.sf.net/p/bleachbit/code/
+GITD=/tmp/bleachbit_git
+GITURL=https://github.com/az0/bleachbit.git
 
-if [[ -d $SVND ]]; then
-	echo "rm -rf $SVND"
-	rm -rf "$SVND"
+if [[ -d $GITD ]]; then
+	echo "rm -rf $GITD"
+	rm -rf "$GITD"
 fi
-echo "mkdir $SVND"
-mkdir $SVND
-cd $SVND
-echo "svn checkout"
-svn co $SVNBASE/$BRANCH
-cd -
-cd $BRANCHD
-
+echo "mkdir $GITD"
+mkdir $GITD
+cd $GITD
+echo "git clone "
+git clone --single-branch $GITURL $GITDIR
+cd bleachbit
 
 echo "python setup"
 VER=`python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/'`
@@ -41,28 +35,8 @@ python setup.py sdist --formats=bztar,gztar
 
 
 echo "creating LZMA tarball"
-bzcat $BRANCHD/dist/$NAMEV.tar.bz2 | xz -9 - > $BRANCHD/dist/$NAMEV.tar.lzma
+bzcat dist/$NAMEV.tar.bz2 | xz -9 - > dist/$NAMEV.tar.lzma
 [[ -e "dist/$NAMEV.tar.lzma" ]] || echo dist/$NAMEV.tar.lzma missing
 [[ -e "dist/$NAMEV.tar.lzma" ]] || exit 1
 
 
-
-echo "rpmbuild"
-rm -f ~/rpmbuild/SOURCES/$NAMEV.tar.gz
-cp $BRANCHD/dist/$NAMEV.tar.gz ~/rpmbuild/SOURCES/
-rm -f ~/rpmbuild/RPMS/noarch/bleachbit*rpm
-rpmbuild -bb $NAME.spec
-
-
-echo "rpmlint"
-rpmlint ~/rpmbuild/RPMS/noarch/bleachbit*
-cd -
-
-
-echo "copying to ~/tmp/vm"
-rm -f ~/tmp/vm/bleachbit-*.tar.{gz,bz2}
-rm -rf ~/tmp/vm/debian/
-mkdir -p ~/tmp/vm/
-cp $BRANCHD/dist/bleachbit-${VER}.tar.gz ~/tmp/vm/
-cp -a $BRANCHD/debian ~/tmp/vm/
-cp -a $BRANCHD/bleachbit.spec ~/tmp/vm/
