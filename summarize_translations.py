@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
-# Copyright (C) 2009 by Andrew Ziem.  All rights reserved.
+# Copyright (C) 2014 by Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -16,9 +16,9 @@ import re
 import subprocess
 import sys
 
-dir_bb_root = os.path.abspath('../trunk')
-dir_bb_locale = os.path.abspath('../trunk/locale')
-dir_bb_po = os.path.abspath('../trunk/po')
+dir_bb_root = os.path.abspath('../bleachbit')
+dir_bb_locale = os.path.abspath('../bleachbit/locale')
+dir_bb_po = os.path.abspath('../bleachbit/po')
 
 os.chdir(dir_bb_root)
 sys.path.append(dir_bb_root)
