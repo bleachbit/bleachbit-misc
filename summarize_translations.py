@@ -57,7 +57,7 @@ def get_translation_progress(lang):
         # you should run 'make refresh-po' to update untranslated
         translated = int(match.group(1))
         untranslated = int(match.group(2))
-        return "%.2f%%" % (100. * translated / (untranslated + translated))
+        return "%.0f%%" % (100. * translated / (untranslated + translated))
     match = re.search('([0-9]+) translated messages', output)
     if match:
         return "100%"
