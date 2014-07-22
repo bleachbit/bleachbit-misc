@@ -13,7 +13,8 @@
 #
 #
 
-# Workspace name (safe to change)
+# Workspace name (safe to change so long as it's a unique name; this
+# directory gets deleted if it already exists.)
 WORKSPACENAME="duplicate-scan-workspace"
 
 # Directory variables
