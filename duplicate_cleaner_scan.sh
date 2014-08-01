@@ -13,7 +13,8 @@
 #
 #
 
-# Workspace name (safe to change)
+# Workspace name (safe to change so long as it's a unique name; this
+# directory gets deleted if it already exists.)
 WORKSPACENAME="duplicate-scan-workspace"
 
 # Directory variables
@@ -34,8 +35,16 @@ msg2() {
 # Delete old workspace if one exists
 if [ -d "${WORKSPACE}" ]; then
     msg "Deleting old workspace..."
-    # Needs sudo because of write-protected .git files
-    sudo rm -rd "${WORKSPACE}"
+
+    # Delete write-protected .git files
+    for i in bleachbit cleanerml
+    do
+        sudo rm "${WORKSPACE}"/$i/.git/objects/pack/pack-*.idx
+        sudo rm "${WORKSPACE}"/$i/.git/objects/pack/pack-*.pack
+    done
+
+    # Delete regular files
+    rm -rd "${WORKSPACE}"
 fi
 
 # Create a new workspace
