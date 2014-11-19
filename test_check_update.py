@@ -23,10 +23,11 @@ import bleachbit.Common
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
 tests = \
-    (('1.2', '1.4', None),
-     ('1.4', '1.5.2 (beta)', None),
-     ('1.5.1', '1.5.2 (beta)', None),
-     ('1.5.2', None, None))
+    (('1.2', '1.6', None),
+     ('1.4', '1.6', None),
+     ('1.5.1', '1.6', None),
+     ('1.5.2', '1.6', None),
+     ('1.6', None, None))
 
 for test in tests:
     print '\n', '*' * 10, test[0]
