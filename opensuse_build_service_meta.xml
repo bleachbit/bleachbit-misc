@@ -66,11 +66,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_19">
-    <path project="Fedora:19" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_7.0">
     <path project="Debian:7.0" repository="standard"/>
     <arch>i586</arch>
