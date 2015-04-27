@@ -21,6 +21,7 @@ import bleachbit.Update
 import bleachbit.Common
 
 latest_stable = '1.6'
+latest_alpha = '1.7.6 (alpha)'
 
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
@@ -30,7 +31,8 @@ tests = \
      ('1.5.1', latest_stable, None),
      ('1.5.2', latest_stable, None),
      ('1.6', None, None),
-     ('1.7', None, None))
+     ('1.7.5', None, latest_alpha),
+     ('1.7.6', None, None))
 
 for test in tests:
     print '\n', '*' * 10, test[0]
