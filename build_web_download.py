@@ -48,11 +48,7 @@ def make_tag(distro, ver):
         return 'centos' + ver
     if 'Debian' == distro:
         # unofficial
-        if ver in ('40', '4', 'Etch'):
-            ver = '4'
-        elif ver in ('Lenny', '5', '50'):
-            ver = '5'
-        elif ver in ('60'):
+        if ver in ('60'):
             ver = '6'
         elif ver in ('70'):
             ver = '7'
@@ -64,15 +60,9 @@ def make_tag(distro, ver):
     if 'Fedora' == distro:
         # official
         return 'fc' + ver
-    if 'Mandriva' == distro:
-        # official
-        return 'mdv' + ver
     if 'openSUSE' == distro:
         # unofficial
         return 'opensuse' + ver
-    if 'SLES' == distro:
-        # is there an official?
-        return 'sles' + ver
     if 'SLE' == distro:
         # is there an official?
         return 'sle' + ver
@@ -91,70 +81,23 @@ def filename_to_distro(filename):
     tag = re.findall("\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if 1 == len(tag):
         distros = {
-            'centos5': 'CentOS 5',
             'centos6': 'CentOS 6',
             'centos7': 'CentOS 7',
-            'fc8': 'Fedora 8 (Werewolf)',
-            'fc9': 'Fedora 9 (Sulphur)',
-            'fc10': 'Fedora 10 (Cambridge)',
-            'fc11': 'Fedora 11 (Leonidas)',
-            'fc12': 'Fedora 12 (Constantine)',
-            'fc13': 'Fedora 13 (Goddard)',
-            'fc14': 'Fedora 14 (Laughlin)',
-            'fc15': 'Fedora 15 (Lovelock)',
-            'fc16': 'Fedora 16 (Verne)',
-            'fc17': 'Fedora 17 (Beefy Miracle)',
-            'fc18': 'Fedora 18 (Spherical Cow)',
-            'fc19': 'Fedora 19 (Schrodinger\'s Cat)',
             'fc20': 'Fedora 20 (Heisenbug)',
             'fc21': 'Fedora 21',
-            'mdv2008': 'Mandriva 2008',
-            'mdv2009': 'Mandriva 2009',
-            'mdv20091': 'Mandriva 2009.1',
-            'mdv2010': 'Mandriva 2010',
-            'mdv20101': 'Mandriva 2010.1',
-            'opensuse103': 'openSUSE 10.3',
-            'opensuse110': 'openSUSE 11.0',
-            'opensuse111': 'openSUSE 11.1',
-            'opensuse112': 'openSUSE 11.2',
-            'opensuse113': 'openSUSE 11.3',
-            'opensuse114': 'openSUSE 11.4',
-            'opensuse121': 'openSUSE 12.1',
-            'opensuse122': 'openSUSE 12.2',
-            'opensuse123': 'openSUSE 12.3',
             'opensuse131': 'openSUSE 13.1',
             'opensuse132': 'openSUSE 13.2',
-            'el4': '<acronym title="Red Hat Enterprise Linux">RHEL</acronym> 4',
-            'el5': 'RHEL 5',
             'el6': 'RHEL 6',
-            'el7': 'RHEL 7',
-            'sles9': '<acronym title="SUSE Linux Enterprise Server">SLES</acronym> 9',
-            'sle10': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 10',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
         }
         return distros[tag[0]]
     tag = re.findall("_([a-z]*[0-9]*)\.deb$", filename)
     if 1 == len(tag):
         distros = {
-            'ubuntu606': 'Ubuntu 6.06 LTS (Dapper Drake)',
-            'ubuntu710': 'Ubuntu 7.10 (Feisty Fawn)',
-            'ubuntu804': 'Ubuntu 8.04 LTS (Hardy Heron)',
-            'ubuntu810': 'Ubuntu 8.10 (Intrepid Ibex)',
-            'ubuntu904': 'Ubuntu 9.04 (Jaunty Jackalope)',
-            'ubuntu910': 'Ubuntu 9.10 (Karmic Koala)',
-            'ubuntu1004': 'Ubuntu 10.04 LTS (Lucid Lynx)',
-            'ubuntu1010': 'Ubuntu 10.10 (Maverick Meerkat)',
-            'ubuntu1104': 'Ubuntu 11.04 (Natty Narwhal)',
-            'ubuntu1110': 'Ubuntu 11.10 (Oneiric Ocelot)',
             'ubuntu1204': 'Ubuntu 12.04 (Precise Pangolin)',
-            'ubuntu1210': 'Ubuntu 12.10 (Quantal Quetzal)',
-            'ubuntu1304': 'Ubuntu 13.04 (Raring Ringtail)',
-            'ubuntu1310': 'Ubuntu 13.10 (Saucy Salamander)',
             'ubuntu1404': 'Ubuntu 14.04 LTS (Trusty Tahr)',
             'ubuntu1410': 'Ubuntu 14.10 (Utopic Unicorn)',
             'ubuntu1504': 'Ubuntu 15.04 (Vivid Vervet)',
-            'debian4': 'Debian 4 (Etch)',
-            'debian5': 'Debian 5 (Lenny)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
             'debian8': 'Debian 8 (Jessie)'
@@ -221,12 +164,6 @@ def get_files_in_repo(repourl):
     pos = repourl.rfind("/")
     baseurl = repourl[0:pos + 1]
     if 0 <= repourl.find("buntu") or 0 <= repourl.find("ebian"):
-        # files = []
-        # for file in get_files_in_repo_sub(baseurl + "i386/"):
-        #    files.append(file)
-        # for file in get_files_in_repo_sub(baseurl + "amd64/"):
-        #    files.append(file)
-        # return files
         return get_files_in_repo_sub(baseurl + "all/")
     else:
         return get_files_in_repo_sub(baseurl + "noarch/")
