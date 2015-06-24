@@ -178,19 +178,12 @@ def url_to_filename(url):
         sys.stderr.write(
             "url = '%s', distro = '%s', ver=%s\n" % (url, distro, ver))
         raise
-    # print "distro = '%s', ver = '%s', tag = '%s', url = '%s'" % (distro,
-    # ver, tag, url[57:])
     old_fn = url[url.rfind("/") + 1:]
     if 0 <= old_fn.find("noarch"):
         return old_fn.split(".noarch")[0] + "." + tag + ".noarch.rpm"
     if old_fn.endswith(".deb"):
         return old_fn.replace(".deb", "") + "_" + tag + ".deb"
     raise Exception("Unexpected filename '%s'" % (old_fn,))
-
-
-def process_url(url):
-    fn = url_to_filename(url)
-    print ("wget -nv -nc -O %s %s" % (fn, url))
 
 
 def get_repo_urls(osc_dir):
@@ -251,12 +244,6 @@ def get_files_in_repos(repourls):
     return files
 
 
-def distro_to_target(distro):
-    if distro.startswith("Fedora") or distro.startswith("Cent") or distro.startswith("RHEL"):
-        return "/etc/yum.repos.d/"
-    return ""
-
-
 def strip_tags(value):
     """Return the given HTML with all tags stripped."""
     # http://smitbones.blogspot.com/2008/01/python-strip-html-tags-function.html
@@ -281,13 +268,9 @@ def create_html_snippet(filenames, header):
         distro_txt = strip_tags(distro)
         records.append((distro_txt, distro, url, filename))
 
-
 #    print records
     import operator
-#    records = sorted(records, key=map(operator.itemgetter(0), records))
     records = sorted(records, key=operator.itemgetter(0))
-#    print records
-
     for (distro_txt, distro, url, filename) in records:
         f.write("<li><a rel=\"external nofollow\" href=\"%(url)s\">%(distro)s</a></li>\n" %
                 {'url': url, 'distro': distro})
