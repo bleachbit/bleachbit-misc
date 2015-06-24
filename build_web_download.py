@@ -191,8 +191,8 @@ def strip_tags(value):
 def create_html_snippet(filenames, header):
     """Create an HTML snippet with links to download packages"""
     print "* Creating HTML snippet"
-    f = open("snippet_%s.html" % (header.lower().replace(" ", "_"),), "w")
-    f.write("<ul>\n")
+
+    # collect list of download packages
     records = []
     for filename in filenames:
         if len(filename) < 5 \
@@ -201,13 +201,16 @@ def create_html_snippet(filenames, header):
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
         url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
-
         distro_txt = strip_tags(distro) # for sorting
         records.append((distro_txt, distro, url, filename))
 
-#    print records
+    # sort by distribution name
     import operator
     records = sorted(records, key=operator.itemgetter(0))
+
+    # write to file
+    f = open("snippet_%s.html" % (header.lower().replace(" ", "_"),), "w")
+    f.write("<ul>\n")
     for (distro_txt, distro, url, filename) in records:
         f.write("<li><a rel=\"external nofollow\" href=\"%(url)s\">%(distro)s</a></li>\n" %
                 {'url': url, 'distro': distro})
