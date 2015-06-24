@@ -205,6 +205,9 @@ def create_html_snippet(filenames, header):
             # http://www.linuxmint.com/oldreleases.php
             distro = distro_txt = 'Linux Mint 17 (Qiana/Rebecca/Rafaela)'
             records.append((distro_txt, distro, url, filename))
+        if distro == 'Ubuntu 12.04 (Precise Pangolin)':
+            distro = distro_txt = 'Linux Mint 13 LTS (Maya)'
+            records.append((distro_txt, distro, url, filename))
 
     for filename in filenames:
         if len(filename) < 5 \
