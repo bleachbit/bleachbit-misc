@@ -196,7 +196,7 @@ def create_html_snippet(filenames, header):
     records = []
 
     def add_package(distro, url, filename):
-        distro_txt = strip_tags(distro) # for sorting
+        distro_txt = strip_tags(distro)  # for sorting
         records.append((distro_txt, distro, url, filename))
         if distro == 'Ubuntu 14.04 LTS (Trusty Tahr)':
             # Users often ask for Mint packages, so for convenience provide
