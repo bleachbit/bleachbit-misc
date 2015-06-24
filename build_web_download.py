@@ -201,7 +201,7 @@ def create_html_snippet(filenames, header):
         # this url works as of 9/14/2010
         url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
 
-        distro_txt = strip_tags(distro)
+        distro_txt = strip_tags(distro) # for sorting
         records.append((distro_txt, distro, url, filename))
 
 #    print records
