@@ -88,6 +88,7 @@ def filename_to_distro(filename):
             'opensuse131': 'openSUSE 13.1',
             'opensuse132': 'openSUSE 13.2',
             'el6': 'RHEL 6',
+            'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
         }
         return distros[tag[0]]
