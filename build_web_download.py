@@ -9,7 +9,7 @@
 #
 
 """
-Build a list of URLs to download from OpenSUSE Build Service (OBS) and make
+Build a shell script to download packages from OpenSUSE Build Service (OBS) and make
 an HTML snippet of download links
 """
 
@@ -215,24 +215,25 @@ def create_html_snippet(filenames, header):
     f.write("</ul>\n")
 
 
-def dump_file_urls(fileurls):
-    """Dump URLs to a file"""
-    print "* Dumping file URLs"
-    f = open("file_urls.txt", "w")
-    for url in fileurls:
-        f.write("%s\n" % (url,))
+def write_download_urls(urls):
+    """"Build a shell script that downloads URLs and renames the files"""
+    with open('download_from_obs.sh', 'w') as f:
+        for url in urls:
+            local_fn = url_to_filename(url)
+            cmd = 'wget -nv -nc -O %s %s' % (local_fn, url)
+            f.write('%s\n' % cmd)
 
 
 def main():
     import sys
     if len(sys.argv) == 1:
-        print 'invoke with either --get-urls or --make-html'
+        print 'invoke with either --make-download (OSC directory) or --make-html'
         sys.exit(1)
-    elif sys.argv[1] == '--get-urls':
-        print "getting URLs"
+    elif sys.argv[1] == '--make-download':
+        print "getting URLs from OpenSUSE Build Service"
         repourls = get_repo_urls(sys.argv[2])
         fileurls = get_files_in_repos(repourls)
-        dump_file_urls(fileurls)
+        write_download_urls(fileurls)
     elif sys.argv[1] == '--make-html':
         filenames = sorted(os.listdir('files'))
         create_html_snippet(filenames, "Installation package")
