@@ -192,7 +192,6 @@ def create_html_snippet(filenames, header):
     print "* Creating HTML snippet"
     f = open("snippet_%s.html" % (header.lower().replace(" ", "_"),), "w")
     f.write("<ul>\n")
-    target = 0 <= header.find("epo")
     records = []
     for filename in filenames:
         if len(filename) < 5 \
