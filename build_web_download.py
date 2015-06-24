@@ -25,6 +25,7 @@ import traceback
 
 
 def url_to_distro(url):
+    """Given a URL, return the distribution and version"""
     if 'RedHat_RHEL-6' == url:
         return ('RHEL', '6')
     d = url.split("/")[6]
@@ -40,7 +41,7 @@ def url_to_distro(url):
 
 
 def make_tag(distro, ver):
-
+    """Given a distribution, return a short suffix for the package filename"""
     ver = ver.replace(".", "")
     if 'CentOS' == distro:
         # unofficial
@@ -83,6 +84,7 @@ def make_tag(distro, ver):
 
 
 def filename_to_distro(filename):
+    """Given a filename, return a pretty distribution name"""
     if filename.find('centosCentOS-6') > -1:
     # bleachbit-0.9.0beta-1.1.centosCentOS-6.noarch.rpm
         return 'CentOS 6'
@@ -166,6 +168,7 @@ def filename_to_distro(filename):
 
 
 def url_to_filename(url):
+    """Given a URL of a package on OBS, return a filename that adds the distribution"""
     (distro, ver) = url_to_distro(url)
     try:
         tag = make_tag(distro, ver)
@@ -191,6 +194,7 @@ def process_url(url):
 
 
 def get_repo_urls(osc_dir):
+    """Return repository URLs returned by "osc repourls" """
     print "* Getting list of URLs"
     old_cwd = os.getcwd()
     os.chdir(osc_dir)
@@ -202,6 +206,7 @@ def get_repo_urls(osc_dir):
 
 
 def get_files_in_repo_sub(url):
+    """Return a list of files in an OBS repository sub-directory"""
     print "opening url '%s'" % (url,)
     try:
         dir = urllib2.urlopen(url).read(100000)
@@ -218,6 +223,7 @@ def get_files_in_repo_sub(url):
 
 
 def get_files_in_repo(repourl):
+    """Return a list of files in an OBS repository directory"""
     # strip off the filename
     pos = repourl.rfind("/")
     baseurl = repourl[0:pos + 1]
@@ -234,6 +240,7 @@ def get_files_in_repo(repourl):
 
 
 def get_files_in_repos(repourls):
+    """Return a list of files in an OBS repository"""
     print "* Getting files in repos"
     files = []
     for repourl in repourls:
@@ -257,6 +264,7 @@ def strip_tags(value):
 
 
 def create_html_snippet(filenames, header):
+    """Create an HTML snippet with links to download packages"""
     print "* Creating HTML snippet"
     f = open("snippet_%s.html" % (header.lower().replace(" ", "_"),), "w")
     f.write("<ul>\n")
@@ -288,6 +296,7 @@ def create_html_snippet(filenames, header):
 
 
 def dump_file_urls(fileurls):
+    """Dump URLs to a file"""
     print "* Dumping file URLs"
     f = open("file_urls.txt", "w")
     for url in fileurls:
