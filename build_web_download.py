@@ -194,6 +194,18 @@ def create_html_snippet(filenames, header):
 
     # collect list of download packages
     records = []
+
+    def add_package(distro, url, filename):
+        distro_txt = strip_tags(distro) # for sorting
+        records.append((distro_txt, distro, url, filename))
+        if distro == 'Ubuntu 14.04 LTS (Trusty Tahr)':
+            # Users often ask for Mint packages, so for convenience provide
+            # a link to the compatible Ubuntu package.
+            # Linux Mint 17 is based off of Ubuntu Trusty
+            # http://www.linuxmint.com/oldreleases.php
+            distro = distro_txt = 'Linux Mint 17 (Qiana/Rebecca/Rafaela)'
+            records.append((distro_txt, distro, url, filename))
+
     for filename in filenames:
         if len(filename) < 5 \
                 or re.search('(bonus|(tar.(bz2|lzma|gz)|zip|txt|txt.asc|html)$)', filename):
@@ -201,8 +213,7 @@ def create_html_snippet(filenames, header):
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
         url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
-        distro_txt = strip_tags(distro) # for sorting
-        records.append((distro_txt, distro, url, filename))
+        add_package(distro, url, filename)
 
     # sort by distribution name
     import operator
