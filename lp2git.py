@@ -9,7 +9,7 @@
 #
 
 
-"""Import translated .po files from Launchpad to SVN"""
+"""Import translated .po files from Launchpad to Git"""
 
 from BeautifulSoup import BeautifulSoup
 from polib import pofile
@@ -159,7 +159,7 @@ def process_po(lang_id):
 
 
 def download_po_files(urls):
-    """Download .po files from Launchpad and prepare for SVN"""
+    """Download .po files from Launchpad and prepare for Git"""
     langs = {}
     for url in urls:
         print 'debug: downloading url %s' % url
