@@ -101,6 +101,8 @@ def filename_to_distro(filename):
             'ubuntu1404': 'Ubuntu 14.04 LTS (Trusty Tahr)',
             'ubuntu1410': 'Ubuntu 14.10 (Utopic Unicorn)',
             'ubuntu1504': 'Ubuntu 15.04 (Vivid Vervet)',
+            'ubuntu1510': 'Ubuntu 15.10 (Wily Werewolf)',
+            'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
             'debian8': 'Debian 8 (Jessie)'
