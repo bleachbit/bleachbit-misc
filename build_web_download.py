@@ -85,6 +85,8 @@ def filename_to_distro(filename):
             'centos7': 'CentOS 7',
             'fc20': 'Fedora 20 (Heisenbug)',
             'fc21': 'Fedora 21',
+            'fc22': 'Fedora 22',
+            'fc23': 'Fedora 23',
             'opensuse131': 'openSUSE 13.1',
             'opensuse132': 'openSUSE 13.2',
             'el6': 'RHEL 6',
