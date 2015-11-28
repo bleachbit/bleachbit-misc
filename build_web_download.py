@@ -105,7 +105,8 @@ def filename_to_distro(filename):
             'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
-            'debian8': 'Debian 8 (Jessie)'
+            'debian8': 'Debian 8 (Jessie)',
+            'debian9': 'Debian 9 (Strech)'
         }
         return distros[tag[0]]
 
