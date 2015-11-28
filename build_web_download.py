@@ -207,7 +207,7 @@ def create_html_snippet(filenames, header):
             # a link to the compatible Ubuntu package.
             # Linux Mint 17 is based off of Ubuntu Trusty
             # http://www.linuxmint.com/oldreleases.php
-            distro = distro_txt = 'Linux Mint 17 (Qiana/Rebecca/Rafaela)'
+            distro = distro_txt = 'Linux Mint 17 - 17.3 (Qiana/Rebecca/Rafaela/Rosa)'
             records.append((distro_txt, distro, url, filename))
         if distro == 'Ubuntu 12.04 (Precise Pangolin)':
             distro = distro_txt = 'Linux Mint 13 LTS (Maya)'
