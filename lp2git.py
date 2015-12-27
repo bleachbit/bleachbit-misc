@@ -186,6 +186,8 @@ def download_po_files(urls):
 
     for lang_id, cmd in langs.iteritems():
         print 'mv %s_new.po %s.po' % (lang_id, lang_id)
+        os.rename('%s_new.po' % lang_id, '%s.po' % lang_id)
         print cmd
+        os.system(cmd)
 
 download_po_files(sys.argv[1:])
