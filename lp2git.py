@@ -165,6 +165,13 @@ def process_po(lang_id):
 def download_po_files(urls):
     """Download .po files from Launchpad and prepare for Git"""
     langs = {}
+
+    for url in urls:
+        ret = re.search('-([a-z]{2,3}(_[A-Z]{2})?).po$', url, re.I)
+        lang_id = ret.groups(0)[0]
+        if not os.path.exists('%s.po' % lang_id):
+            raise RuntimeError('file %s.po does not exist' % lang_id)
+
     for url in urls:
         print 'debug: downloading url %s' % url
         doc = read_http(url)
