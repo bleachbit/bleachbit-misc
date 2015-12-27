@@ -143,6 +143,10 @@ def process_po(lang_id):
                 msgids.pop()
                 break
 
+    if not msgids:
+        print 'No changes for language %s' % lang_id
+        return None
+
     names = []
     for (msgctxt, msgid) in msgids:
         print "looking for msgctxt '%s' msgid '%s' for lang '%s'" % \
@@ -170,7 +174,8 @@ def download_po_files(urls):
         f.write(doc)
         f.close()
         cmd = process_po(lang_id)
-        langs[lang_id] = cmd
+        if cmd:
+            langs[lang_id] = cmd
 
     for lang_id, cmd in langs.iteritems():
         print 'mv %s_new.po %s.po' % (lang_id, lang_id)
