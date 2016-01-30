@@ -18,25 +18,23 @@ if [[ -d $GITD ]]; then
 	rm -rf "$GITD"
 fi
 echo "mkdir $GITD"
-mkdir $GITD
-cd $GITD
-echo "git clone "
-git clone --single-branch $GITURL $GITDIR
-cd bleachbit
+mkdir $GITD || exit 1
+cd $GITD || exit 1
+echo "git clone"
+git clone --single-branch $GITURL $GITDIR || exit 1
+cd bleachbit || exit 1
 
 echo "python setup"
-VER=`python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/'`
+VER=$(python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/')
 NAMEV=${NAME}-${VER}
 make clean
-python setup.py sdist --formats=bztar,gztar
+python setup.py sdist --formats=bztar,gztar || exit 1
 
-[[ -e "dist/$NAMEV.tar.gz" ]] || echo dist/$NAMEV.tar.gz missing
-[[ -e "dist/$NAMEV.tar.gz" ]] || exit 1
+[[ -e "dist/$NAMEV.tar.gz" ]] || (echo dist/$NAMEV.tar.gz missing; exit 1)
 
 
 echo "creating LZMA tarball"
 bzcat dist/$NAMEV.tar.bz2 | xz -9 - > dist/$NAMEV.tar.lzma
-[[ -e "dist/$NAMEV.tar.lzma" ]] || echo dist/$NAMEV.tar.lzma missing
-[[ -e "dist/$NAMEV.tar.lzma" ]] || exit 1
+[[ -e "dist/$NAMEV.tar.lzma" ]] || (echo dist/$NAMEV.tar.lzma missing; exit 1)
 
-
+echo Success!
