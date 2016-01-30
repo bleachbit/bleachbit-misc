@@ -78,7 +78,7 @@ def main():
     for langid in sorted(setup.supported_languages()):
         assert (isinstance(langid, str))
         print '<tr lang="%s">' % (langid)
-        native_name = bleachbit.Unix.locales.native_name(langid)
+        native_name = bleachbit.Unix.Locales.native_locale_names[langid]
         print '<td>%s</td>' % langid
         print '<td>%s</td>' % (native_name)
         lang = gettext.translation(
