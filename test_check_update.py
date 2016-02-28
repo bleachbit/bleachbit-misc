@@ -35,7 +35,8 @@ tests = \
      ('1.9.2', latest_stable, None),
      ('1.9.3', latest_stable, None),
      ('1.9.4', latest_stable, None),
-     ('1.10', None, None))
+     ('1.10', None, None),
+     ('1.11', None, None))
 
 for test in tests:
     print '\n', '*' * 10, test[0]
