@@ -66,6 +66,11 @@
     <arch>x86_64</arch>
     <arch>ppc64</arch>
   </repository>
+  <repository name="Fedora_24">
+    <path project="Fedora:24" repository="standard"/>
+    <arch>i586</arch>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="Fedora_23">
     <path project="Fedora:23" repository="standard"/>
     <arch>i586</arch>
