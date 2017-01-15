@@ -56,11 +56,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="openSUSE_13.1">
-    <path project="openSUSE:13.1" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="SLE_11">
     <path project="SUSE:SLE-11" repository="standard"/>
     <arch>i586</arch>
