@@ -115,11 +115,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Debian_6.0">
-    <path project="Debian:6.0" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="CentOS_CentOS-6">
     <path project="CentOS:CentOS-6" repository="standard"/>
     <arch>i586</arch>
@@ -130,3 +125,4 @@
     <arch>x86_64</arch>
   </repository>
 </project>
+
