@@ -157,7 +157,7 @@ def process_po(lang_id):
         author = po_new.metadata['Last-Translator']
     else:
         author = ', '.join(set(names)) + ' <multiple-authors>'
-    cmd = 'git commit %s.po -m "Update %s translation thanks to %s" --author "%s"' % \
+    cmd = 'git commit %s.po -m "Update %s translation thanks to %s" --author "%s" -m "[skip ci]"' % \
         (lang_id, lang_name, ', '.join(set(names)), author)
     return cmd
 
