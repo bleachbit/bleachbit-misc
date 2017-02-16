@@ -122,6 +122,8 @@ def get_lang_name(po, lang_id):
         return 'Polish'
     if 'bg' == lang_id:
         return 'Bulgarian'
+    if 'id' == lang_id:
+        return 'Indonesian'
     return po.metadata['Language-Team'].split('<')[0].strip()
 
 
