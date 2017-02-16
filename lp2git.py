@@ -188,6 +188,8 @@ def download_po_files(urls):
         print 'mv %s_new.po %s.po' % (lang_id, lang_id)
         os.rename('%s_new.po' % lang_id, '%s.po' % lang_id)
         print cmd
-        os.system(cmd)
+        # cmd is a Unicode, so encode to bytestring to avoid
+        # UnicodeEncodeError: 'ascii' codec can't encode character u'\xf6' in position 49: ordinal not in range(128)
+        os.system(cmd.encode('utf-8'))
 
 download_po_files(sys.argv[1:])
