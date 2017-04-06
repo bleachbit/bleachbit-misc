@@ -11,7 +11,7 @@
 
 NAME=bleachbit
 GITD=/tmp/bleachbit_git
-GITURL=https://github.com/az0/bleachbit.git
+GITURL=https://github.com/bleachbit/bleachbit.git
 
 if [[ -d $GITD ]]; then
 	echo "rm -rf $GITD"
