@@ -12,6 +12,10 @@
     <disable arch="ppc64p7"/>
     <disable arch="ppc64le"/>
   </build>
+  <repository name="xUbuntu_17.10">
+    <path project="Ubuntu:17.10" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="xUbuntu_17.04">
     <path project="Ubuntu:17.04" repository="universe"/>
     <arch>i586</arch>
@@ -68,12 +72,21 @@
     <arch>x86_64</arch>
     <arch>ppc64</arch>
   </repository>
+  <repository name="Fedora_27">
+    <path project="Fedora:27" repository="standard"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="Fedora_26">
     <path project="Fedora:26" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
   <repository name="Fedora_25">
     <path project="Fedora:25" repository="standard"/>
+    <arch>i586</arch>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="Debian_9.0">
+    <path project="Debian:9.0" repository="standard"/>
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
