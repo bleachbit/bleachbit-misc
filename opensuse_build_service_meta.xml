@@ -43,11 +43,6 @@
     <path project="openSUSE:Leap:42.1" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="openSUSE_13.2">
-    <path project="openSUSE:13.2" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="SLE_11">
     <path project="SUSE:SLE-11" repository="standard"/>
     <arch>i586</arch>
