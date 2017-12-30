@@ -33,6 +33,10 @@ def url_to_distro(url):
         # example: RedHat_RHEL-6
         (dummy, distrover) = d.split("_")
         (distro, ver) = distrover.split("-")
+    elif d.startswith('openSUSE_Leap'):
+        # example: openSUSE_Leap_42.3
+        distro = 'openSUSE_Leap'
+        ver = d.split('_')[2]
     else:
         (distro, ver) = d.split("_")
     if "xUbuntu" == distro:
@@ -48,19 +52,15 @@ def make_tag(distro, ver):
         return 'centos' + ver
     if 'Debian' == distro:
         # unofficial
-        if ver in ('60'):
-            ver = '6'
-        elif ver in ('70'):
-            ver = '7'
-        elif ver in ('80'):
-            ver = '8'
+        if ver in ('60', '70', '80', '90'):
+            ver = ver[0]
         else:
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
     if 'Fedora' == distro:
         # official
         return 'fc' + ver
-    if 'openSUSE' == distro:
+    if distro in ('openSUSE', 'openSUSE_Leap'):
         # unofficial
         return 'opensuse' + ver
     if 'SLE' == distro:
@@ -90,8 +90,12 @@ def filename_to_distro(filename):
             'fc24': 'Fedora 24',
             'fc25': 'Fedora 25',
             'fc26': 'Fedora 26',
+            'fc27': 'Fedora 27',
             'opensuse131': 'openSUSE 13.1',
             'opensuse132': 'openSUSE 13.2',
+            'opensuse421': 'openSUSE Leap 42.1',
+            'opensuse422': 'openSUSE Leap 42.2',
+            'opensuse423': 'openSUSE Leap 42.3',
             'el6': 'RHEL 6',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
@@ -107,6 +111,8 @@ def filename_to_distro(filename):
             'ubuntu1510': 'Ubuntu 15.10 (Wily Werewolf)',
             'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
             'ubuntu1610': 'Ubuntu 16.10 (Yakkety Yak)',
+            'ubuntu1704': 'Ubuntu 17.04 (Zesty Zapus)',
+            'ubuntu1710': 'Ubuntu 17.10 (Artful Aardvark)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
             'debian8': 'Debian 8 (Jessie)',
