@@ -21,11 +21,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_16.10">
-    <path project="Ubuntu:16.10" repository="universe"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="xUbuntu_16.04">
     <path project="Ubuntu:16.04" repository="universe"/>
     <arch>i586</arch>
@@ -33,11 +28,6 @@
   </repository>
   <repository name="xUbuntu_14.04">
     <path project="Ubuntu:14.04" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="xUbuntu_12.04">
-    <path project="Ubuntu:12.04" repository="standard"/>
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
