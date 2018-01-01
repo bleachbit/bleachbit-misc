@@ -24,10 +24,10 @@ import traceback
 
 def url_to_distro(url):
     """Given a URL, return the distribution and version"""
-    if 'RedHat_RHEL-6' == url:
+    if url == 'RedHat_RHEL-6':
         return ('RHEL', '6')
     d = url.split("/")[6]
-    if 0 == d.find('RedHat_'):
+    if d.find('RedHat_') == 0:
         # example: RedHat_RHEL-6
         (dummy, distrover) = d.split("_")
         (distro, ver) = distrover.split("-")
@@ -37,7 +37,7 @@ def url_to_distro(url):
         ver = d.split('_')[2]
     else:
         (distro, ver) = d.split("_")
-    if "xUbuntu" == distro:
+    if distro == "xUbuntu":
         distro = "Ubuntu"
     return (distro, ver)
 
@@ -45,29 +45,23 @@ def url_to_distro(url):
 def make_tag(distro, ver):
     """Given a distribution, return a short suffix for the package filename"""
     ver = ver.replace(".", "")
-    if 'CentOS' == distro:
-        # unofficial
-        return 'centos' + ver
-    if 'Debian' == distro:
+    if distro == 'Fedora':
+        # official
+        return 'fc' + ver
+    if distro in ('CentOS', 'SLE', 'Ubuntu'):
+        return distro.lower() + ver
+    if distro == 'Debian':
         # unofficial
         if ver in ('60', '70', '80', '90'):
             ver = ver[0]
         else:
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
-    if 'Fedora' == distro:
-        # official
-        return 'fc' + ver
     if distro in ('openSUSE', 'openSUSE_Leap'):
         # unofficial
         return 'opensuse' + ver
-    if 'SLE' == distro:
-        # is there an official?
-        return 'sle' + ver
-    if 'RHEL' == distro:
+    if distro == 'RHEL':
         return 'el' + ver
-    if 'Ubuntu' == distro:
-        return 'ubuntu' + ver
     raise Exception("Unknown distro %s" % (distro,))
 
 
@@ -77,7 +71,7 @@ def filename_to_distro(filename):
     # bleachbit-0.9.0beta-1.1.centosCentOS-6.noarch.rpm
         return 'CentOS 6'
     tag = re.findall("\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
-    if 1 == len(tag):
+    if len(tag) == 1:
         distros = {
             'centos6': 'CentOS 6',
             'centos7': 'CentOS 7',
@@ -100,7 +94,7 @@ def filename_to_distro(filename):
         }
         return distros[tag[0]]
     tag = re.findall("_([a-z]*[0-9]*)\.deb$", filename)
-    if 1 == len(tag):
+    if len(tag) == 1:
         distros = {
             'ubuntu1204': 'Ubuntu 12.04 (Precise Pangolin)',
             'ubuntu1404': 'Ubuntu 14.04 LTS (Trusty Tahr)',
@@ -136,7 +130,7 @@ def url_to_filename(url):
             "url = '%s', distro = '%s', ver=%s\n" % (url, distro, ver))
         raise
     old_fn = url[url.rfind("/") + 1:]
-    if 0 <= old_fn.find("noarch"):
+    if old_fn.find("noarch") >= 0:
         return old_fn.split(".noarch")[0] + "." + tag + ".noarch.rpm"
     if old_fn.endswith(".deb"):
         return old_fn.replace(".deb", "") + "_" + tag + ".deb"
@@ -177,7 +171,7 @@ def get_files_in_repo(repourl):
     # strip off the filename
     pos = repourl.rfind("/")
     baseurl = repourl[0:pos + 1]
-    if 0 <= repourl.find("buntu") or 0 <= repourl.find("ebian"):
+    if repourl.find("buntu") >= 0 or repourl.find("ebian") >= 0:
         return get_files_in_repo_sub(baseurl + "all/")
     else:
         return get_files_in_repo_sub(baseurl + "noarch/")
