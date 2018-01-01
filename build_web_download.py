@@ -17,10 +17,8 @@ an HTML snippet of download links
 import os
 import subprocess
 import urllib2
-import pdb
 import sys
 import re
-import time
 import traceback
 
 
@@ -257,7 +255,6 @@ def write_download_urls(urls):
 
 
 def main():
-    import sys
     if len(sys.argv) == 1:
         print 'invoke with either --make-download (OSC directory) or --make-html'
         sys.exit(1)
