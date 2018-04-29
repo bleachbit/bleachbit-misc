@@ -15,7 +15,7 @@ ci.bleachbit.org. This script helps purge the older builds.
 
 import subprocess
 
-args = ['s3cmd', 'ls', 's3://ci.bleachbit.org/']
+args = ['s3cmd', 'ls', 's3://bleachbitci/dl/']
 ls_raw = subprocess.check_output(args)
 
 ls_lines = ls_raw.decode().split('\n')
@@ -33,10 +33,16 @@ for line in ls_lines:
     dirs.append(line_s[1])
 
 # sort by version number,keep newest first
-def key_ver(s):
-    v = s.split('/')[3]
+def key_ver(path):
+    """Convert an S3 path into a StrictVersion for sorting"""
+    ver_str = path.split('/')[4]
     from distutils.version import StrictVersion
-    return StrictVersion(v)
+    try:
+        ret = StrictVersion(ver_str)
+    except ValueError:
+        print('Not a recognizable StrictVersion:', ver_str)
+        ret = ver_str
+    return ret
 
 dirs.sort(key=key_ver, reverse=True)
 
