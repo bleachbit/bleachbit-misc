@@ -28,6 +28,8 @@ echo "python setup"
 VER=$(python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/')
 NAMEV=${NAME}-${VER}
 make clean
+REV=`git rev-parse --short HEAD`
+echo "revision = \"$REV\"" > bleachbit/Revision.py
 python setup.py sdist --formats=bztar,gztar || exit 1
 
 [[ -e "dist/$NAMEV.tar.gz" ]] || (echo dist/$NAMEV.tar.gz missing; exit 1)
