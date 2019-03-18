@@ -20,7 +20,11 @@ import sys
 import subprocess
 import re
 
-os.chdir('../bleachbit')
+bleachbit_repo_dir = '../bleachbit'
+if not os.path.exists(bleachbit_repo_dir):
+    print('The bleachbit repository does not exist in ', bleachbit_repo_dir)
+    sys.exit(1)
+os.chdir(bleachbit_repo_dir)
 sys.path.append(".")
 
 import setup
@@ -50,6 +54,13 @@ def print_desktop_keys(key, value):
 
 
 def main():
+    if not os.path.exists('po/es.po'):
+        print('ERROR: po/es.po does not exist. It should always be in the bleachbit repo.')
+        sys.exit(1)
+    if not os.path.exists('po/es.mo'):
+        print('ERROR: po/es.mo does not exist, so it seems translations are not compiled.')
+        print('Tip: try running "make -c po local" from the bleachbit repo.')
+        sys.exit(1)
     print_desktop_keys('Comment', 'Free space and maintain privacy')
     print_desktop_keys('GenericName', 'Unnecessary file cleaner')
 
