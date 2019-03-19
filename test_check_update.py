@@ -12,16 +12,18 @@
 Verify the online update notification system returns the right version numbers
 """
 
+from __future__ import absolute_import
+
 import os
 import sys
 dir_bb_root = os.path.abspath('../bleachbit')
 os.chdir(dir_bb_root)
 sys.path.append(dir_bb_root)
+import bleachbit
 import bleachbit.Update
-import bleachbit.Common
 
-latest_stable = '1.12'
-latest_beta = None
+latest_stable = '2.0'
+latest_beta = '2.1 (beta)'
 
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
@@ -30,11 +32,15 @@ tests = \
      ('1.9.4', latest_stable, None),
      ('1.10', latest_stable, None),
      ('1.11.4', latest_stable, None),
-     ('1.12', None, None))
+     ('1.12', latest_stable, None),
+     ('2.0', latest_beta, None),
+     ('2.1', None, None))
 
 for test in tests:
     print '\n', '*' * 10, test[0]
-    bleachbit.Common.APP_VERSION = test[0]
+    bleachbit.APP_VERSION = test[0]
+    bleachbit.update_check_url = "%s/update/%s" % (
+        bleachbit.base_url, bleachbit.APP_VERSION)
     v1e = test[1]  # e=expected
     v2e = test[2]
     cu = bleachbit.Update.check_updates(True, False, None, None)
