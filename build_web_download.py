@@ -166,6 +166,8 @@ def get_files_in_repo_sub(url):
         fileurl = url + fn
         print "found fileurl '%s'" % (fileurl,)
         files.append(fileurl)
+    # make the list unique
+    files = list(set(files))
     return files
 
 
