@@ -10,7 +10,15 @@
 
 
 """
-List entries for bleachbit.desktop
+This program helps manage the translations in the bleachbit.desktop file.
+
+Here is how it works
+1. The bleachbit/po/Makefile adds strings from bleachbit.desktop to bleachbit.pot
+2. I upload bleachbit.pot to Launchpad
+3. Launchpad asks users to translate the strings
+4. I download the .po files
+5. This program extracts the two strings
+6. I copy the output of this program and paste it into bleachbit.desktop
 """
 
 
