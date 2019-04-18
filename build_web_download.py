@@ -210,15 +210,17 @@ def create_html_snippet(filenames, header):
     def add_package(distro, url, filename):
         distro_txt = strip_tags(distro)  # for sorting
         records.append((distro_txt, distro, url, filename))
-        if distro == 'Ubuntu 14.04 LTS (Trusty Tahr)':
-            # Users often ask for Mint packages, so for convenience provide
-            # a link to the compatible Ubuntu package.
-            # Linux Mint 17 is based off of Ubuntu Trusty
-            # http://www.linuxmint.com/oldreleases.php
-            distro = distro_txt = 'Linux Mint 17 - 17.3 (Qiana/Rebecca/Rafaela/Rosa)'
+        # Users often ask for Mint packages, so for convenience provide
+        # a link to the compatible Ubuntu package.
+        # https://en.wikipedia.org/wiki/Linux_Mint_version_history
+        if distro == 'Ubuntu 18.04 LTS (Bionic Beaver)':
+            distro = distro_txt = 'Linux Mint 19 - 19.2 (Tara - Tina)'
             records.append((distro_txt, distro, url, filename))
-        if distro == 'Ubuntu 12.04 (Precise Pangolin)':
-            distro = distro_txt = 'Linux Mint 13 LTS (Maya)'
+        if distro == 'Ubuntu 16.04 LTS (Xenial Xerus)':
+            distro = distro_txt = 'Linux Mint 18 - 18.3 (Sarah - Sylvia)'
+            records.append((distro_txt, distro, url, filename))
+        if distro == 'Ubuntu 14.04 LTS (Trusty Tahr)':
+            distro = distro_txt = 'Linux Mint 17 - 17.3 (Qiana - Rosa)'
             records.append((distro_txt, distro, url, filename))
 
     for filename in filenames:
