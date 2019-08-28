@@ -39,54 +39,85 @@ that this program can run on Unix-style systems.
 
 """
 
-import csv
-import os
-import sys
 
-if not len(sys.argv) == 4:
-    print('Please read the instructions about this program in its source.')
-    sys.exit(1)
 
-csv_filename = sys.argv[1]
-base_path = sys.argv[2]
-compare_path = sys.argv[3]
+def list_to_file(l, fn):
+    """Write the list to a file"""
+    with open(fn, 'w') as f:
+        for item in sorted(l):
+            f.write('%s\n' % item)
 
-whitelist = set()
+def clean_filename(fn, base_path):
+    """Standardize the filename"""
+    ret = fn
+    if '/' == fn[0]:
+        # running on Unix-like system
+        ret = ret.replace('/', '\\')
 
-with open(csv_filename, newline='') as f:
-    reader = csv.reader(f)
-    for row in reader:
-        if not 'SUCCESS' == row[5]:
-            continue
-        fn_raw = row[4]
-        fn_clean = fn_raw.replace(base_path, '').lower()
-        whitelist.add(fn_clean)
+    ret = ret.lower() # make lowercase
+    ret = ret.replace(base_path.lower(), '') # strip off the base path
+    ret = ret.replace(base_path.replace('/', '\\').lower(), '') # Unix variation
+    if ret.endswith(r'\*'):
+        # remove wildcard seen with QueryDirectory
+        ret = ret[:-1]
 
-print('***********WHITELIST')
-for fn in sorted(whitelist):
-    print(fn)
+    return ret
 
-keep = set()
-remove = set()
+def is_filtered(path):
+    if path.lower().startswith('hk'):
+        # registry keys: HKCU, HKLM
+        return True
+    if path.lower().startswith('c:\\windows\\'):
+        return True
+    return False
 
-for root, dirs, files in os.walk(compare_path, topdown=False):
-    for name in files:
-        full_path = os.path.join(root, name)
-        clean_path = full_path.replace(compare_path, '')[1:].lower()
-        if '/' == full_path[0]:
-            # running on Unix-like system
-            clean_path = clean_path.replace('/', '\\')
-        if clean_path in whitelist:
-            keep.add(clean_path)
-        else:
-            remove.add(clean_path)
+def get_whitelist(csv_path, base_path):
+    whitelist = set()
 
-print('')
-print('**********KEEP')
-for fn in sorted(keep):
-    print(fn)
+    import csv
+    with open(csv_path, newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if not 'SUCCESS' == row[5]:
+                continue
+            fn_raw = row[4]
+            if is_filtered(fn_raw):
+                continue
+            fn_clean = clean_filename(fn_raw, base_path)
+            whitelist.add(fn_clean)
+    return whitelist
 
-print('')
-print('**********REMOVE')
-for fn in sorted(remove):
-    print(fn)
+
+
+def walk_compare_path(compare_path, whitelist):
+    keep = set()
+    remove = set()
+
+    import os
+    for root, dirs, files in os.walk(compare_path, topdown=False):
+        for name in files:
+            full_path = os.path.join(root, name)
+            cleaned_path = clean_filename(full_path, compare_path)
+            if cleaned_path in whitelist:
+                keep.add(cleaned_path)
+            else:
+                remove.add(cleaned_path)
+    return (keep, remove)
+
+def go():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('csv_path')
+    parser.add_argument('base_path')
+    parser.add_argument('compare_path')
+    args = parser.parse_args()
+
+    whitelist = get_whitelist(args.csv_path, args.base_path)
+    list_to_file(whitelist, 'whitelist.txt')
+
+    (keep, remove) = walk_compare_path(args.compare_path, whitelist)
+    list_to_file(keep, 'keep.txt')
+    list_to_file(remove, 'remove.txt')
+
+
+go()
