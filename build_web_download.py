@@ -53,7 +53,11 @@ def make_tag(distro, ver):
     if distro == 'Debian':
         # unofficial
         if ver in ('60', '70', '80', '90'):
+            # "90" is Debian 9
             ver = ver[0]
+        elif ver in ('10'):
+            # 10 is Debian 10
+            pass
         else:
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
