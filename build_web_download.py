@@ -112,10 +112,13 @@ def filename_to_distro(filename):
             'ubuntu1710': 'Ubuntu 17.10 (Artful Aardvark)',
             'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
             'ubuntu1810': 'Ubuntu 18.10 (Cosmic Cuttlefish)',
+            'ubuntu1904': 'Ubuntu 19.04 (Disco Dingo)',
+            'ubuntu1910': 'Ubuntu 19.10 (Eoan Ermine)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
             'debian8': 'Debian 8 (Jessie)',
-            'debian9': 'Debian 9 (Strech)'
+            'debian9': 'Debian 9 (Strech)',
+            'debian10': 'Debian 10 (Buster)'
         }
         return distros[tag[0]]
 
