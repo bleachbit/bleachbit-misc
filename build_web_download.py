@@ -236,7 +236,8 @@ def create_html_snippet(filenames, header):
             continue
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
-        url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
+        #url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
+        url = "/download/file/t?file=%s" % filename
         add_package(distro, url, filename)
 
     # sort by distribution name
