@@ -36,11 +36,11 @@ for line in ls_lines:
 def key_ver(path):
     """Convert an S3 path into a StrictVersion for sorting"""
     ver_str = path.split('/')[4]
-    from distutils.version import StrictVersion
+    from pkg_resources import parse_version
     try:
-        ret = StrictVersion(ver_str)
+        ret = parse_version(ver_str)
     except ValueError:
-        print('Not a recognizable StrictVersion:', ver_str)
+        print('Not a recognizable version:', ver_str)
         ret = ver_str
     return ret
 
