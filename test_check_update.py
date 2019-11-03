@@ -38,6 +38,7 @@ tests = \
      ('2.2', latest_stable, None),
      ('2.3', latest_stable, None),
      ('3.0', None, None),
+     ('3.0.1', None, None),
      ('3.1', None, None))
 
 for test in tests:
