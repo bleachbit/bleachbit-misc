@@ -56,6 +56,13 @@
     <arch>x86_64</arch>
     <arch>ppc64</arch>
   </repository>
+  <repository name="Fedora_31">
+    <path project="Fedora:31" repository="standard"/>
+    <arch>x86_64</arch>
+    <arch>armv7l</arch>
+    <arch>aarch64</arch>
+    <arch>ppc64le</arch>
+  </repository>
   <repository name="Fedora_30">
     <path project="Fedora:30" repository="standard"/>
     <arch>x86_64</arch>
