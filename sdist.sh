@@ -21,7 +21,7 @@ echo "mkdir $GITD"
 mkdir $GITD || exit 1
 cd $GITD || exit 1
 echo "git clone"
-git clone --single-branch $GITURL $GITDIR || exit 1
+time git clone --depth 1 $GITURL $GITDIR || exit 1
 cd bleachbit || exit 1
 
 echo "python setup"
