@@ -21,8 +21,8 @@ echo "mkdir $GITD"
 mkdir $GITD || exit 1
 cd $GITD || exit 1
 echo "git clone"
-time git clone --depth 1 $GITURL $GITDIR || exit 1
-cd bleachbit || exit 1
+time git clone --depth 1 $GITURL $GITDIR || { echo "git clone failed"; exit 1; }
+cd bleachbit || { echo "cd bleachbit failed"; exit 1; }
 
 echo "python setup"
 VER=$(python bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/')
@@ -32,11 +32,11 @@ REV=`git rev-parse --short HEAD`
 echo "revision = \"$REV\"" > bleachbit/Revision.py
 python setup.py sdist --formats=bztar,gztar || exit 1
 
-[[ -e "dist/$NAMEV.tar.gz" ]] || (echo dist/$NAMEV.tar.gz missing; exit 1)
+[[ -e "dist/$NAMEV.tar.gz" ]] || { echo dist/$NAMEV.tar.gz missing; exit 1; }
 
 
 echo "creating LZMA tarball"
 bzcat dist/$NAMEV.tar.bz2 | xz -9 - > dist/$NAMEV.tar.lzma
-[[ -e "dist/$NAMEV.tar.lzma" ]] || (echo dist/$NAMEV.tar.lzma missing; exit 1)
+[[ -e "dist/$NAMEV.tar.lzma" ]] || { echo dist/$NAMEV.tar.lzma missing; exit 1; }
 
 echo Success!
