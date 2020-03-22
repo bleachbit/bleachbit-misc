@@ -79,6 +79,7 @@ def filename_to_distro(filename):
         distros = {
             'centos6': 'CentOS 6',
             'centos7': 'CentOS 7',
+            'centos8': 'CentOS 8',
             'fc20': 'Fedora 20 (Heisenbug)',
             'fc21': 'Fedora 21',
             'fc22': 'Fedora 22',
