@@ -43,20 +43,6 @@
     <path project="openSUSE:Leap:42.3" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="SLE_11">
-    <path project="SUSE:SLE-11" repository="standard"/>
-    <arch>i586</arch>
-  </repository>
-  <repository name="RedHat_RHEL-6">
-    <path project="RedHat:RHEL-6" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="RHEL_7">
-    <path project="RedHat:RHEL-7" repository="standard"/>
-    <arch>x86_64</arch>
-    <arch>ppc64</arch>
-  </repository>
   <repository name="Fedora_31">
     <path project="Fedora:31" repository="standard"/>
     <arch>x86_64</arch>
@@ -84,11 +70,6 @@
   </repository>
   <repository name="Debian_10">
     <path project="Debian:10" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="CentOS_CentOS-6">
-    <path project="CentOS:CentOS-6" repository="standard"/>
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
