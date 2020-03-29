@@ -74,6 +74,9 @@ def filename_to_distro(filename):
     if filename.find('centosCentOS-6') > -1:
     # bleachbit-0.9.0beta-1.1.centosCentOS-6.noarch.rpm
         return 'CentOS 6'
+    if 'opensuseTumbleweed' in filename:
+        # example: bleachbit-3.9.0-5.1.opensuseTumbleweed.noarch.rpm
+        return 'openSUSE Tumbleweed'
     tag = re.findall("\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
         distros = {
