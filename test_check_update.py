@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: ts=4:sw=4:expandtab
 
 # Copyright (C) 2014 by Andrew Ziem.  All rights reserved.
@@ -43,14 +43,14 @@ tests = \
      ('3.2.0', None, None))
 
 for test in tests:
-    print '\n', '*' * 10, test[0]
+    print ('\n', '*' * 10, test[0])
     bleachbit.APP_VERSION = test[0]
     bleachbit.update_check_url = "%s/update/%s" % (
         bleachbit.base_url, bleachbit.APP_VERSION)
     v1e = test[1]  # e=expected
     v2e = test[2]
     cu = bleachbit.Update.check_updates(True, False, None, None)
-    print 'returned=', cu
+    print ('returned=', cu)
     match = False
     if cu == ():
         v1r = None  # r=returned
@@ -65,8 +65,8 @@ for test in tests:
         else:
             v2r = None
     if not v1e == v1r:
-        print 'ERROR: sent version %s, expected v1=%s, returned v1=%s' % \
-            (test[0], v1e, v1r)
+        print ('ERROR: sent version %s, expected v1=%s, returned v1=%s' % \
+            (test[0], v1e, v1r))
     if not v2e == v2r:
-        print 'ERROR: sent version %s, expected v1=%s, returned v2=%s' % \
-            (test[0], v2e, v2r)
+        print ('ERROR: sent version %s, expected v1=%s, returned v2=%s' % \
+            (test[0], v2e, v2r))
