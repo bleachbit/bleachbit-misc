@@ -12,7 +12,7 @@ make clean
 make refresh-po > /dev/null
 make local > /dev/null
 cd ../../bleachbit-misc
-python summarize_translations.py > /tmp/summarized_translations.html
+python3 summarize_translations.py > /tmp/summarized_translations.html
 cd ../bleachbit/po
 git checkout *po
 cd -

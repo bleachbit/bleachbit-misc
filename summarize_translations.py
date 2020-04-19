@@ -28,7 +28,7 @@ import bleachbit.Unix
 
 gettext.bindtextdomain('bleachbit', dir_bb_locale)
 gettext.textdomain('bleachbit')
-gettext.install('bleachbit', dir_bb_locale, unicode=1)
+gettext.install('bleachbit', dir_bb_locale)
 
 strs = [
     'Delete',
@@ -48,11 +48,10 @@ def get_translation_progress(lang):
     args = ['msgfmt', '--statistics', '-o', lang + '.mo', lang + '.po']
     outputs = subprocess.Popen(
         args, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-    output = outputs[1]
+    output = outputs[1].decode()
     os.chdir(oldcwd)
     # 53 translated messages, 82 untranslated messages.
-    match = re.search(
-        '([0-9]+) translated messages.* ([0-9]+) untranslated message', output)
+    match = re.search('([0-9]+) translated messages.* ([0-9]+) untranslated message', output)
     if match:
         # you should run 'make refresh-po' to update untranslated
         translated = int(match.group(1))
@@ -66,32 +65,32 @@ def get_translation_progress(lang):
 
 
 def main():
-    print """
+    print ("""
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-"""
-    print '<table>\n'
-    print '<tr><td>Code</td><td>Name</td><td>Percentage translated</td><td>"%s"</td></tr>\n' % summary_str
+""")
+    print ('<table>\n')
+    print(('<tr><td>Code</td><td>Name</td><td>Percentage translated</td><td>"%s"</td></tr>\n' % summary_str))
     for langid in sorted(setup.supported_languages()):
         assert (isinstance(langid, str))
-        print '<tr lang="%s">' % (langid)
+        print('<tr lang="%s">' % (langid))
         native_name = bleachbit.Unix.Locales.native_locale_names[langid]
-        print '<td>%s</td>' % langid
-        print '<td>%s</td>' % (native_name)
+        print('<td>%s</td>' % langid)
+        print('<td>%s</td>' % (native_name))
         lang = gettext.translation(
             'bleachbit', localedir=dir_bb_locale, languages=[langid])
         lang.install()
         stats = get_translation_progress(langid)
-        print '<td>%s</td>' % (stats)
+        print('<td>%s</td>' % (stats))
         free_space = lang.gettext(summary_str)
         # print 'free_space =', free_space
         if free_space == summary_str:
             free_space = '&nbsp;'
-        print '<td>%s</td>' % free_space
-        print '</tr>'
-    print '</table>'
+        print('<td>%s</td>' % free_space)
+        print('</tr>')
+    print('</table>')
 
 main()

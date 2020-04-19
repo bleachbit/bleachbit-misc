@@ -43,7 +43,7 @@ locale_dir = 'locale'
 
 gettext.bindtextdomain('bleachbit', locale_dir)
 gettext.textdomain('bleachbit')
-gettext.install('bleachbit', locale_dir, unicode=1)
+gettext.install('bleachbit', locale_dir)
 
 
 def get_lang_str(langid, str):
@@ -54,11 +54,11 @@ def get_lang_str(langid, str):
 
 
 def print_desktop_keys(key, value):
-    print '%s=%s' % (key, value)
+    print ('%s=%s' % (key, value))
     for langid in sorted(setup.supported_languages()):
         translated = get_lang_str(langid, value)
         if translated != value:
-            print '%s[%s]=%s' % (key, langid, translated)
+            print ('%s[%s]=%s' % (key, langid, translated))
 
 
 def main():
