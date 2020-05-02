@@ -12,6 +12,10 @@
     <disable arch="ppc64p7"/>
     <disable arch="ppc64le"/>
   </build>
+  <repository name="xUbuntu_20.04">
+    <path project="Ubuntu:20.04" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="xUbuntu_19.10">
     <path project="Ubuntu:19.10" repository="universe"/>
     <arch>x86_64</arch>
@@ -42,6 +46,13 @@
   <repository name="openSUSE_Leap_42.3">
     <path project="openSUSE:Leap:42.3" repository="standard"/>
     <arch>x86_64</arch>
+  </repository>
+  <repository name="Fedora_32">
+    <path project="Fedora:32" repository="standard"/>
+    <arch>x86_64</arch>
+    <arch>armv7l</arch>
+    <arch>aarch64</arch>
+    <arch>ppc64le</arch>
   </repository>
   <repository name="Fedora_31">
     <path project="Fedora:31" repository="standard"/>
