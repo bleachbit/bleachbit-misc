@@ -16,14 +16,6 @@
     <path project="Ubuntu:20.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_19.10">
-    <path project="Ubuntu:19.10" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="xUbuntu_19.04">
-    <path project="Ubuntu:19.04" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="xUbuntu_18.04">
     <path project="Ubuntu:18.04" repository="universe"/>
     <arch>x86_64</arch>
@@ -57,14 +49,6 @@
   <repository name="Fedora_31">
     <path project="Fedora:31" repository="standard"/>
     <arch>x86_64</arch>
-    <arch>armv7l</arch>
-    <arch>aarch64</arch>
-    <arch>ppc64le</arch>
-  </repository>
-  <repository name="Fedora_30">
-    <path project="Fedora:30" repository="standard"/>
-    <arch>x86_64</arch>
-    <arch>i586</arch>
     <arch>armv7l</arch>
     <arch>aarch64</arch>
     <arch>ppc64le</arch>
