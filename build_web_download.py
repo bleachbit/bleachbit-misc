@@ -123,6 +123,8 @@ def filename_to_distro(filename):
             'ubuntu1810': 'Ubuntu 18.10 (Cosmic Cuttlefish)',
             'ubuntu1904': 'Ubuntu 19.04 (Disco Dingo)',
             'ubuntu1910': 'Ubuntu 19.10 (Eoan Ermine)',
+            'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
+            'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
             'debian6': 'Debian 6 (Squeeze)',
             'debian7': 'Debian 7 (Wheezy)',
             'debian8': 'Debian 8 (Jessie)',
