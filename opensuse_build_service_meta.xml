@@ -29,11 +29,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_14.04">
-    <path project="Ubuntu:14.04" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="openSUSE_Tumbleweed">
     <path project="openSUSE:Factory" repository="snapshot"/>
     <arch>i586</arch>
@@ -57,20 +52,8 @@
     <arch>aarch64</arch>
     <arch>ppc64le</arch>
   </repository>
-  <repository name="Fedora_31">
-    <path project="Fedora:31" repository="standard"/>
-    <arch>x86_64</arch>
-    <arch>armv7l</arch>
-    <arch>aarch64</arch>
-    <arch>ppc64le</arch>
-  </repository>
   <repository name="Debian_9.0">
     <path project="Debian:9.0" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="Debian_8.0">
-    <path project="Debian:8.0" repository="standard"/>
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
