@@ -31,7 +31,7 @@ def read_http(url):
     return opener.open(url).read().decode()
 
 
-def parse_search_html(lang_id, msgctxt, msgid, start):
+def parse_search_html(lang_id, msgid, start):
     """
     Query Launchpad for a message, and add its URL to the
     global dictionary.
@@ -39,7 +39,6 @@ def parse_search_html(lang_id, msgctxt, msgid, start):
     Parameters
     ----------
     lang_id: language code such as en_GB
-    msgctxt: message context
     msgid: message (i.e.g, English string)
     start: index for pagination
 
@@ -125,7 +124,7 @@ def who_translated(lang_id, msgctxt, msgid):
 
     start = 0
     while True:
-        start = parse_search_html(lang_id, msgctxt, msgid, start)
+        start = parse_search_html(lang_id, msgid, start)
         msgctxt_key = "none" if msgctxt is None else msgctxt
         if msgctxt_key in translations[lang_id]:
             if msgid in translations[lang_id][msgctxt_key]:
