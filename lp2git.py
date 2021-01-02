@@ -206,13 +206,13 @@ def process_po(lang_id):
     print('Count of new messages:', len(msgids))
 
     if not msgids:
-        print ('No changes for language %s' % lang_id)
+        print('No changes for language %s' % lang_id)
         return None
 
     names = []
     for (msgctxt, msgid) in msgids:
-        print ("looking for msgctxt '%s' msgid '%s' for lang '%s'" % \
-            (msgctxt, msgid, lang_id))
+        print("looking for msgctxt '%s' msgid '%s' for lang '%s'" %
+              (msgctxt, msgid, lang_id))
         names = names + who_translated(lang_id, msgctxt, msgid)
     lang_name = get_lang_name(po_new, lang_id)
     if len(set(names)) == 1:
@@ -245,16 +245,18 @@ def download_po_files(urls):
             langs[lang_id] = cmd
 
     for lang_id, cmd in langs.items():
-        print ('mv %s_new.po %s.po' % (lang_id, lang_id))
+        print('mv %s_new.po %s.po' % (lang_id, lang_id))
         os.rename('%s_new.po' % lang_id, '%s.po' % lang_id)
-        print (cmd)
+        print(cmd)
         # cmd is a Unicode, so encode to bytestring to avoid
         # UnicodeEncodeError: 'ascii' codec can't encode character u'\xf6' in position 49: ordinal not in range(128)
         os.system(cmd.encode('utf-8'))
 
+
 def go():
     """Main program"""
     download_po_files(sys.argv[1:])
+
 
 if __name__ == '__main__':
     go()
