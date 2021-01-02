@@ -14,6 +14,7 @@
 from bs4 import BeautifulSoup
 from polib import pofile
 from urllib.parse import urlencode
+from joblib import Memory
 import os
 import re
 import sys
@@ -23,12 +24,46 @@ import sys
 # https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/es/159/+translate
 translations = {}
 
+# Disabling search is a workaround for this timeout error
+# https://bugs.launchpad.net/launchpad/+bug/1909501
+disable_search = True
+
+cache_dir = None
+
+
+def get_cache_dir():
+    """Initialize and return the directory name to use for joblib caching"""
+    global cache_dir
+    if cache_dir:
+        # If available, use the cached result.
+        return cache_dir
+    cache_base = os.getenv('XDG_CACHE_HOME') or os.path.expanduser('~/.cache')
+    if not os.path.exists(cache_base):
+        os.mkdir(cache_base)
+    # Add hack to expire cache daily.
+    # https://github.com/joblib/joblib/issues/313
+    from datetime import datetime
+    date_code = datetime.now().strftime('%Y-%m-%d')
+    cache_dir = os.path.join(cache_base, f'lp2git-{date_code}')
+    if not os.path.exists(cache_dir):
+        os.mkdir(cache_dir)
+    print(f'info: caching to directory {cache_dir}')
+    return cache_dir
+
+
+def open_read_decode(opener, url):
+    """Given a build_opener, return the decoded body"""
+    print(f'debug: fetch url {url}')
+    return opener.open(url).read().decode()
+
 
 def read_http(url):
     from urllib.request import build_opener
     opener = build_opener()
     opener.addheaders = [('User-agent', 'lp2git')]
-    return opener.open(url).read().decode()
+    memory = Memory(get_cache_dir(), verbose=0)
+    ord_func = memory.cache(open_read_decode)
+    return ord_func(opener, url)
 
 
 def parse_search_html(lang_id, msgid, start):
@@ -39,7 +74,7 @@ def parse_search_html(lang_id, msgid, start):
     Parameters
     ----------
     lang_id: language code such as en_GB
-    msgid: message (i.e.g, English string)
+    msgid: message (i.e., English string)
     start: index for pagination
 
     Returns
@@ -47,12 +82,14 @@ def parse_search_html(lang_id, msgid, start):
     integer: value of start indicating to get more results
     None: there are no more search results
     """
-    param = urlencode({'show': 'all',
-                       'search': msgid,
-                       'start': start})
-    url = 'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/%s/+translate?%s' \
-        % (lang_id, param)
-    print ('debug: fetch url %s ' % url)
+    if disable_search:
+        url = f'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/{lang_id}/+translate?start={start}'
+    else:
+        param = urlencode({'show': 'all',
+                           'search': msgid,
+                           'start': start})
+        url = f'https://translations.launchpad.net/bleachbit/trunk/+pots/bleachbit/{lang_id}/+translate?{param}'
+
     doc = read_http(url)
     soup = BeautifulSoup(doc, features="lxml")
     for tr in soup.findAll('tr', attrs={'class': 'translation'}):
@@ -94,7 +131,6 @@ def parse_search_html(lang_id, msgid, start):
 
 def parse_detail_html(url):
     """Parse a Launchpad page for an individual translation message"""
-    print ('debug: fetch url %s ' % url)
     doc = read_http(url)
     soup = BeautifulSoup(doc, features="lxml")
     label = soup.find('label', 'no-translation')
@@ -199,7 +235,6 @@ def download_po_files(urls):
             raise RuntimeError('file %s.po does not exist' % lang_id)
 
     for url in urls:
-        print ('debug: downloading url %s' % url)
         doc = read_http(url)
         ret = re.search('-([a-z]{2,3}(_[A-Z]{2})?).po$', url, re.I)
         lang_id = ret.groups(0)[0]
