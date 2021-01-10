@@ -231,6 +231,9 @@ def create_html_snippet(filenames, header):
         # Users often ask for Mint packages, so for convenience provide
         # a link to the compatible Ubuntu package.
         # https://en.wikipedia.org/wiki/Linux_Mint_version_history
+        if distro == 'Ubuntu 20.04 LTS (Focal Fossa)':
+            distro = distro_txt = 'Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'
+            records.append((distro_txt, distro, url, filename))
         if distro == 'Ubuntu 18.04 LTS (Bionic Beaver)':
             distro = distro_txt = 'Linux Mint 19 - 19.2 (Tara - Tina)'
             records.append((distro_txt, distro, url, filename))
