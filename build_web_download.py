@@ -24,8 +24,6 @@ import traceback
 
 def url_to_distro(url):
     """Given a URL, return the distribution and version"""
-    if url == 'RedHat_RHEL-6':
-        return ('RHEL', '6')
     d = url.split("/")[6]
     if d.find('RedHat_') == 0:
         # example: RedHat_RHEL-6
@@ -71,38 +69,17 @@ def make_tag(distro, ver):
 
 def filename_to_distro(filename):
     """Given a filename, return a pretty distribution name"""
-    if filename.find('centosCentOS-6') > -1:
-    # bleachbit-0.9.0beta-1.1.centosCentOS-6.noarch.rpm
-        return 'CentOS 6'
     if 'opensuseTumbleweed' in filename:
         # example: bleachbit-3.9.0-5.1.opensuseTumbleweed.noarch.rpm
         return 'openSUSE Tumbleweed'
     tag = re.findall("\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
         distros = {
-            'centos6': 'CentOS 6',
             'centos7': 'CentOS 7',
             'centos8': 'CentOS 8',
-            'fc20': 'Fedora 20 (Heisenbug)',
-            'fc21': 'Fedora 21',
-            'fc22': 'Fedora 22',
-            'fc23': 'Fedora 23',
-            'fc24': 'Fedora 24',
-            'fc25': 'Fedora 25',
-            'fc26': 'Fedora 26',
-            'fc27': 'Fedora 27',
-            'fc28': 'Fedora 28',
-            'fc29': 'Fedora 29',
-            'fc30': 'Fedora 30',
-            'fc31': 'Fedora 31',
             'fc32': 'Fedora 32',
             'fc33': 'Fedora 33',
-            'opensuse131': 'openSUSE 13.1',
-            'opensuse132': 'openSUSE 13.2',
-            'opensuse421': 'openSUSE Leap 42.1',
-            'opensuse422': 'openSUSE Leap 42.2',
             'opensuse423': 'openSUSE Leap 42.3',
-            'el6': 'RHEL 6',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
         }
@@ -110,24 +87,10 @@ def filename_to_distro(filename):
     tag = re.findall("_([a-z]*[0-9]*)\.deb$", filename)
     if len(tag) == 1:
         distros = {
-            'ubuntu1204': 'Ubuntu 12.04 (Precise Pangolin)',
-            'ubuntu1404': 'Ubuntu 14.04 LTS (Trusty Tahr)',
-            'ubuntu1410': 'Ubuntu 14.10 (Utopic Unicorn)',
-            'ubuntu1504': 'Ubuntu 15.04 (Vivid Vervet)',
-            'ubuntu1510': 'Ubuntu 15.10 (Wily Werewolf)',
             'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
-            'ubuntu1610': 'Ubuntu 16.10 (Yakkety Yak)',
-            'ubuntu1704': 'Ubuntu 17.04 (Zesty Zapus)',
-            'ubuntu1710': 'Ubuntu 17.10 (Artful Aardvark)',
             'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
-            'ubuntu1810': 'Ubuntu 18.10 (Cosmic Cuttlefish)',
-            'ubuntu1904': 'Ubuntu 19.04 (Disco Dingo)',
-            'ubuntu1910': 'Ubuntu 19.10 (Eoan Ermine)',
             'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
             'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
-            'debian6': 'Debian 6 (Squeeze)',
-            'debian7': 'Debian 7 (Wheezy)',
-            'debian8': 'Debian 8 (Jessie)',
             'debian9': 'Debian 9 (Strech)',
             'debian10': 'Debian 10 (Buster)'
         }
@@ -239,9 +202,6 @@ def create_html_snippet(filenames, header):
             records.append((distro_txt, distro, url, filename))
         if distro == 'Ubuntu 16.04 LTS (Xenial Xerus)':
             distro = distro_txt = 'Linux Mint 18 - 18.3 (Sarah - Sylvia)'
-            records.append((distro_txt, distro, url, filename))
-        if distro == 'Ubuntu 14.04 LTS (Trusty Tahr)':
-            distro = distro_txt = 'Linux Mint 17 - 17.3 (Qiana - Rosa)'
             records.append((distro_txt, distro, url, filename))
 
     for filename in filenames:
