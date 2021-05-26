@@ -56,6 +56,9 @@ def get_lang_str(langid, str):
 def print_desktop_keys(key, value):
     print ('%s=%s' % (key, value))
     for langid in sorted(setup.supported_languages()):
+        if '_new' in langid:
+            # in process by lp2git
+            continue
         translated = get_lang_str(langid, value)
         if translated != value:
             print ('%s[%s]=%s' % (key, langid, translated))
