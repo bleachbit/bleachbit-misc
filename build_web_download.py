@@ -79,6 +79,7 @@ def filename_to_distro(filename):
             'centos8': 'CentOS 8',
             'fc32': 'Fedora 32',
             'fc33': 'Fedora 33',
+            'fc34': 'Fedora 34',
             'opensuse423': 'openSUSE Leap 42.3',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
@@ -91,6 +92,7 @@ def filename_to_distro(filename):
             'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
             'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
             'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
+            'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
             'debian9': 'Debian 9 (Strech)',
             'debian10': 'Debian 10 (Buster)'
         }
