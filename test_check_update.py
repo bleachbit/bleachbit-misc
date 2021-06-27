@@ -22,7 +22,7 @@ sys.path.append(dir_bb_root)
 import bleachbit
 import bleachbit.Update
 
-latest_stable = '4.2.0'
+latest_stable = '4.4.0'
 latest_beta = None
 
 # tuple in the format
@@ -32,13 +32,14 @@ tests = \
      ('3.0.1', latest_stable, None),
      ('3.1.0', latest_stable, None),
      ('3.2.0', latest_stable, None),
-     ('3.9.0',latest_stable, None),
-     ('3.9.1',latest_stable,None),
+     ('3.9.0', latest_stable, None),
+     ('3.9.1', latest_stable,None),
      ('3.9.2', latest_stable, None),
      ('4.0.0', latest_stable, None),
      ('4.1.0', latest_stable, None),
      ('4.1.1', latest_stable, None),
-     ('4.2.0', None, None))
+     ('4.2.0', latest_stable, None),
+     ('4.4.0', None, None))
 
 for test in tests:
     print ('\n', '*' * 10, test[0])
