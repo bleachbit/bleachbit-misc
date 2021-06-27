@@ -33,7 +33,7 @@ tests = \
      ('3.1.0', latest_stable, None),
      ('3.2.0', latest_stable, None),
      ('3.9.0', latest_stable, None),
-     ('3.9.1', latest_stable,None),
+     ('3.9.1', latest_stable, None),
      ('3.9.2', latest_stable, None),
      ('4.0.0', latest_stable, None),
      ('4.1.0', latest_stable, None),
@@ -42,14 +42,14 @@ tests = \
      ('4.4.0', None, None))
 
 for test in tests:
-    print ('\n', '*' * 10, test[0])
+    print('\n', '*' * 10, test[0])
     bleachbit.APP_VERSION = test[0]
     bleachbit.update_check_url = "%s/update/%s" % (
         bleachbit.base_url, bleachbit.APP_VERSION)
     v1e = test[1]  # e=expected
     v2e = test[2]
     cu = bleachbit.Update.check_updates(True, False, None, None)
-    print ('returned=', cu)
+    print('returned=', cu)
     match = False
     if cu == ():
         v1r = None  # r=returned
@@ -64,8 +64,8 @@ for test in tests:
         else:
             v2r = None
     if not v1e == v1r:
-        print ('ERROR: sent version %s, expected v1=%s, returned v1=%s' % \
-            (test[0], v1e, v1r))
+        print('ERROR: sent version %s, expected v1=%s, returned v1=%s' %
+              (test[0], v1e, v1r))
     if not v2e == v2r:
-        print ('ERROR: sent version %s, expected v1=%s, returned v2=%s' % \
-            (test[0], v2e, v2r))
+        print('ERROR: sent version %s, expected v1=%s, returned v2=%s' %
+              (test[0], v2e, v2r))
