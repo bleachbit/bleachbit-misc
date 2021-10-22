@@ -12,6 +12,14 @@
     <disable arch="ppc64p7"/>
     <disable arch="ppc64le"/>
   </build>
+  <repository name="xUbuntu_21.10">
+    <path project="Ubuntu:21.10" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="xUbuntu_21.04">
+    <path project="Ubuntu:21.04" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="xUbuntu_20.10">
     <path project="Ubuntu:20.10" repository="universe"/>
     <arch>x86_64</arch>
@@ -38,6 +46,13 @@
     <path project="openSUSE:Leap:42.3" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
+  <repository name="Fedora_34">
+    <path project="Fedora:34" repository="standard"/>
+    <arch>x86_64</arch>
+    <arch>armv7l</arch>
+    <arch>aarch64</arch>
+    <arch>ppc64le</arch>
+  </repository>
   <repository name="Fedora_33">
     <path project="Fedora:33" repository="standard"/>
     <arch>x86_64</arch>
@@ -54,6 +69,11 @@
   </repository>
   <repository name="Debian_9.0">
     <path project="Debian:9.0" repository="standard"/>
+    <arch>i586</arch>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="Debian_11">
+    <path project="Debian:11" repository="standard"/>
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
