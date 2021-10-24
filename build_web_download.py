@@ -53,7 +53,7 @@ def make_tag(distro, ver):
         if ver in ('60', '70', '80', '90'):
             # "90" is Debian 9
             ver = ver[0]
-        elif ver in ('10'):
+        elif ver in ('10','11'):
             # 10 is Debian 10
             pass
         else:
@@ -80,6 +80,7 @@ def filename_to_distro(filename):
             'fc32': 'Fedora 32',
             'fc33': 'Fedora 33',
             'fc34': 'Fedora 34',
+            'fc34': 'Fedora 35',
             'opensuse423': 'openSUSE Leap 42.3',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
@@ -94,7 +95,8 @@ def filename_to_distro(filename):
             'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
             'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
             'debian9': 'Debian 9 (Strech)',
-            'debian10': 'Debian 10 (Buster)'
+            'debian10': 'Debian 10 (Buster)',
+            'debian11': 'Debian 11 (Bullseye)'
         }
         return distros[tag[0]]
 
