@@ -80,7 +80,9 @@ def filename_to_distro(filename):
             'fc32': 'Fedora 32',
             'fc33': 'Fedora 33',
             'fc34': 'Fedora 34',
-            'fc34': 'Fedora 35',
+            'fc35': 'Fedora 35',
+            'fc36': 'Fedora 36',
+            'fc37': 'Fedora 37',
             'opensuse423': 'openSUSE Leap 42.3',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
