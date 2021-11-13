@@ -96,6 +96,7 @@ def filename_to_distro(filename):
             'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
             'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
             'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
+            'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
             'debian9': 'Debian 9 (Strech)',
             'debian10': 'Debian 10 (Buster)',
             'debian11': 'Debian 11 (Bullseye)'
