@@ -12,6 +12,14 @@
     <disable arch="ppc64p7"/>
     <disable arch="ppc64le"/>
   </build>
+  <repository name="xUbuntu_22.10">
+    <path project="Ubuntu:22.10" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="xUbuntu_22.04">
+    <path project="Ubuntu:22.04" repository="universe"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="xUbuntu_21.10">
     <path project="Ubuntu:21.10" repository="universe"/>
     <arch>x86_64</arch>
@@ -28,11 +36,6 @@
     <path project="Ubuntu:18.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_16.04">
-    <path project="Ubuntu:16.04" repository="universe"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="openSUSE_Tumbleweed">
     <path project="openSUSE:Factory" repository="snapshot"/>
     <arch>i586</arch>
@@ -42,19 +45,19 @@
     <path project="openSUSE:Leap:42.3" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_34">
-    <path project="Fedora:34" repository="standard"/>
-    <arch>x86_64</arch>
-    <arch>armv7l</arch>
+  <repository name="Fedora_37">
+    <path project="Fedora:37" repository="standard"/>
     <arch>aarch64</arch>
+    <arch>armv7l</arch>
     <arch>ppc64le</arch>
+    <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_33">
-    <path project="Fedora:33" repository="standard"/>
-    <arch>x86_64</arch>
-    <arch>armv7l</arch>
+  <repository name="Fedora_36">
+    <path project="Fedora:36" repository="standard"/>
     <arch>aarch64</arch>
+    <arch>armv7l</arch>
     <arch>ppc64le</arch>
+    <arch>x86_64</arch>
   </repository>
   <repository name="Debian_9.0">
     <path project="Debian:9.0" repository="standard"/>
@@ -80,3 +83,4 @@
     <arch>x86_64</arch>
   </repository>
 </project>
+
