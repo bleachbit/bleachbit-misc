@@ -41,7 +41,8 @@ tests = \
      ('4.2.0', latest_stable, None),
      ('4.4.0', latest_stable, None),
      ('4.4.1', latest_stable, None),
-     ('4.4.2', None, None))
+     ('4.4.2', None, None),
+     ('4.5.0', None, None))
 
 for test in tests:
     print('\n', '*' * 10, test[0])
