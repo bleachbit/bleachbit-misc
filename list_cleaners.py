@@ -34,7 +34,7 @@ def main():
         for (option_id, name) in backends[key].get_options():
             options.append(name)
 
-        print '<li title="%s">%s</li>' % (", ".join(options), backends[key].get_name())
+        print('<li title="%s">%s</li>' % (", ".join(options), backends[key].get_name()))
 
 
 main()

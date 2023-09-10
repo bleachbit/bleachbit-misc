@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: ts=4:sw=4:expandtab
 
 # Copyright (C) 2008-2015 by Andrew Ziem.  All rights reserved.
@@ -16,7 +16,7 @@ an HTML snippet of download links
 
 import os
 import subprocess
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import sys
 import re
 import traceback
@@ -53,7 +53,7 @@ def make_tag(distro, ver):
         if ver in ('60', '70', '80', '90'):
             # "90" is Debian 9
             ver = ver[0]
-        elif ver in ('10','11'):
+        elif ver in ('10','11','12'):
             # 10 is Debian 10
             pass
         else:
@@ -83,6 +83,7 @@ def filename_to_distro(filename):
             'fc35': 'Fedora 35',
             'fc36': 'Fedora 36',
             'fc37': 'Fedora 37',
+            'fc38': 'Fedora 38',
             'opensuse423': 'openSUSE Leap 42.3',
             'el7': 'RHEL 7',
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
@@ -97,9 +98,12 @@ def filename_to_distro(filename):
             'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
             'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
             'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
+            'ubuntu2204': 'Ubuntu 23.04 (Lunar Lobster)',
+            'ubuntu2304': 'Ubuntu 23.04',
             'debian9': 'Debian 9 (Strech)',
             'debian10': 'Debian 10 (Buster)',
-            'debian11': 'Debian 11 (Bullseye)'
+            'debian11': 'Debian 11 (Bullseye)',
+            'debian12': 'Debian 12 (Bookworm)'
         }
         return distros[tag[0]]
 
@@ -125,37 +129,39 @@ def url_to_filename(url):
         return old_fn.split(".noarch")[0] + "." + tag + ".noarch.rpm"
     if old_fn.endswith(".deb"):
         return old_fn.replace(".deb", "") + "_" + tag + ".deb"
-    raise Exception("Unexpected filename '%s'" % (old_fn,))
+    raise Exception(f"Unexpected filename '{old_fn}'")
 
 
 def get_repo_urls(osc_dir):
     """Return repository URLs returned by "osc repourls" """
-    print "* Getting list of URLs"
+    print("* Getting list of URLs")
     old_cwd = os.getcwd()
     os.chdir(osc_dir)
     repourls = subprocess.Popen(
         ["osc", "repourls"], stdout=subprocess.PIPE).communicate()[0]
-    repourls = repourls.split("\n")
+    repourls = repourls.decode().split("\n")
     os.chdir(old_cwd)
     return repourls
 
 
 def get_files_in_repo_sub(url):
     """Return a list of files in an OBS repository sub-directory"""
-    print "opening url '%s'" % (url,)
+    print(f"opening url '{url}'")
     try:
-        dir = urllib2.urlopen(url).read(100000)
+        dir = urllib.request.urlopen(url).read(100000)
     except:
-        print str(sys.exc_info()[1])
+        print(str(sys.exc_info()[1]))
         return []
     files = []
-    for (file, ext) in re.findall('"([a-z0-9_.-]*)(rpm|deb)"', dir):
+    for (file, ext) in re.findall(r"([a-z0-9_.-]+)(rpm|deb)", dir.decode()):
         fn = file + ext
         fileurl = url + fn
-        print "found fileurl '%s'" % (fileurl,)
+        print(f"found fileurl '{fileurl}'")
         files.append(fileurl)
     # make the list unique
     files = list(set(files))
+    if not files:
+        print(f'WARNING: no files found in {url}')
     return files
 
 
@@ -172,13 +178,13 @@ def get_files_in_repo(repourl):
 
 def get_files_in_repos(repourls):
     """Return a list of files in an OBS repository"""
-    print "* Getting files in repos"
+    print("* Getting files in repos")
     files = []
     for repourl in repourls:
         if len(repourl) < 3:
             break
         files += get_files_in_repo(repourl)
-    print files
+    print(files)
     return files
 
 
@@ -190,7 +196,7 @@ def strip_tags(value):
 
 def create_html_snippet(filenames, header):
     """Create an HTML snippet with links to download packages"""
-    print "* Creating HTML snippet"
+    print("* Creating HTML snippet")
 
     # collect list of download packages
     records = []
@@ -238,7 +244,9 @@ def create_html_snippet(filenames, header):
 def write_download_urls(urls):
     """"Build a shell script that downloads URLs and renames the files"""
     with open('download_from_obs.sh', 'w') as f:
+        assert len(urls) > 0
         for url in urls:
+            assert url.startswith('http')
             local_fn = url_to_filename(url)
             cmd = 'wget -nv -nc -O %s %s' % (local_fn, url)
             f.write('%s\n' % cmd)
@@ -246,10 +254,10 @@ def write_download_urls(urls):
 
 def main():
     if len(sys.argv) == 1:
-        print 'invoke with either --make-download (OSC directory) or --make-html'
+        print('invoke with either --make-download (OSC directory) or --make-html')
         sys.exit(1)
     elif sys.argv[1] == '--make-download':
-        print "getting URLs from OpenSUSE Build Service"
+        print("getting URLs from OpenSUSE Build Service")
         repourls = get_repo_urls(sys.argv[2])
         fileurls = get_files_in_repos(repourls)
         write_download_urls(fileurls)
