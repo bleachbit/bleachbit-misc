@@ -16,20 +16,8 @@
     <path project="Ubuntu:23.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_22.10">
-    <path project="Ubuntu:22.10" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="xUbuntu_22.04">
     <path project="Ubuntu:22.04" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="xUbuntu_21.10">
-    <path project="Ubuntu:21.10" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="xUbuntu_21.04">
-    <path project="Ubuntu:21.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
   <repository name="xUbuntu_20.04">
