@@ -70,11 +70,6 @@
     <arch>ppc64le</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Debian_9.0">
-    <path project="Debian:9.0" repository="standard"/>
-    <arch>i586</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_12">
     <path project="Debian:12" repository="standard"/>
     <arch>i586</arch>
