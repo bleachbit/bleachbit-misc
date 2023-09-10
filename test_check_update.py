@@ -23,7 +23,7 @@ import bleachbit
 import bleachbit.Update
 
 latest_stable = '4.4.2'
-latest_beta = None
+latest_beta = '4.5.0 (beta)'
 
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
@@ -41,7 +41,7 @@ tests = \
      ('4.2.0', latest_stable, None),
      ('4.4.0', latest_stable, None),
      ('4.4.1', latest_stable, None),
-     ('4.4.2', None, None),
+     ('4.4.2', latest_beta, None),
      ('4.5.0', None, None))
 
 for test in tests:
