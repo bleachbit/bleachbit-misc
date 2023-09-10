@@ -63,13 +63,6 @@
     <arch>ppc64le</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_36">
-    <path project="Fedora:36" repository="standard"/>
-    <arch>aarch64</arch>
-    <arch>armv7l</arch>
-    <arch>ppc64le</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_12">
     <path project="Debian:12" repository="standard"/>
     <arch>i586</arch>
