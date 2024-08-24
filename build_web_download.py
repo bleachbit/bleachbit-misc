@@ -72,7 +72,7 @@ def filename_to_distro(filename):
     if 'opensuseTumbleweed' in filename:
         # example: bleachbit-3.9.0-5.1.opensuseTumbleweed.noarch.rpm
         return 'openSUSE Tumbleweed'
-    tag = re.findall("\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
+    tag = re.findall(r"\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
         distros = {
             'centos7': 'CentOS 7',
@@ -89,7 +89,7 @@ def filename_to_distro(filename):
             'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
         }
         return distros[tag[0]]
-    tag = re.findall("_([a-z]*[0-9]*)\.deb$", filename)
+    tag = re.findall(r"_([a-z]*[0-9]*)\.deb$", filename)
     if len(tag) == 1:
         distros = {
             'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
