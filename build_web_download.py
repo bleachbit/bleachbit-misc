@@ -22,6 +22,41 @@ import re
 import traceback
 
 
+# https://en.wikipedia.org/wiki/Linux_Mint_version_history
+UBUNTU_TO_MINT = {
+    'Ubuntu 24.04 LTS (Noble Numbat)': ['']
+    'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'],
+    'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)'],
+    'Ubuntu 16.04 LTS (Xenial Xerus)': ['Linux Mint 18 - 18.3 (Sarah - Sylvia)'],
+}
+
+DISTRO_CODE_TO_NAME = {
+    'centos7': 'CentOS 7',
+    'centos8': 'CentOS 8',
+    'fc37': 'Fedora 37',
+    'fc38': 'Fedora 38',
+    'fc39': 'Fedora 39',
+    'fc40': 'Fedora 40',
+    'opensuse423': 'openSUSE Leap 42.3',
+    'el7': 'RHEL 7',
+    'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11',
+    'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
+    'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
+    'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
+    'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
+    'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
+    'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
+    'ubuntu2204': 'Ubuntu 22.04 (Jammy Jellyfish)',
+    'ubuntu2304': 'Ubuntu 23.04 (Lunar Lobster)',
+    'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
+    'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
+    'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
+    'debian9': 'Debian 9 (Strech)',
+    'debian10': 'Debian 10 (Buster)',
+    'debian11': 'Debian 11 (Bullseye)',
+    'debian12': 'Debian 12 (Bookworm)'
+}
+
 def url_to_distro(url):
     """Given a URL, return the distribution and version"""
     d = url.split("/")[6]
@@ -67,6 +102,7 @@ def make_tag(distro, ver):
     raise Exception("Unknown distro %s" % (distro,))
 
 
+
 def filename_to_distro(filename):
     """Given a filename, return a pretty distribution name"""
     if 'opensuseTumbleweed' in filename:
@@ -76,38 +112,10 @@ def filename_to_distro(filename):
         return 'openSUSE Slowroll'
     tag = re.findall(r"\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
-        distros = {
-            'centos7': 'CentOS 7',
-            'centos8': 'CentOS 8',
-            'fc37': 'Fedora 37',
-            'fc38': 'Fedora 38',
-            'fc39': 'Fedora 39',
-            'fc40': 'Fedora 40',
-            'opensuse423': 'openSUSE Leap 42.3',
-            'el7': 'RHEL 7',
-            'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11'
-        }
-        return distros[tag[0]]
+        return DISTRO_CODE_TO_NAME[tag[0]]
     tag = re.findall(r"_([a-z]*[0-9]*)\.deb$", filename)
     if len(tag) == 1:
-        distros = {
-            'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
-            'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
-            'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
-            'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
-            'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
-            'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
-            'ubuntu2204': 'Ubuntu 22.04 (Jammy Jellyfish)',
-            'ubuntu2304': 'Ubuntu 23.04 (Lunar Lobster)',
-            'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
-            'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
-            'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
-            'debian9': 'Debian 9 (Strech)',
-            'debian10': 'Debian 10 (Buster)',
-            'debian11': 'Debian 11 (Bullseye)',
-            'debian12': 'Debian 12 (Bookworm)'
-        }
-        return distros[tag[0]]
+        return DISTRO_CODE_TO_NAME[tag[0]]
 
     if filename.endswith('.exe'):
         return 'Microsoft Windows'
@@ -198,7 +206,6 @@ def strip_tags(value):
     # http://smitbones.blogspot.com/2008/01/python-strip-html-tags-function.html
     return re.sub(r'<[^>]*?>', '', value)
 
-
 def add_package(distro, url, filename):
     """Add package to HTML snippet
 
@@ -207,20 +214,12 @@ def add_package(distro, url, filename):
     returns a list of tuples (distro_txt, distro, url, filename)
     """
     distro_txt = strip_tags(distro)  # for sorting
-    ret = []
-    ret.append((distro_txt, distro, url, filename))
+    ret = [(distro_txt, distro, url, filename)]
     # Users often ask for Mint packages, so for convenience provide
     # a link to the compatible Ubuntu package.
-    # https://en.wikipedia.org/wiki/Linux_Mint_version_history
-    if distro == 'Ubuntu 20.04 LTS (Focal Fossa)':
-        distro = distro_txt = 'Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'
-        ret.append((distro_txt, distro, url, filename))
-    if distro == 'Ubuntu 18.04 LTS (Bionic Beaver)':
-        distro = distro_txt = 'Linux Mint 19 - 19.2 (Tara - Tina)'
-        ret.append((distro_txt, distro, url, filename))
-    if distro == 'Ubuntu 16.04 LTS (Xenial Xerus)':
-        distro = distro_txt = 'Linux Mint 18 - 18.3 (Sarah - Sylvia)'
-        ret.append((distro_txt, distro, url, filename))
+    if distro in UBUNTU_TO_MINT:
+        for d in UBUNTU_TO_MINT[distro]:
+            ret.append((strip_tags(d), d, url, filename))
     if 'Ubuntu' in distro and ' LTS ' in distro and len(ret) == 1:
         raise RuntimeError(f'Add {distro} to add_package()')
     return ret
