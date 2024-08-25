@@ -37,10 +37,6 @@
     <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="openSUSE_Leap_42.3">
-    <path project="openSUSE:Leap:42.3" repository="standard"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Fedora_40">
     <path project="Fedora:40" repository="standard"/>
     <arch>aarch64</arch>
