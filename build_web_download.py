@@ -100,7 +100,7 @@ def filename_to_distro(filename):
             'ubuntu2204': 'Ubuntu 22.04 (Jammy Jellyfish)',
             'ubuntu2304': 'Ubuntu 23.04 (Lunar Lobster)',
             'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
-            'ubuntu2404': 'Ubuntu 24.04 (Noble Numbat)',
+            'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
             'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
             'debian9': 'Debian 9 (Strech)',
             'debian10': 'Debian 10 (Buster)',
@@ -199,6 +199,32 @@ def strip_tags(value):
     return re.sub(r'<[^>]*?>', '', value)
 
 
+def add_package(distro, url, filename):
+    """Add package to HTML snippet
+
+    distro: human name of Linux distribution
+
+    returns a list of tuples (distro_txt, distro, url, filename)
+    """
+    distro_txt = strip_tags(distro)  # for sorting
+    ret = []
+    ret.append((distro_txt, distro, url, filename))
+    # Users often ask for Mint packages, so for convenience provide
+    # a link to the compatible Ubuntu package.
+    # https://en.wikipedia.org/wiki/Linux_Mint_version_history
+    if distro == 'Ubuntu 20.04 LTS (Focal Fossa)':
+        distro = distro_txt = 'Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'
+        ret.append((distro_txt, distro, url, filename))
+    if distro == 'Ubuntu 18.04 LTS (Bionic Beaver)':
+        distro = distro_txt = 'Linux Mint 19 - 19.2 (Tara - Tina)'
+        ret.append((distro_txt, distro, url, filename))
+    if distro == 'Ubuntu 16.04 LTS (Xenial Xerus)':
+        distro = distro_txt = 'Linux Mint 18 - 18.3 (Sarah - Sylvia)'
+        ret.append((distro_txt, distro, url, filename))
+    if 'Ubuntu' in distro and ' LTS ' in distro and len(ret) == 1:
+        raise RuntimeError(f'Add {distro} to add_package()')
+    return ret
+
 def create_html_snippet(filenames, header):
     """Create an HTML snippet with links to download packages"""
     print("* Creating HTML snippet")
@@ -206,31 +232,15 @@ def create_html_snippet(filenames, header):
     # collect list of download packages
     records = []
 
-    def add_package(distro, url, filename):
-        distro_txt = strip_tags(distro)  # for sorting
-        records.append((distro_txt, distro, url, filename))
-        # Users often ask for Mint packages, so for convenience provide
-        # a link to the compatible Ubuntu package.
-        # https://en.wikipedia.org/wiki/Linux_Mint_version_history
-        if distro == 'Ubuntu 20.04 LTS (Focal Fossa)':
-            distro = distro_txt = 'Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'
-            records.append((distro_txt, distro, url, filename))
-        if distro == 'Ubuntu 18.04 LTS (Bionic Beaver)':
-            distro = distro_txt = 'Linux Mint 19 - 19.2 (Tara - Tina)'
-            records.append((distro_txt, distro, url, filename))
-        if distro == 'Ubuntu 16.04 LTS (Xenial Xerus)':
-            distro = distro_txt = 'Linux Mint 18 - 18.3 (Sarah - Sylvia)'
-            records.append((distro_txt, distro, url, filename))
-
     for filename in filenames:
         if len(filename) < 5 \
-                or re.search('(bonus|(tar.(bz2|lzma|gz)|zip|txt|txt.asc|html)$)', filename):
+                or re.search(r'(bonus|(tar.(bz2|lzma|gz)|zip|txt|txt.asc|html|sh)$)', filename):
             continue
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
         #url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
         url = "/download/file/t?file=%s" % filename
-        add_package(distro, url, filename)
+        records.extend(add_package(distro, url, filename))
 
     # sort by distribution name
     import operator
