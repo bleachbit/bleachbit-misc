@@ -55,20 +55,6 @@
     <arch>aarch64</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_38">
-    <path project="Fedora:38" repository="standard"/>
-    <arch>aarch64</arch>
-    <arch>armv7l</arch>
-    <arch>ppc64le</arch>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="Fedora_37">
-    <path project="Fedora:37" repository="standard"/>
-    <arch>aarch64</arch>
-    <arch>armv7l</arch>
-    <arch>ppc64le</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_12">
     <path project="Debian:12" repository="standard"/>
     <arch>i586</arch>
