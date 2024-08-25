@@ -72,6 +72,8 @@ def filename_to_distro(filename):
     if 'opensuseTumbleweed' in filename:
         # example: bleachbit-3.9.0-5.1.opensuseTumbleweed.noarch.rpm
         return 'openSUSE Tumbleweed'
+    if 'opensuseSlowroll' in filename:
+        return 'openSUSE Slowroll'
     tag = re.findall(r"\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
         distros = {
