@@ -88,9 +88,4 @@
     <path project="CentOS:CentOS-8" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="CentOS_7">
-    <path project="CentOS:CentOS-7" repository="standard"/>
-    <arch>x86_64</arch>
-  </repository>
 </project>
-
