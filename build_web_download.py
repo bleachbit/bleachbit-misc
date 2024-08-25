@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # vim: ts=4:sw=4:expandtab
 
-# Copyright (C) 2008-2015 by Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2024 by Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -139,13 +139,16 @@ def get_repo_urls(osc_dir):
     os.chdir(osc_dir)
     repourls = subprocess.Popen(
         ["osc", "repourls"], stdout=subprocess.PIPE).communicate()[0]
-    repourls = repourls.decode().split("\n")
+    repourls_txt = repourls.decode()
+    repourls = re.findall(r"https?://[^\s]+", repourls_txt)
     os.chdir(old_cwd)
     return repourls
 
 
 def get_files_in_repo_sub(url):
     """Return a list of files in an OBS repository sub-directory"""
+    if not url.startswith('http'):
+        raise RuntimeError(f'not a valid url {url}')
     print(f"opening url '{url}'")
     try:
         dir = urllib.request.urlopen(url).read(100000)
