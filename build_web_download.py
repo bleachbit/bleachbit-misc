@@ -24,8 +24,9 @@ import traceback
 
 # https://en.wikipedia.org/wiki/Linux_Mint_version_history
 UBUNTU_TO_MINT = {
-    'Ubuntu 24.04 LTS (Noble Numbat)': ['']
-    'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.1 (Ulyana - Ulyssa)'],
+    'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 (Wilma)'],
+    'Ubuntu 22.04 LTS (Jammy Jellyfish)': ['Linux Mint 21 - 21.3 (Vanessa - Virginia)'],
+    'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.3 (Ulyana - Una)'],
     'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)'],
     'Ubuntu 16.04 LTS (Xenial Xerus)': ['Linux Mint 18 - 18.3 (Sarah - Sylvia)'],
 }
@@ -46,7 +47,7 @@ DISTRO_CODE_TO_NAME = {
     'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
     'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
     'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
-    'ubuntu2204': 'Ubuntu 22.04 (Jammy Jellyfish)',
+    'ubuntu2204': 'Ubuntu 22.04 LTS (Jammy Jellyfish)',
     'ubuntu2304': 'Ubuntu 23.04 (Lunar Lobster)',
     'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
     'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
