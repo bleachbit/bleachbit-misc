@@ -73,5 +73,5 @@ for test in tests:
         print('ERROR: sent version %s, expected v1=%s, returned v1=%s' %
               (test[0], v1e, v1r))
     if not v2e == v2r:
-        print('ERROR: sent version %s, expected v1=%s, returned v2=%s' %
+        print('ERROR: sent version %s, expected v2=%s, returned v2=%s' %
               (test[0], v2e, v2r))
