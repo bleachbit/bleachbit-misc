@@ -51,25 +51,33 @@ def get_lang_str(langid, str):
     return lang.gettext(str)
 
 
-def print_desktop_keys(key, value):
-    print ('%s=%s' % (key, value))
+def update_desktop(parser, key, value):
     for langid in sorted(setup.supported_languages()):
         if '_new' in langid:
-            # in process by lp2git
-            continue
+            raise ValueError('langid=_new')
         translated = get_lang_str(langid, value)
         if translated != value:
-            print ('%s[%s]=%s' % (key, langid, translated))
+            key_lang = f"{key}[{langid}]"
+            parser['Desktop Entry'][key_lang] = translated
 
+def process_desktop_file():
+    from configparser import ConfigParser
+    parser = ConfigParser()
+    parser.optionxform = str # preserve case
+    parser.read('org.bleachbit.BleachBit.desktop', encoding='utf-8')
+    update_desktop(parser, 'Comment', 'Free space and maintain privacy')
+    update_desktop(parser,'GenericName', 'Unnecessary file cleaner')
+    with open('org.bleachbit.BleachBit.desktop', 'w', encoding='utf-8') as f:
+        parser.write(f, space_around_delimiters=False)
 
 def main():
     if not os.path.exists('po/es.po'):
-        print('ERROR: po/es.po does not exist. It should always be in the bleachbit repo.')
-        print('Tip: Verify you are in the right directory.')
+        print('ERROR: po/es.po does not exist.')
+        print('Tip: Verify you are in the root directory of the BleachBit repository.')
         sys.exit(1)
     if not os.path.exists('po/es.mo'):
         print('ERROR: po/es.mo does not exist, so it seems translations are not compiled.')
-        print('Tip: try running "make -C po local" from the bleachbit repo.')
+        print('Tip: try running "make -C po local" from the BleachBit repo.')
         print('Running the command for you.')
         ret = subprocess.run(['make', '-C', 'po', 'local'])
         if ret.returncode != 0:
@@ -78,8 +86,8 @@ def main():
         if not os.path.exists('po/es.mo'):
             print('ERROR: po/es.mo does not exist even after running "make -C po local"')
             sys.exit(1)
-    print_desktop_keys('Comment', 'Free space and maintain privacy')
-    print_desktop_keys('GenericName', 'Unnecessary file cleaner')
+    process_desktop_file()
+
 
 
 main()
