@@ -11,7 +11,14 @@
     <disable arch="aarch64"/>
     <disable arch="ppc64p7"/>
     <disable arch="ppc64le"/>
+    <disable arch="s390x"/>
+    <disable arch="i586"/>
   </build>
+  <publish>
+    <disable arch="s390x"/>
+    <disable arch="ppc64le"/>
+    <disable arch="aarch64"/>
+  </publish>
   <repository name="xUbuntu_24.04">
     <path project="Ubuntu:24.04" repository="universe"/>
     <arch>x86_64</arch>
@@ -34,32 +41,26 @@
   </repository>
   <repository name="openSUSE_Tumbleweed">
     <path project="openSUSE:Factory" repository="snapshot"/>
-    <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
   <repository name="openSUSE_Slowroll">
     <path project="openSUSE:Slowroll" repository="standard"/>
-    <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
   <repository name="Fedora_40">
     <path project="Fedora:40" repository="standard"/>
-    <arch>aarch64</arch>
     <arch>x86_64</arch>
   </repository>
   <repository name="Fedora_39">
     <path project="Fedora:39" repository="standard"/>
-    <arch>aarch64</arch>
     <arch>x86_64</arch>
   </repository>
   <repository name="Debian_12">
     <path project="Debian:12" repository="standard"/>
-    <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
   <repository name="Debian_11">
     <path project="Debian:11" repository="standard"/>
-    <arch>i586</arch>
     <arch>x86_64</arch>
   </repository>
 </project>
