@@ -27,50 +27,35 @@ UBUNTU_TO_MINT = {
     'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 (Wilma)'],
     'Ubuntu 22.04 LTS (Jammy Jellyfish)': ['Linux Mint 21 - 21.3 (Vanessa - Virginia)'],
     'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.3 (Ulyana - Una)'],
-    'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)'],
-    'Ubuntu 16.04 LTS (Xenial Xerus)': ['Linux Mint 18 - 18.3 (Sarah - Sylvia)'],
+    'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)']
 }
 
 DISTRO_CODE_TO_NAME = {
-    'centos7': 'CentOS 7',
-    'centos8': 'CentOS 8',
-    'fc37': 'Fedora 37',
-    'fc38': 'Fedora 38',
+    'centos9': 'CentOS 9 Stream',    
     'fc39': 'Fedora 39',
-    'fc40': 'Fedora 40',
-    'opensuse423': 'openSUSE Leap 42.3',
-    'el7': 'RHEL 7',
-    'sle11': '<acronym title="SUSE Linux Enterprise">SLE</acronym> 11',
-    'ubuntu1604': 'Ubuntu 16.04 LTS (Xenial Xerus)',
+    'fc40': 'Fedora 40',        
     'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
     'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
-    'ubuntu2010': 'Ubuntu 20.10 (Groovy Gorilla)',
-    'ubuntu2104': 'Ubuntu 21.04 (Hirsute Hippo)',
-    'ubuntu2110': 'Ubuntu 21.10 (Impish Indri)',
     'ubuntu2204': 'Ubuntu 22.04 LTS (Jammy Jellyfish)',
-    'ubuntu2304': 'Ubuntu 23.04 (Lunar Lobster)',
     'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
     'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
-    'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
-    'debian9': 'Debian 9 (Strech)',
-    'debian10': 'Debian 10 (Buster)',
+    'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',    
     'debian11': 'Debian 11 (Bullseye)',
     'debian12': 'Debian 12 (Bookworm)'
 }
 
-def url_to_distro(url):
+def url_to_distro(url : str) -> (str, str):
     """Given a URL, return the distribution and version"""
-    d = url.split("/")[6]
-    if d.find('RedHat_') == 0:
+    assert url.startswith('https://download.opensuse.org'), f"not an OBS URL: {url}"
+    distro_ver = url.split("/")[6]
+    if re.match(r'CentOS_\d+_Stream', distro_ver):
+        distro_ver = re.sub('_Stream$', '', distro_ver)
+    if distro_ver.find('RedHat_') == 0:
         # example: RedHat_RHEL-6
-        (dummy, distrover) = d.split("_")
+        (dummy, distrover) = distro_ver.split("_")
         (distro, ver) = distrover.split("-")
-    elif d.startswith('openSUSE_Leap'):
-        # example: openSUSE_Leap_42.3
-        distro = 'openSUSE_Leap'
-        ver = d.split('_')[2]
     else:
-        (distro, ver) = d.split("_")
+        (distro, ver) = distro_ver.split("_")        
     if distro == "xUbuntu":
         distro = "Ubuntu"
     return (distro, ver)
@@ -82,24 +67,16 @@ def make_tag(distro, ver):
     if distro == 'Fedora':
         # official
         return 'fc' + ver
-    if distro in ('CentOS', 'SLE', 'Ubuntu'):
+    if distro in ('CentOS', 'Ubuntu'):
         return distro.lower() + ver
     if distro == 'Debian':
-        # unofficial
-        if ver in ('60', '70', '80', '90'):
-            # "90" is Debian 9
-            ver = ver[0]
-        elif ver in ('10','11','12'):
-            # 10 is Debian 10
-            pass
-        else:
+        # unofficial        
+        if not ver in ('11','12'):
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
-    if distro in ('openSUSE', 'openSUSE_Leap'):
+    if distro == 'openSUSE':
         # unofficial
-        return 'opensuse' + ver
-    if distro == 'RHEL':
-        return 'el' + ver
+        return 'opensuse' + ver    
     raise Exception("Unknown distro %s" % (distro,))
 
 
@@ -234,7 +211,7 @@ def create_html_snippet(filenames, header):
 
     for filename in filenames:
         if len(filename) < 5 \
-                or re.search(r'(bonus|(tar.(bz2|lzma|gz)|zip|txt|txt.asc|html|sh)$)', filename):
+                or re.search(r'((tar.(bz2|lzma|gz)|zip|txt|txt.asc|html|sh)$)', filename):
             continue
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
