@@ -60,10 +60,6 @@
     <path project="Fedora:40" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_39">
-    <path project="Fedora:39" repository="standard"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_12">
     <path project="Debian:12" repository="standard"/>
     <arch>x86_64</arch>
