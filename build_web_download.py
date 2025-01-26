@@ -31,9 +31,9 @@ UBUNTU_TO_MINT = {
 }
 
 DISTRO_CODE_TO_NAME = {
-    'centos9': 'CentOS 9 Stream',    
-    'fc39': 'Fedora 39',
-    'fc40': 'Fedora 40',        
+    'centos9': 'CentOS 9 Stream',
+    'fc40': 'Fedora 40',
+    'fc41': 'Fedora 41',
     'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
     'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
     'ubuntu2204': 'Ubuntu 22.04 LTS (Jammy Jellyfish)',
@@ -78,7 +78,6 @@ def make_tag(distro, ver):
         # unofficial
         return 'opensuse' + ver    
     raise Exception("Unknown distro %s" % (distro,))
-
 
 
 def filename_to_distro(filename):
