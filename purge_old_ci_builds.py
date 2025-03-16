@@ -14,23 +14,8 @@ ci.bleachbit.org. This script helps purge the older builds.
 """
 
 import subprocess
-
-args = ['s3cmd', 'ls', 's3://bleachbitci/dl/']
-ls_raw = subprocess.check_output(args)
-
-ls_lines = ls_raw.decode().split('\n')
-
-# get relevant directories
-dirs = []
-for line in ls_lines:
-    if '' == ls_lines:
-        break
-    line_s = line.split()
-    if not len(line_s) == 2:
-        break
-    if line_s[0] != 'DIR':
-        break
-    dirs.append(line_s[1])
+import unittest
+from pkg_resources import parse_version
 
 # sort by version number,keep newest first
 def key_ver(path):
@@ -38,31 +23,74 @@ def key_ver(path):
     ver_str = path.split('/')[4]
     from pkg_resources import parse_version
     try:
+        # Extract version number before the hyphen
+        ver_str = ver_str.split('-')[0]
         ret = parse_version(ver_str)
     except ValueError:
-        print('Not a recognizable version:', ver_str)
+        print('Not a recognizable version:', ver_str, path)
         ret = ver_str
     return ret
 
-dirs.sort(key=key_ver, reverse=True)
+def get_dirs():
+    """Get the list of directories from S3."""
+    args = ['s3cmd', 'ls', 's3://bleachbitci/dl/']
+    ls_raw = subprocess.check_output(args)
+    ls_lines = ls_raw.decode().split('\n')
 
-# Keep the newest builds.
-keep_newest_n = 5
-print('Keeping the following {} newest directories:'.format(keep_newest_n))
-for d in dirs[:keep_newest_n]:
-    print ('     ', d)
-print()
-# Delete the older builds.
-if len(dirs) > keep_newest_n:
-    print('Issue the following command to perform the delete')
+    # get relevant directories
+    dirs = []
+    for line in ls_lines:
+        if '' == ls_lines:
+            break
+        line_s = line.split()
+        if not len(line_s) == 2:
+            break
+        if line_s[0] != 'DIR':
+            break
+        dirs.append(line_s[1])
+
+    dirs.sort(key=key_ver, reverse=True)
+    return dirs
+
+
+class TestKeyVer(unittest.TestCase):
+    def test_key_ver(self):
+        # Test cases
+        test_cases = [
+            ("s3://bleachbitci/dl/4.6.2.2665-v4.6.2/", "4.6.2.2665"),
+            ("s3://bleachbitci/dl/4.9.0.2773-certificate_verify/", "4.9.0.2773"),
+        ]
+        for path, expected in test_cases:
+            with self.subTest(path=path):
+                # Use parse_version for both actual and expected values
+                self.assertEqual(key_ver(path), parse_version(expected))
+
+def main():
+    """Main function."""
+    dirs = get_dirs()
+    assert dirs is not None
+    assert len(dirs) > 3
+    # Keep the newest builds.
+    keep_newest_n = 5
+    print('Keeping the following {} newest directories:'.format(keep_newest_n))
+    for d in dirs[:keep_newest_n]:
+        print('     ', d)
     print()
-    # s3cmd 1.6.1 does not support multiple paths to delete at once
-    # Support was added in its Git repository November 2016.
-    # For now, issue separate commands.
-    #delete_dirs = ' '.join(dirs[keep_newest_n:])
-    #delete_cmd = 's3cmd del -r {}'.format(delete_dirs)
-    # print(delete_cmd)
-    for delete_dir in dirs[keep_newest_n:]:
-        print('s3cmd del -r {}'.format(delete_dir))
-else:
-    print('nothing to delete')
+    # Delete the older builds.
+    if len(dirs) > keep_newest_n:
+        print('Issue the following command to perform the delete')
+        print()
+        # s3cmd 1.6.1 does not support multiple paths to delete at once
+        # Support was added in its Git repository November 2016.
+        # For now, issue separate commands.
+        #delete_dirs = ' '.join(dirs[keep_newest_n:])
+        #delete_cmd = 's3cmd del -r {}'.format(delete_dirs)
+        # print(delete_cmd)
+        for delete_dir in dirs[keep_newest_n:]:
+            print('s3cmd del -r {}'.format(delete_dir))
+    else:
+        print('nothing to delete')
+
+
+if __name__ == '__main__':
+    main()
