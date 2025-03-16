@@ -27,20 +27,12 @@
     <path project="Ubuntu:24.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_23.10">
-    <path project="Ubuntu:23.10" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="xUbuntu_22.04">
     <path project="Ubuntu:22.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
   <repository name="xUbuntu_20.04">
     <path project="Ubuntu:20.04" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
-  <repository name="xUbuntu_18.04">
-    <path project="Ubuntu:18.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
   <repository name="openSUSE_Tumbleweed">
@@ -74,4 +66,3 @@
     <arch>x86_64</arch>
   </repository>
 </project>
-
