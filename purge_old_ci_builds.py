@@ -15,13 +15,12 @@ ci.bleachbit.org. This script helps purge the older builds.
 
 import subprocess
 import unittest
-from pkg_resources import parse_version
+from packaging.version import parse as parse_version
 
 # sort by version number,keep newest first
 def key_ver(path):
     """Convert an S3 path into a StrictVersion for sorting"""
     ver_str = path.split('/')[4]
-    from pkg_resources import parse_version
     try:
         # Extract version number before the hyphen
         ver_str = ver_str.split('-')[0]
