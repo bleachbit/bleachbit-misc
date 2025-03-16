@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # vim: ts=4:sw=4:expandtab
 
-# Copyright (C) 2016 by Andrew Ziem.  All rights reserved.
-# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
-# This is free software: you are free to change and redistribute it.
-# There is NO WARRANTY, to the extent permitted by law.
-#
-#
-
 """
+Copyright (C) 2016-2025 by Andrew Ziem.  All rights reserved.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
 Windows builds are frequently and automatically published to
 ci.bleachbit.org. This script helps purge the older builds.
 """
@@ -17,7 +15,7 @@ import subprocess
 import unittest
 from packaging.version import parse as parse_version
 
-# sort by version number,keep newest first
+
 def key_ver(path):
     """Convert an S3 path into a StrictVersion for sorting"""
     ver_str = path.split('/')[4]
@@ -39,7 +37,7 @@ def get_dirs():
     # get relevant directories
     dirs = []
     for line in ls_lines:
-        if '' == ls_lines:
+        if not line:
             break
         line_s = line.split()
         if not len(line_s) == 2:
@@ -48,6 +46,7 @@ def get_dirs():
             break
         dirs.append(line_s[1])
 
+    # Sort by version number, keeping the newest first.
     dirs.sort(key=key_ver, reverse=True)
     return dirs
 
@@ -71,9 +70,9 @@ def main():
     assert len(dirs) > 3
     # Keep the newest builds.
     keep_newest_n = 5
-    print('Keeping the following {} newest directories:'.format(keep_newest_n))
+    print(f'Keeping the following {keep_newest_n} newest directories:')
     for d in dirs[:keep_newest_n]:
-        print('     ', d)
+        print(f'     {d}')
     print()
     # Delete the older builds.
     if len(dirs) > keep_newest_n:
@@ -86,7 +85,7 @@ def main():
         #delete_cmd = 's3cmd del -r {}'.format(delete_dirs)
         # print(delete_cmd)
         for delete_dir in dirs[keep_newest_n:]:
-            print('s3cmd del -r {}'.format(delete_dir))
+            print(f's3cmd del -r {delete_dir}')
     else:
         print('nothing to delete')
 
