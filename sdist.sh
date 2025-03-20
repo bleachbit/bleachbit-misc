@@ -10,6 +10,8 @@
 
 
 NAME=bleachbit
+# Use CLI argument for branch if provided, otherwise use default
+BRANCH=${1:-master}
 GITD=/tmp/bleachbit_git
 GITURL=https://github.com/bleachbit/bleachbit.git
 
@@ -20,8 +22,8 @@ fi
 echo "mkdir $GITD"
 mkdir $GITD || exit 1
 cd $GITD || exit 1
-echo "git clone"
-time git clone --depth 1 $GITURL $GITDIR || { echo "git clone failed"; exit 1; }
+echo "git clone $BRANCH"
+time git clone --depth 1 $GITURL -b $BRANCH $GITDIR || { echo "git clone failed"; exit 1; }
 cd bleachbit || { echo "cd bleachbit failed"; exit 1; }
 
 echo "python setup"
