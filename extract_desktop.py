@@ -34,7 +34,6 @@ os.chdir(bleachbit_repo_dir)
 sys.path.append(".")
 
 import setup
-import bleachbit.Unix
 
 
 locale_dir = 'locale'
