@@ -20,7 +20,7 @@ sys.path.append(dir_bb_root)
 import bleachbit
 import bleachbit.Update
 
-LATEST_STABLE = '4.6.2'
+LATEST_STABLE = '5.0.0'
 LATEST_BETA = '4.9.2 (beta)'
 
 
@@ -43,11 +43,12 @@ def main():
          ('4.5.1', LATEST_STABLE, None),
          ('4.6.0', LATEST_STABLE, None),
          ('4.6.1', LATEST_STABLE, None),
-         ('4.6.2', LATEST_BETA, None),
-         ('4.6.3', LATEST_BETA, None),
-         ('4.9.0', LATEST_BETA, None),
-         ('4.9.1', LATEST_BETA, None),
-         ('4.9.2', None, None))
+         ('4.6.2', LATEST_STABLE, None),
+         ('4.6.3', LATEST_STABLE, None),
+         ('4.9.0', LATEST_STABLE, None),
+         ('4.9.1', LATEST_STABLE, None),
+         ('4.9.2', LATEST_STABLE, None),
+         ('5.0.0', None, None))
 
     for test in tests:
         print('\n', '*' * 10, test[0])
