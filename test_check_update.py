@@ -18,8 +18,8 @@ dir_bb_root = os.path.abspath('../bleachbit')
 os.chdir(dir_bb_root)
 sys.path.append(dir_bb_root)
 
-import bleachbit
-import bleachbit.Update
+import bleachbit  # noqa: E402
+import bleachbit.Update  # noqa: E402
 
 LATEST_STABLE = '5.0.0'
 LATEST_BETA = '4.9.2 (beta)'
@@ -48,11 +48,11 @@ TESTS = \
      ('5.0.0', None, None))
 
 
-def do_test(app_version, version1_expected, version2_expected):
+def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url):
     """Do a single test"""
     print('\n', '*' * 10, app_version)
     bleachbit.APP_VERSION = app_version
-    bleachbit.update_check_url = f'{bleachbit.base_url}/update/{bleachbit.APP_VERSION}'
+    bleachbit.update_check_url = f'{base_url}/update/{bleachbit.APP_VERSION}'
 
     v1e = version1_expected  # e=expected
     v2e = version2_expected
@@ -90,6 +90,9 @@ def do_test(app_version, version1_expected, version2_expected):
 
 def main():
     """Main function"""
+    base_url = None
+    if len(sys.argv) > 1:
+        base_url = sys.argv[1]
 
     times_ms = []
     test_count = 0
@@ -98,7 +101,7 @@ def main():
 
     for (app_version, version1_expected, version2_expected) in TESTS:
         elapsed_time_ms, test_success = do_test(
-            app_version, version1_expected, version2_expected)
+            app_version, version1_expected, version2_expected, base_url)
         test_count += 1
         times_ms.append(elapsed_time_ms)
         if test_success:
