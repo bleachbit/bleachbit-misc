@@ -22,7 +22,7 @@ import bleachbit  # noqa: E402
 import bleachbit.Update  # noqa: E402
 
 LATEST_STABLE = '5.0.0'
-LATEST_BETA = '4.9.2 (beta)'
+LATEST_BETA = '5.0.1 (beta)'
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
 TESTS = \
@@ -37,19 +37,16 @@ TESTS = \
      ('4.4.0', LATEST_STABLE, None),
      ('4.4.2', LATEST_STABLE, None),
      ('4.5.0', LATEST_STABLE, None),
-     ('4.5.1', LATEST_STABLE, None),
      ('4.6.0', LATEST_STABLE, None),
-     ('4.6.1', LATEST_STABLE, None),
      ('4.6.2', LATEST_STABLE, None),
-     ('4.6.3', LATEST_STABLE, None),
-     ('4.9.0', LATEST_STABLE, None),
-     ('4.9.1', LATEST_STABLE, None),
-     ('4.9.2', LATEST_STABLE, None),
-     ('5.0.0', None, None))
+     ('5.0.0', LATEST_BETA, None),
+     ('5.0.1', None, None))
 
 
 def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url):
     """Do a single test"""
+    assert isinstance(base_url, str)
+    assert base_url.startswith('http')
     print('\n', '*' * 10, app_version)
     bleachbit.APP_VERSION = app_version
     bleachbit.update_check_url = f'{base_url}/update/{bleachbit.APP_VERSION}'
@@ -78,11 +75,11 @@ def do_test(app_version, version1_expected, version2_expected, base_url=bleachbi
             v2r = None
     if not v1e == v1r:
         print(
-            f'ERROR: sent version {test[0]}, expected v1={v1e}, returned v1={v1r}')
+            f'ERROR: sent version {app_version}, expected v1={v1e}, returned v1={v1r}')
         test_success = False
     if not v2e == v2r:
         print(
-            f'ERROR: sent version {test[0]}, expected v2={v2e}, returned v2={v2r}')
+            f'ERROR: sent version {app_version}, expected v2={v2e}, returned v2={v2r}')
         test_success = False
 
     return elapsed_time_ms, test_success
@@ -90,7 +87,7 @@ def do_test(app_version, version1_expected, version2_expected, base_url=bleachbi
 
 def main():
     """Main function"""
-    base_url = None
+    base_url = bleachbit.base_url
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
 
