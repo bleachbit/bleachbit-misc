@@ -69,9 +69,8 @@
     <path project="Debian:11" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="CentOS_9_Stream">
-    <path project="CentOS:CentOS-9:Stream" repository="standard"/>
-    <path project="Fedora:EPEL:9" repository="stream"/>
+  <repository name="AlmaLinux_9">
+    <path project="AlmaLinux:9" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
 </project>

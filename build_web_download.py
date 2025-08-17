@@ -24,15 +24,15 @@ import traceback
 
 # https://en.wikipedia.org/wiki/Linux_Mint_version_history
 UBUNTU_TO_MINT = {
-    'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 - 22.1 (Wilma - Xia)'],
+    'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 - 22.2 (Wilma - Zara)'],
     'Ubuntu 22.04 LTS (Jammy Jellyfish)': ['Linux Mint 21 - 21.3 (Vanessa - Virginia)'],
     'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.3 (Ulyana - Una)'],
     'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)']
 }
 
 DISTRO_CODE_TO_NAME = {
+    'alma9': 'AlmaLinux 9',
     'centos9': 'CentOS 9 Stream',
-    'fc40': 'Fedora 40',
     'fc41': 'Fedora 41',
     'fc42': 'Fedora 42',
     'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
@@ -43,7 +43,8 @@ DISTRO_CODE_TO_NAME = {
     'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
     'ubuntu2504': 'Ubuntu 25.04 (Plucky Puffin)',
     'debian11': 'Debian 11 (Bullseye)',
-    'debian12': 'Debian 12 (Bookworm)'
+    'debian12': 'Debian 12 (Bookworm)',
+    'debian13': 'Debian 13 (Trixie)',
 }
 
 def url_to_distro(url : str) -> (str, str):
@@ -71,9 +72,12 @@ def make_tag(distro, ver):
         return 'fc' + ver
     if distro in ('CentOS', 'Ubuntu'):
         return distro.lower() + ver
+    if distro == 'AlmaLinux':
+        assert int(ver) >= 9
+        return 'alma' + ver
     if distro == 'Debian':
         # unofficial        
-        if not ver in ('11','12'):
+        if not (11 <= int(ver) <= 99):
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
     if distro == 'openSUSE':
