@@ -23,10 +23,6 @@
     <path project="Ubuntu:25.04" repository="universe"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="xUbuntu_24.10">
-    <path project="Ubuntu:24.10" repository="universe"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="xUbuntu_24.04">
     <path project="Ubuntu:24.04" repository="universe"/>
     <arch>x86_64</arch>
