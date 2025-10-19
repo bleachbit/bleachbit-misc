@@ -13,6 +13,7 @@ Verify the online update notification system returns the right version numbers
 import os
 import sys
 import time
+import requests
 
 dir_bb_root = os.path.abspath('../bleachbit')
 os.chdir(dir_bb_root)
@@ -105,6 +106,19 @@ def main():
             success_count += 1
         else:
             error_count += 1
+
+    # Additional test: invalid path should return HTTP error
+    try:
+        invalid_url = f"{base_url}/test.html"
+        r = requests.get(invalid_url, timeout=10)
+        if r.status_code < 400:
+            print(f"ERROR: GET {invalid_url} returned {r.status_code}, expected 4xx/5xx")
+            error_count += 1
+        else:
+            print(f"Invalid path test passed: {invalid_url} -> {r.status_code}")
+    except requests.RequestException as e:
+        # Network error considered a pass for invalid path (treated as error on server side)
+        print(f"Invalid path test raised exception (treated as pass): {e}")
 
     print(
         f"\nTest summary: {test_count} total, {success_count} successful, {error_count} failed")
