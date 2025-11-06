@@ -22,7 +22,7 @@ sys.path.append(dir_bb_root)
 import bleachbit  # noqa: E402
 import bleachbit.Update  # noqa: E402
 
-LATEST_STABLE = '5.0.0'
+LATEST_STABLE = '5.0.2'
 LATEST_BETA = '5.0.1 (beta)'
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
@@ -40,8 +40,9 @@ TESTS = \
      ('4.5.0', LATEST_STABLE, None),
      ('4.6.0', LATEST_STABLE, None),
      ('4.6.2', LATEST_STABLE, None),
-     ('5.0.0', LATEST_BETA, None),
-     ('5.0.1', None, None))
+     ('5.0.0', LATEST_STABLE, None),
+     ('5.0.1', LATEST_STABLE, None),
+     ('5.0.2', None, None))
 
 
 def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url):
