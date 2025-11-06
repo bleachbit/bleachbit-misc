@@ -24,7 +24,7 @@ os.chdir(dir_bb_root)
 sys.path.append(dir_bb_root)
 
 import setup
-import bleachbit.Unix
+import bleachbit.Language
 
 gettext.bindtextdomain('bleachbit', dir_bb_locale)
 gettext.textdomain('bleachbit')
@@ -77,7 +77,7 @@ def main():
     for langid in sorted(setup.supported_languages()):
         assert (isinstance(langid, str))
         print('<tr lang="%s">' % (langid))
-        native_name = bleachbit.Unix.Locales.native_locale_names[langid]
+        native_name = bleachbit.Language.native_locale_names[langid]
         print('<td>%s</td>' % langid)
         print('<td>%s</td>' % (native_name))
         lang = gettext.translation(
