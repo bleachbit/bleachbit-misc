@@ -45,20 +45,30 @@ DISTRO_CODE_TO_NAME = {
     'debian11': 'Debian 11 (Bullseye)',
     'debian12': 'Debian 12 (Bookworm)',
     'debian13': 'Debian 13 (Trixie)',
+    'opensuse156' : 'openSUSE Leap 15.6',
+    'opensuse160' : 'openSUSE Leap 16.0',
 }
 
-def url_to_distro(url : str) -> (str, str):
+def url_to_distro(url: str) -> (str, str):
     """Given a URL, return the distribution and version"""
     assert url.startswith('https://download.opensuse.org'), f"not an OBS URL: {url}"
     distro_ver = url.split("/")[6]
+
+    # Handle openSUSE Leap versions (e.g., 15.6, 16.0)
+    if re.match(r'^\d+\.\d+$', distro_ver):
+        return ('openSUSE', distro_ver.replace('.', ''))
+
     if re.match(r'CentOS_\d+_Stream', distro_ver):
         distro_ver = re.sub('_Stream$', '', distro_ver)
     if distro_ver.find('RedHat_') == 0:
         # example: RedHat_RHEL-6
-        (dummy, distrover) = distro_ver.split("_")
+        (_, distrover) = distro_ver.split("_")
         (distro, ver) = distrover.split("-")
     else:
-        (distro, ver) = distro_ver.split("_")        
+        try:
+            (distro, ver) = distro_ver.split("_")
+        except ValueError:
+            raise Exception(f"Unknown distro ver {distro_ver} from {url}")
     if distro == "xUbuntu":
         distro = "Ubuntu"
     return (distro, ver)
@@ -76,13 +86,13 @@ def make_tag(distro, ver):
         assert int(ver) >= 9
         return 'alma' + ver
     if distro == 'Debian':
-        # unofficial        
+        # unofficial
         if not (11 <= int(ver) <= 99):
             raise Exception("Unknown debian ver %s" % (ver,))
         return 'debian' + ver
     if distro == 'openSUSE':
         # unofficial
-        return 'opensuse' + ver    
+        return 'opensuse' + ver
     raise Exception("Unknown distro %s" % (distro,))
 
 
