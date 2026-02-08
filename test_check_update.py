@@ -108,6 +108,41 @@ def main():
         else:
             error_count += 1
 
+    # Test 1: root URL (/) should return HTTP 200 with HTML content
+    try:
+        root_url = base_url
+        r = requests.get(root_url, timeout=10)
+        if r.status_code != 200:
+            print(f"ERROR: GET {root_url} returned {r.status_code}, expected 200")
+            error_count += 1
+        elif '<html>' not in r.text.lower():
+            print(f"ERROR: GET {root_url} returned 200 but response does not contain '<html>'")
+            error_count += 1
+        else:
+            print(f"Root URL test passed: {root_url} -> {r.status_code} with HTML content")
+            success_count += 1
+        test_count += 1
+    except requests.RequestException as e:
+        print(f"ERROR: Root URL test raised exception: {e}")
+        error_count += 1
+        test_count += 1
+
+    # Test 2: /help/{LATEST_STABLE} should return a redirect
+    try:
+        help_url = f"{base_url}/help/{LATEST_STABLE}"
+        r = requests.get(help_url, timeout=10, allow_redirects=False)
+        if r.status_code not in (301, 302, 303, 307, 308):
+            print(f"ERROR: GET {help_url} returned {r.status_code}, expected redirect (3xx)")
+            error_count += 1
+        else:
+            print(f"Help URL test passed: {help_url} -> {r.status_code} (redirect)")
+            success_count += 1
+        test_count += 1
+    except requests.RequestException as e:
+        print(f"ERROR: Help URL test raised exception: {e}")
+        error_count += 1
+        test_count += 1
+
     # Additional test: invalid path should return HTTP error
     try:
         invalid_url = f"{base_url}/test.html"
@@ -117,9 +152,13 @@ def main():
             error_count += 1
         else:
             print(f"Invalid path test passed: {invalid_url} -> {r.status_code}")
+            success_count += 1
+        test_count += 1
     except requests.RequestException as e:
         # Network error considered a pass for invalid path (treated as error on server side)
         print(f"Invalid path test raised exception (treated as pass): {e}")
+        success_count += 1
+        test_count += 1
 
     print(
         f"\nTest summary: {test_count} total, {success_count} successful, {error_count} failed")
