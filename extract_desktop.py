@@ -57,15 +57,16 @@ def update_desktop(parser, key, value):
         if '_new' in langid:
             raise ValueError('langid=_new')
         translated = get_lang_str(langid, value)
-        if translated != value:
-            key_lang = f"{key}[{langid}]"
-            if key_lang in parser['Desktop Entry']:
-                old_string = parser['Desktop Entry'][key_lang]
-            else:
-                old_string = ''
-            if old_string != translated:
-                changes += 1
-            parser['Desktop Entry'][key_lang] = translated
+        key_lang = f"{key}[{langid}]"
+        if key_lang in parser['Desktop Entry']:
+            old_string = parser['Desktop Entry'][key_lang]
+        else:
+            old_string = ''
+        # Add/update translation if it's different from current value
+        # or if the language doesn't exist yet in the desktop file
+        if old_string != translated:
+            changes += 1
+        parser['Desktop Entry'][key_lang] = translated
     return changes
 
 def process_desktop_file():
