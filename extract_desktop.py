@@ -25,6 +25,7 @@ Here is how it works
 import gettext
 import os
 import sys
+import subprocess
 
 bleachbit_repo_dir = '../bleachbit'
 if not os.path.exists(bleachbit_repo_dir):
