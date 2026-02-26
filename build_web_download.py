@@ -24,10 +24,9 @@ import traceback
 
 # https://en.wikipedia.org/wiki/Linux_Mint_version_history
 UBUNTU_TO_MINT = {
-    'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 - 22.2 (Wilma - Zara)'],
+    'Ubuntu 24.04 LTS (Noble Numbat)': ['Linux Mint 22 - 22.3 (Wilma - Zena)'],
     'Ubuntu 22.04 LTS (Jammy Jellyfish)': ['Linux Mint 21 - 21.3 (Vanessa - Virginia)'],
     'Ubuntu 20.04 LTS (Focal Fossa)': ['Linux Mint 20 - 20.3 (Ulyana - Una)'],
-    'Ubuntu 18.04 LTS (Bionic Beaver)': ['Linux Mint 19 - 19.2 (Tara - Tina)']
 }
 
 DISTRO_CODE_TO_NAME = {
@@ -35,13 +34,12 @@ DISTRO_CODE_TO_NAME = {
     'centos9': 'CentOS 9 Stream',
     'fc41': 'Fedora 41',
     'fc42': 'Fedora 42',
-    'ubuntu1804': 'Ubuntu 18.04 LTS (Bionic Beaver)',
+    'fc43': 'Fedora 43',
     'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
     'ubuntu2204': 'Ubuntu 22.04 LTS (Jammy Jellyfish)',
-    'ubuntu2310': 'Ubuntu 23.10 (Mantic Minitaur)',
     'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
-    'ubuntu2410': 'Ubuntu 24.10 (Oracular Oriole)',
-    'ubuntu2504': 'Ubuntu 25.04 (Plucky Puffin)',
+    'ubuntu2510': 'Ubuntu 25.10 (Questing Quokka)',
+    'ubuntu2604': 'Ubuntu 26.04 (Resolute Raccoon)',
     'debian11': 'Debian 11 (Bullseye)',
     'debian12': 'Debian 12 (Bookworm)',
     'debian13': 'Debian 13 (Trixie)',
