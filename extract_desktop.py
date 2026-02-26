@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-# vim: ts=4:sw=4:expandtab
 
-# Copyright (C) 2014-2024 by Andrew Ziem.  All rights reserved.
-# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
-# This is free software: you are free to change and redistribute it.
-# There is NO WARRANTY, to the extent permitted by law.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2014-2026 Andrew Ziem.
 #
-#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -58,6 +56,14 @@ def update_desktop(parser, key, value):
             raise ValueError('langid=_new')
         translated = get_lang_str(langid, value)
         key_lang = f"{key}[{langid}]"
+
+        if translated == value:
+            # Not translated
+            if key_lang in parser['Desktop Entry']:
+                del parser['Desktop Entry'][key_lang]
+                changes += 1
+            continue
+
         if key_lang in parser['Desktop Entry']:
             old_string = parser['Desktop Entry'][key_lang]
         else:
