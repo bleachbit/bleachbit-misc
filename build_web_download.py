@@ -248,13 +248,27 @@ def create_html_snippet(filenames, header):
 
 def write_download_urls(urls):
     """"Build a shell script that downloads URLs and renames the files"""
-    with open('download_from_obs.sh', 'w') as f:
+    with open('download_from_obs.sh', 'w', encoding='utf-8') as f:
         assert len(urls) > 0
+        f.write('#!/bin/bash\n')
+        f.write('# Download script for BleachBit packages from OBS\n')
+        f.write('# Uses wget with no-clobber to avoid re-downloading existing files\n')
+        f.write('# Exit code 1 from wget when file exists is expected and handled\n\n')
         for url in urls:
             assert url.startswith('http')
             local_fn = url_to_filename(url)
-            cmd = 'wget -nv -nc -O %s %s' % (local_fn, url)
-            f.write('%s\n' % cmd)
+            f.write(f'if [ -f "{local_fn}" ]; then\n')
+            f.write(f'  echo "Warning: {local_fn} already exists, skipping"\n')
+            f.write('  sleep 1\n')
+            f.write('else\n')
+            f.write(f'  wget -O {local_fn} {url} || {{\n')
+            f.write('    rc=$?\n')
+            f.write(f'    echo "Error downloading {local_fn}: exit code $rc"\n')
+            f.write('    sleep 5\n')
+            f.write('    exit $rc\n')
+            f.write('  }\n')
+            f.write('fi\n\n')
+        f.write('\necho "Download completed successfully"\n')
 
 
 def main():
