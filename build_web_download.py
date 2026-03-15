@@ -161,10 +161,9 @@ def get_files_in_repo_sub(url):
     for (file, ext) in re.findall(r"(bleachbit[a-z0-9_.-]+\.)(rpm|deb)", dir.decode()):
         fn = file + ext
         fileurl = url + fn
-        print(f"found fileurl '{fileurl}'")
-        files.append(fileurl)
-    # make the list unique
-    files = list(set(files))
+        if fileurl not in files:
+            print(f"found fileurl '{fileurl}'")
+            files.append(fileurl)
     if not files:
         print(f'WARNING: no files found in {url}')
     return files
