@@ -47,46 +47,62 @@ TESTS = \
      ('5.1.1', None, None))
 
 
-def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url):
-    """Do a single test"""
+def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url, os_version=None):
+    """Do a single test
+
+    Args:
+        os_version: Optional tuple (os_name, os_version) to override _get_os_name_version()
+                   e.g., ('Windows', '6.0') for Windows Vista testing
+    """
     assert isinstance(base_url, str)
     assert base_url.startswith('http')
-    print('\n', '*' * 10, app_version)
-    bleachbit.APP_VERSION = app_version
-    bleachbit.update_check_url = f'{base_url}/update/{bleachbit.APP_VERSION}'
 
-    v1e = version1_expected  # e=expected
-    v2e = version2_expected
+    # Apply OS version override if provided
+    if os_version:
+        original_get_os = bleachbit.Network._get_os_name_version
+        bleachbit.Network._get_os_name_version = lambda: os_version
 
-    start_time = time.time()
-    cu = bleachbit.Update.check_updates(True, False, None, None)
-    elapsed_time_ms = (time.time() - start_time) * 1000
+    try:
+        print('\n', '*' * 10, app_version)
+        bleachbit.APP_VERSION = app_version
+        bleachbit.update_check_url = f'{base_url}/update/{bleachbit.APP_VERSION}'
 
-    print(f'returned={cu}, time={elapsed_time_ms:.2f}ms')
+        v1e = version1_expected  # e=expected
+        v2e = version2_expected
 
-    test_success = True
-    if cu == ():
-        v1r = None  # r=returned
-        v2r = None
-    else:
-        if cu[0]:
-            v1r = cu[0][0]
-        else:
-            v1r = None
-        if len(cu) > 1:
-            v2r = cu[1][0]
-        else:
+        start_time = time.time()
+        cu = bleachbit.Update.check_updates(True, False, None, None)
+        elapsed_time_ms = (time.time() - start_time) * 1000
+
+        print(f'returned={cu}, time={elapsed_time_ms:.2f}ms')
+
+        test_success = True
+        if cu == ():
+            v1r = None  # r=returned
             v2r = None
-    if not v1e == v1r:
-        print(
-            f'ERROR: sent version {app_version}, expected v1={v1e}, returned v1={v1r}')
-        test_success = False
-    if not v2e == v2r:
-        print(
-            f'ERROR: sent version {app_version}, expected v2={v2e}, returned v2={v2r}')
-        test_success = False
+        else:
+            if cu[0]:
+                v1r = cu[0][0]
+            else:
+                v1r = None
+            if len(cu) > 1:
+                v2r = cu[1][0]
+            else:
+                v2r = None
+        if not v1e == v1r:
+            print(
+                f'ERROR: sent version {app_version}, expected v1={v1e}, returned v1={v1r}')
+            test_success = False
+        if not v2e == v2r:
+            print(
+                f'ERROR: sent version {app_version}, expected v2={v2e}, returned v2={v2r}')
+            test_success = False
 
-    return elapsed_time_ms, test_success
+        return elapsed_time_ms, test_success
+    finally:
+        # Restore original function if it was overridden
+        if os_version:
+            bleachbit.Network._get_os_name_version = original_get_os
 
 
 def main():
@@ -109,6 +125,27 @@ def main():
             success_count += 1
         else:
             error_count += 1
+
+    # Windows 6.0 (Vista) specific tests
+    # Windows 6.0 on 4.6.0 should be offered 4.6.2.
+    elapsed_time_ms, test_success = do_test(
+        '4.6.0', '4.6.2', None, base_url, os_version=('Windows', '6.0'))
+    test_count += 1
+    times_ms.append(elapsed_time_ms)
+    if test_success:
+        success_count += 1
+    else:
+        error_count += 1
+
+    # Windows 6.0 on 4.6.2 should *not* be offered an update.
+    elapsed_time_ms, test_success = do_test(
+        '4.6.2', None, None, base_url, os_version=('Windows', '6.0'))
+    test_count += 1
+    times_ms.append(elapsed_time_ms)
+    if test_success:
+        success_count += 1
+    else:
+        error_count += 1
 
     # Test 1: root URL (/) should return HTTP 200 with HTML content
     try:
