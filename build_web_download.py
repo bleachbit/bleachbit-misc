@@ -224,12 +224,12 @@ def create_html_snippet(filenames, header):
 
     for filename in filenames:
         if len(filename) < 5 \
-                or re.search(r'((tar.(bz2|lzma|gz)|zip|txt|txt.asc|html|sh)$)', filename):
+                or re.search(r'((tar.(bz2|lzma|gz)|zip|txt|txt.asc|html|sh|sig)$)', filename):
             continue
         distro = filename_to_distro(filename)
         # this url works as of 9/14/2010
         #url = "http://sourceforge.net/projects/bleachbit/files/%s" % filename
-        url = "/download/file/t?file=%s" % filename
+        url = f"https://download.bleachbit.org/get/{filename}"
         records.extend(add_package(distro, url, filename))
 
     # sort by distribution name
@@ -240,7 +240,7 @@ def create_html_snippet(filenames, header):
     f = open("snippet_%s.html" % (header.lower().replace(" ", "_"),), "w")
     f.write("<ul>\n")
     for (distro_txt, distro, url, filename) in records:
-        f.write("<li><a rel=\"external nofollow\" href=\"%(url)s\">%(distro)s</a></li>\n" %
+        f.write("<li><a rel=\"nofollow dns-prefetch\" href=\"%(url)s\">%(distro)s</a></li>\n" %
                 {'url': url, 'distro': distro})
 
     f.write("</ul>\n")
