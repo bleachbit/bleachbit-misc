@@ -27,7 +27,8 @@ time git clone --depth 1 $GITURL -b $BRANCH $GITDIR || { echo "git clone failed"
 cd bleachbit || { echo "cd bleachbit failed"; exit 1; }
 
 echo "python setup"
-VER=$(python3 bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/')
+#VER=$(python3 bleachbit.py --version | perl -ne 'print if s/^BleachBit version (.*)/$1/')
+VER=$(grep '^APP_VERSION = ' bleachbit/__init__.py | sed "s/APP_VERSION = \"\(.*\)\"/\1/")
 NAMEV=${NAME}-${VER}
 make clean
 REV=`git rev-parse --short HEAD`
