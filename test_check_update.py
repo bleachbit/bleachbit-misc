@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 """
-Copyright (C) 2014-2025 by Andrew Ziem.  All rights reserved.
+Copyright (C) 2014-2026 by Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -22,8 +22,9 @@ sys.path.append(dir_bb_root)
 import bleachbit  # noqa: E402
 import bleachbit.Update  # noqa: E402
 
-LATEST_STABLE = '5.0.2'
-LATEST_BETA = '5.1.1 (beta)'
+LATEST_STABLE = '6.0.0'
+LATEST_BETA = None  # no current beta release being promoted
+LEGACY_WINDOWS = '4.7.0'  # version of BleachBit for legacy Windows
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
 TESTS = \
@@ -42,9 +43,10 @@ TESTS = \
      ('4.6.2', LATEST_STABLE, None),
      ('5.0.0', LATEST_STABLE, None),
      ('5.0.1', LATEST_STABLE, None),
-     ('5.0.2', LATEST_BETA, None),
-     ('5.1.0', LATEST_BETA, None),
-     ('5.1.1', None, None))
+     ('5.0.2', LATEST_STABLE, None),
+     ('5.1.0', LATEST_STABLE, None),
+     ('5.1.1', LATEST_STABLE, None),
+     ('6.0.0', None, None))
 
 
 def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url, os_version=None):
@@ -127,9 +129,9 @@ def main():
             error_count += 1
 
     # Windows 6.0 (Vista) specific tests
-    # Windows 6.0 on 4.6.0 should be offered 4.6.2.
+    # Users on old Windows should be offered the legacy version.
     elapsed_time_ms, test_success = do_test(
-        '4.6.0', '4.6.2', None, base_url, os_version=('Windows', '6.0'))
+        '4.6.0', LEGACY_WINDOWS, None, base_url, os_version=('Windows', '6.0'))
     test_count += 1
     times_ms.append(elapsed_time_ms)
     if test_success:
@@ -137,9 +139,18 @@ def main():
     else:
         error_count += 1
 
-    # Windows 6.0 on 4.6.2 should *not* be offered an update.
     elapsed_time_ms, test_success = do_test(
-        '4.6.2', None, None, base_url, os_version=('Windows', '6.0'))
+        '4.6.2', LEGACY_WINDOWS, None, base_url, os_version=('Windows', '6.0'))
+    test_count += 1
+    times_ms.append(elapsed_time_ms)
+    if test_success:
+        success_count += 1
+    else:
+        error_count += 1
+
+    # Windows 6.0 on 4.7.0 should *not* be offered an update.
+    elapsed_time_ms, test_success = do_test(
+        '4.7.0', None, None, base_url, os_version=('Windows', '6.0'))
     test_count += 1
     times_ms.append(elapsed_time_ms)
     if test_success:
