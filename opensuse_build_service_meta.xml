@@ -47,6 +47,11 @@
     <path project="openSUSE:Slowroll" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
+  <repository name="Fedora_44">
+    <path project="Fedora:44" repository="standard"/>
+    <arch>aarch64</arch>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="Fedora_43">
     <path project="Fedora:43" repository="standard"/>
     <arch>aarch64</arch>
