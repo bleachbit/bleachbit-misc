@@ -111,6 +111,9 @@ def filename_to_distro(filename):
     if filename.endswith('.exe'):
         return 'Microsoft Windows'
 
+    if filename.endswith('.AppImage'):
+        return 'Linux (AppImage)'
+
     raise Exception("unknown distro for '%s'" % filename)
 
 
