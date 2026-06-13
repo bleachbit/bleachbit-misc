@@ -57,11 +57,6 @@
     <arch>aarch64</arch>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Fedora_42">
-    <path project="Fedora:42" repository="standard"/>
-    <arch>aarch64</arch>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="Debian_13">
     <path project="Debian:13" repository="standard"/>
     <arch>x86_64</arch>
@@ -88,4 +83,3 @@
     <arch>x86_64</arch>
   </repository>
 </project>
-
