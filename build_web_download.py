@@ -32,9 +32,6 @@ UBUNTU_TO_MINT = {
 DISTRO_CODE_TO_NAME = {
     'alma9': 'AlmaLinux 9',
     'centos9': 'CentOS 9 Stream',
-    'fc41': 'Fedora 41',
-    'fc42': 'Fedora 42',
-    'fc43': 'Fedora 43',
     'ubuntu2004': 'Ubuntu 20.04 LTS (Focal Fossa)',
     'ubuntu2204': 'Ubuntu 22.04 LTS (Jammy Jellyfish)',
     'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
@@ -46,6 +43,26 @@ DISTRO_CODE_TO_NAME = {
     'opensuse156' : 'openSUSE Leap 15.6',
     'opensuse160' : 'openSUSE Leap 16.0',
 }
+
+
+def tag_to_distro(tag):
+    """Map a package tag to a pretty distribution name"""
+    if tag in DISTRO_CODE_TO_NAME:
+        return DISTRO_CODE_TO_NAME[tag]
+    # Auto-generate for known patterns to avoid hardcoding every version
+    m = re.match(r'^fc(\d+)$', tag)
+    if m:
+        return f'Fedora {m.group(1)}'
+    m = re.match(r'^alma(\d+)$', tag)
+    if m:
+        return f'AlmaLinux {m.group(1)}'
+    m = re.match(r'^centos(\d+)$', tag)
+    if m:
+        return f'CentOS {m.group(1)} Stream'
+    m = re.match(r'^opensuse(\d+)(\d)$', tag)
+    if m:
+        return f'openSUSE Leap {m.group(1)}.{m.group(2)}'
+    raise KeyError(f"Unknown distro tag '{tag}'")
 
 def url_to_distro(url: str) -> (str, str):
     """Given a URL, return the distribution and version"""
@@ -103,10 +120,10 @@ def filename_to_distro(filename):
         return 'openSUSE Slowroll'
     tag = re.findall(r"\.([a-z]*[0-9]*)\.noarch.rpm$", filename)
     if len(tag) == 1:
-        return DISTRO_CODE_TO_NAME[tag[0]]
+        return tag_to_distro(tag[0])
     tag = re.findall(r"_([a-z]*[0-9]*)\.deb$", filename)
     if len(tag) == 1:
-        return DISTRO_CODE_TO_NAME[tag[0]]
+        return tag_to_distro(tag[0])
 
     if filename.endswith('.exe'):
         return 'Microsoft Windows'
