@@ -173,7 +173,7 @@ def is_new_language(repo_path: str, commit_range: str, po_file: str) -> bool:
         )
         # If exit code is 0, file existed; if non-zero, it didn't exist
         return result.returncode != 0
-    except Exception as e:
+    except (OSError, subprocess.SubprocessError) as e:
         print(f"Error checking if {po_file} is new: {e}", file=sys.stderr)
         return False
 
@@ -466,7 +466,7 @@ class TestSummarizeTranslationChanges(unittest.TestCase):
 
         # Create a third commit with more changes
         for i in range(18):  # 18 changes as per test case
-            with open('po/de.po', 'a') as f:
+            with open('po/de.po', 'a', encoding='utf-8') as f:
                 f.write(f'\nmsgid "new_{i}"\nmsgstr "neu_{i}"')
 
         subprocess.run(['git', 'add', 'po/de.po', 'po/el.po'], check=True)
