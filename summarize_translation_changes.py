@@ -25,6 +25,40 @@ MSGSTR_PATTERN = re.compile(r'\+msgstr\s+"(.*)"\s*$')
 MULTILINE_MSGSTR_PATTERN = re.compile(r'\+"(.+)"')
 MAX_LOOKAHEAD_LINES = 20
 
+# Matches a bare version number like "6.0.0" or "6.0.2" (no leading "v", no
+# non-digits) that the bleachbit repository tags as "v6.0.0".
+BARE_VERSION_PATTERN = re.compile(r'^\d+\.\d+(\.\d+)?$')
+
+
+def normalize_commit_range(commit_range: str) -> str:
+    """Normalize a commit range by prepending ``v`` to bare version numbers.
+
+    The bleachbit repository tags releases as ``v6.0.0`` rather than
+    ``6.0.0``.  This lets users pass either form (e.g. ``6.0.0..6.0.2`` or
+    ``v6.0.0..v6.0.2``) by auto-prefixing any bare version endpoint with
+    ``v``.  Non-version endpoints (commit hashes, branch names, HEAD, etc.)
+    are left untouched.
+
+    Args:
+        commit_range: Git commit range (e.g., '6.0.0..6.0.2', 'v5.0.0...v5.0.2')
+
+    Returns:
+        Normalized commit range with bare versions prefixed by ``v``
+    """
+    # Split on either '..' or '...', preserving the separator.
+    for sep in ('...', '..'):
+        if sep in commit_range:
+            start, _, end = commit_range.partition(sep)
+            if BARE_VERSION_PATTERN.match(start):
+                start = 'v' + start
+            if BARE_VERSION_PATTERN.match(end):
+                end = 'v' + end
+            return f'{start}{sep}{end}'
+    # No separator: treat the whole thing as a single ref.
+    if BARE_VERSION_PATTERN.match(commit_range):
+        return 'v' + commit_range
+    return commit_range
+
 
 class BleachbitLanguageManager:
     """Manages bleachbit.Language module import with lazy initialization."""
@@ -88,7 +122,10 @@ def get_po_files_in_range(repo_path: str, commit_range: str) -> List[str]:
         files = [f for f in result.stdout.strip().split('\n') if f]
         return files
     except subprocess.CalledProcessError as e:
-        sys.stderr.write(f"Error getting changed files: {e}\n")
+        sys.stderr.write(
+            f"Error getting changed files: {e}\n"
+            f"git stderr: {e.stderr.strip() if e.stderr else '(none)'}\n"
+        )
         sys.exit(1)
 
 
@@ -123,8 +160,10 @@ def is_new_language(repo_path: str, commit_range: str, po_file: str) -> bool:
         True if the language is new in this range, False otherwise
     """
     try:
-        # Check if file exists in the first commit of the range
-        start_commit = commit_range.split('...')[0]
+        # Check if file exists in the first commit of the range.
+        # Split on either '..' or '...' (check '...' first so it isn't
+        # mistakenly split as a single '..').
+        start_commit = re.split(r'\.{2,3}', commit_range, maxsplit=1)[0]
         result = subprocess.run(
             ['git', 'cat-file', '-e', f'{start_commit}:{po_file}'],
             cwd=repo_path,
@@ -329,7 +368,8 @@ def main() -> None:
     )
     parser.add_argument(
         'commit_range',
-        help='Git commit range (e.g., v5.0.0...v5.0.2)'
+        help='Git commit range (e.g., 6.0.0..6.0.2 or v5.0.0...v5.0.2). '
+             'Bare version numbers are auto-prefixed with "v".'
     )
     parser.add_argument(
         '--repo-path',
@@ -344,11 +384,13 @@ def main() -> None:
         sys.stderr.write(f"Repository path does not exist: {repo_path}\n")
         sys.exit(1)
 
+    commit_range = normalize_commit_range(args.commit_range)
+
     # Initialize language manager
     lang_manager = BleachbitLanguageManager(repo_path)
 
     # Get list of modified .po files
-    po_files = get_po_files_in_range(repo_path, args.commit_range)
+    po_files = get_po_files_in_range(repo_path, commit_range)
 
     if not po_files:
         print("No translation files were modified in this range.")
@@ -364,11 +406,11 @@ def main() -> None:
             continue
 
         # Check if new language (regardless of whether it has changes)
-        if is_new_language(repo_path, args.commit_range, po_file):
+        if is_new_language(repo_path, commit_range, po_file):
             new_languages.append(locale)
 
         # Count changes
-        changes = count_msgstr_changes(repo_path, args.commit_range, po_file)
+        changes = count_msgstr_changes(repo_path, commit_range, po_file)
         if changes > 0:
             language_changes[locale] = changes
 
@@ -486,6 +528,22 @@ class TestSummarizeTranslationChanges(unittest.TestCase):
                 self.new_po_file
             )
         )
+
+    def test_normalize_commit_range(self) -> None:
+        """Test normalization of bare version numbers to ``v``-prefixed tags."""
+        self.assertEqual(normalize_commit_range('6.0.0..6.0.2'),
+                         'v6.0.0..v6.0.2')
+        self.assertEqual(normalize_commit_range('6.0.0...6.0.2'),
+                         'v6.0.0...v6.0.2')
+        self.assertEqual(normalize_commit_range('v6.0.0..v6.0.2'),
+                         'v6.0.0..v6.0.2')
+        # Non-version refs are left untouched.
+        self.assertEqual(normalize_commit_range('HEAD..main'),
+                         'HEAD..main')
+        self.assertEqual(normalize_commit_range('abc123..def456'),
+                         'abc123..def456')
+        # Single bare version.
+        self.assertEqual(normalize_commit_range('6.0.0'), 'v6.0.0')
 
     def test_count_msgstr_changes(self) -> None:
         """Test counting msgstr changes in a commit."""
