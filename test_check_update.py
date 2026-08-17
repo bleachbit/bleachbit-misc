@@ -22,31 +22,24 @@ sys.path.append(dir_bb_root)
 import bleachbit  # noqa: E402
 import bleachbit.Update  # noqa: E402
 
-LATEST_STABLE = '6.0.0'
-LATEST_BETA = None  # no current beta release being promoted
+LATEST_STABLE = '6.0.2'
+LATEST_BETA = '6.0.3 (beta)'  # no current beta release being promoted
 LEGACY_WINDOWS = '4.7.0'  # version of BleachBit for legacy Windows
 # tuple in the format
 # (current version sent, version returned 1, version returned 2)
 TESTS = \
     (('3.0', LATEST_STABLE, None),
-     ('3.1.0', LATEST_STABLE, None),
-     ('3.2.0', LATEST_STABLE, None),
-     ('3.9.0', LATEST_STABLE, None),
-     ('3.9.2', LATEST_STABLE, None),
      ('4.0.0', LATEST_STABLE, None),
-     ('4.1.0', LATEST_STABLE, None),
-     ('4.2.0', LATEST_STABLE, None),
-     ('4.4.0', LATEST_STABLE, None),
      ('4.4.2', LATEST_STABLE, None),
-     ('4.5.0', LATEST_STABLE, None),
-     ('4.6.0', LATEST_STABLE, None),
      ('4.6.2', LATEST_STABLE, None),
      ('5.0.0', LATEST_STABLE, None),
-     ('5.0.1', LATEST_STABLE, None),
      ('5.0.2', LATEST_STABLE, None),
      ('5.1.0', LATEST_STABLE, None),
      ('5.1.1', LATEST_STABLE, None),
-     ('6.0.0', None, None))
+     ('6.0.0', LATEST_STABLE, None),
+     ('6.0.1', LATEST_STABLE, None),
+     ('6.0.2', LATEST_BETA, None),
+     ('6.0.3', None, None))
 
 
 def do_test(app_version, version1_expected, version2_expected, base_url=bleachbit.base_url, os_version=None):
