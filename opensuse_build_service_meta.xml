@@ -65,6 +65,10 @@
     <path project="AlmaLinux:9" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
+  <repository name="AlmaLinux_10">
+    <path project="AlmaLinux:10" repository="standard"/>
+    <arch>x86_64</arch>
+  </repository>
   <repository name="16.0">
     <path project="openSUSE:Leap:16.0" repository="standard"/>
     <arch>aarch64</arch>
