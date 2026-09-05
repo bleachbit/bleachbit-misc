@@ -57,10 +57,6 @@
     <path project="Debian:12" repository="standard"/>
     <arch>x86_64</arch>
   </repository>
-  <repository name="Debian_11">
-    <path project="Debian:11" repository="standard"/>
-    <arch>x86_64</arch>
-  </repository>
   <repository name="AlmaLinux_9">
     <path project="AlmaLinux:9" repository="standard"/>
     <arch>x86_64</arch>
