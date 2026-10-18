@@ -14,12 +14,14 @@ an HTML snippet of download links
 """
 
 
+import gzip
 import os
 import subprocess
 import urllib.request, urllib.error, urllib.parse
 import sys
 import re
 import traceback
+import xml.etree.ElementTree as ET
 
 
 # https://en.wikipedia.org/wiki/Linux_Mint_version_history
@@ -64,9 +66,16 @@ def tag_to_distro(tag):
         return f'openSUSE Leap {m.group(1)}.{m.group(2)}'
     raise KeyError(f"Unknown distro tag '{tag}'")
 
+# download.opensuse.org redirects to mirrors that can lag for hours after a
+# republish. downloadcontentcdn.opensuse.org fronts the origin server directly,
+# so use it for fetching metadata and binaries.
+OBS_REDIRECT_HOST = 'https://download.opensuse.org'
+OBS_CDN_HOST = 'https://downloadcontentcdn.opensuse.org'
+
+
 def url_to_distro(url: str) -> (str, str):
     """Given a URL, return the distribution and version"""
-    assert url.startswith('https://download.opensuse.org'), f"not an OBS URL: {url}"
+    assert url.startswith((OBS_REDIRECT_HOST, OBS_CDN_HOST)), f"not an OBS URL: {url}"
     distro_ver = url.split("/")[6]
 
     # Handle openSUSE Leap versions (e.g., 15.6, 16.0)
@@ -166,49 +175,104 @@ def get_repo_urls(osc_dir):
     return repourls
 
 
-def get_files_in_repo_sub(url):
-    """Return a list of files in an OBS repository sub-directory"""
-    if not url.startswith('http'):
-        raise RuntimeError(f'not a valid url {url}')
-    print(f"opening url '{url}'")
+def to_cdn_url(url):
+    """Rewrite an OBS mirror redirect URL to the CDN origin endpoint"""
+    return url.replace(OBS_REDIRECT_HOST, OBS_CDN_HOST, 1)
+
+
+def fetch_bytes(url):
+    """Return the raw response body for a URL"""
+    return urllib.request.urlopen(url).read()
+
+
+def decompress(data):
+    """Decompress data by magic bytes; the CDN serves gzip or zstd variants"""
+    if data[:2] == b'\x1f\x8b':
+        return gzip.decompress(data)
+    if data[:4] == b'\x28\xb5\x2f\xfd':
+        # Lazy import: the compression package requires Python 3.14+
+        from compression import zstd  # pylint: disable=import-outside-toplevel
+        return zstd.decompress(data)
+    return data
+
+
+def get_deb_checksums(base_url):
+    """Return {rel_path: ('sha256', sha256)} from a deb repository's Packages index"""
     try:
-        dir = urllib.request.urlopen(url).read(100000)
-    except:
-        print(str(sys.exc_info()[1]))
-        return []
-    files = []
-    # ignore https://download.opensuse.org/repositories/home:/andrew_z/xUbuntu_25.04/all/769d957dfb780abf11d2a6a4491de28296cdeb
-    for (file, ext) in re.findall(r"(bleachbit[a-z0-9_.-]+\.)(rpm|deb)", dir.decode()):
-        fn = file + ext
-        fileurl = url + fn
-        if fileurl not in files:
-            print(f"found fileurl '{fileurl}'")
-            files.append(fileurl)
-    if not files:
-        print(f'WARNING: no files found in {url}')
-    return files
+        data = fetch_bytes(base_url + 'Packages')
+    except urllib.error.HTTPError:
+        data = fetch_bytes(base_url + 'Packages.gz')
+    data = decompress(data)
+    sums = {}
+    for stanza in data.decode('utf-8').split('\n\n'):
+        fname = re.search(r'^Filename: (\S+)', stanza, re.MULTILINE)
+        sha = re.search(r'^SHA256: ([0-9a-f]{64})', stanza, re.MULTILINE)
+        if fname and sha and re.fullmatch(r'all/bleachbit[a-z0-9_.-]+\.deb', fname.group(1)):
+            sums[fname.group(1)] = ('sha256', sha.group(1))
+    return sums
+
+
+def get_rpm_checksums(base_url):
+    """Return {rel_path: (algo, hash)} from an rpm repository's repodata"""
+    repo_ns = '{http://linux.duke.edu/metadata/repo}'
+    common_ns = '{http://linux.duke.edu/metadata/common}'
+    repomd = ET.fromstring(fetch_bytes(base_url + 'repodata/repomd.xml'))
+    loc = None
+    for data in repomd.findall(f'{repo_ns}data'):
+        if data.get('type') == 'primary':
+            loc = data.find(f'{repo_ns}location').get('href')
+    assert loc, f'no primary data in {base_url}repodata/repomd.xml'
+    primary = decompress(fetch_bytes(base_url + loc))
+    sums = {}
+    for pkg in ET.fromstring(primary).findall(f'{common_ns}package'):
+        loc_el = pkg.find(f'{common_ns}location')
+        cksum = pkg.find(f'{common_ns}checksum')
+        if loc_el is not None and cksum is not None:
+            href = loc_el.get('href', '')
+            if not re.fullmatch(r'noarch/bleachbit[a-z0-9_.-]+\.rpm', href):
+                continue
+            algo = cksum.get('type')
+            digest = (cksum.text or '').strip()
+            assert algo in ('sha256', 'sha512'), f'unexpected checksum type {algo} in {base_url}'
+            assert re.fullmatch(r'[0-9a-f]+', digest), f'invalid checksum {digest} in {base_url}'
+            sums[href] = (algo, digest)
+    return sums
 
 
 def get_files_in_repo(repourl):
-    """Return a list of files in an OBS repository directory"""
-    # strip off the filename
+    """Return {fileurl: (algo, hash)} for packages in an OBS repository via CDN metadata"""
     pos = repourl.rfind("/")
-    baseurl = repourl[0:pos + 1]
-    if repourl.find("buntu") >= 0 or repourl.find("ebian") >= 0:
-        return get_files_in_repo_sub(baseurl + "all/")
-    else:
-        return get_files_in_repo_sub(baseurl + "noarch/")
+    baseurl = to_cdn_url(repourl[0:pos + 1])
+    if not baseurl.startswith('http'):
+        raise RuntimeError(f'not a valid url {baseurl}')
+    print(f"opening url '{baseurl}'")
+    try:
+        if repourl.find("buntu") >= 0 or repourl.find("ebian") >= 0:
+            rel_sums = get_deb_checksums(baseurl)
+        else:
+            rel_sums = get_rpm_checksums(baseurl)
+    except urllib.error.URLError as exc:
+        print(exc)
+        return {}
+    files = {}
+    for rel_path, cksum in rel_sums.items():
+        fileurl = baseurl + rel_path
+        print(f"found fileurl '{fileurl}'")
+        files[fileurl] = cksum
+    if not files:
+        print(f'WARNING: no files found in {baseurl}')
+    return files
 
 
 def get_files_in_repos(repourls):
-    """Return a list of files in an OBS repository"""
-    print("* Getting files in repos")
-    files = []
+    """Return {fileurl: (algo, hash)} for packages across OBS repositories"""
+    print("* Getting files and checksums in repos")
+    files = {}
     for repourl in repourls:
         if len(repourl) < 3:
             break
-        files += get_files_in_repo(repourl)
-    print(files)
+        files.update(get_files_in_repo(repourl))
+    print(list(files.keys()))
     return files
 
 
@@ -266,28 +330,49 @@ def create_html_snippet(filenames, header):
     f.write("</ul>\n")
 
 
-def write_download_urls(urls):
-    """"Build a shell script that downloads URLs and renames the files"""
+def write_download_urls(checksum_map):
+    """Build a shell script that downloads URLs, verifies checksums, and renames"""
+    assert len(checksum_map) > 0
     with open('download_from_obs.sh', 'w', encoding='utf-8') as f:
-        assert len(urls) > 0
         f.write('#!/bin/bash\n')
         f.write('# Download script for BleachBit packages from OBS\n')
-        f.write('# Uses wget with no-clobber to avoid re-downloading existing files\n')
-        f.write('# Exit code 1 from wget when file exists is expected and handled\n\n')
-        for url in urls:
+        f.write('# Downloads via the CDN origin to avoid stale mirrors, and verifies\n')
+        f.write('# each file against the checksum in the repository metadata\n\n')
+        f.write('verify_checksum() {\n')
+        f.write('  local algo="$1" hash="$2" fn="$3"\n')
+        f.write('  echo "$hash  $fn" | "${algo}sum" --status --check -\n')
+        f.write('}\n\n')
+        f.write('download_file() {\n')
+        f.write('  local fn="$1" url="$2" algo="$3" hash="$4"\n')
+        f.write('  if [ -f "$fn" ]; then\n')
+        f.write('    if verify_checksum "$algo" "$hash" "$fn"; then\n')
+        f.write('      echo "Skipping $fn (exists and checksum verified)"\n')
+        f.write('      return 0\n')
+        f.write('    fi\n')
+        f.write('    echo "Warning: existing $fn failed checksum, re-downloading"\n')
+        f.write('    rm -f "$fn"\n')
+        f.write('  fi\n')
+        f.write('  wget -O "$fn.tmp" "$url" || {\n')
+        f.write('    rc=$?\n')
+        f.write('    rm -f "$fn.tmp"\n')
+        f.write('    echo "Error downloading $fn: exit code $rc"\n')
+        f.write('    sleep 5\n')
+        f.write('    exit $rc\n')
+        f.write('  }\n')
+        f.write('  if ! verify_checksum "$algo" "$hash" "$fn.tmp"; then\n')
+        f.write('    rm -f "$fn.tmp"\n')
+        f.write('    echo "ERROR: checksum mismatch for $fn"\n')
+        f.write('    echo "OBS may have republished since this script was '
+                'generated; regenerate it."\n')
+        f.write('    exit 1\n')
+        f.write('  fi\n')
+        f.write('  mv "$fn.tmp" "$fn"\n')
+        f.write('  echo "Verified $fn"\n')
+        f.write('}\n\n')
+        for url, (algo, checksum) in checksum_map.items():
             assert url.startswith('http')
             local_fn = url_to_filename(url)
-            f.write(f'if [ -f "{local_fn}" ]; then\n')
-            f.write(f'  echo "Warning: {local_fn} already exists, skipping"\n')
-            f.write('  sleep 1\n')
-            f.write('else\n')
-            f.write(f'  wget -O {local_fn} {url} || {{\n')
-            f.write('    rc=$?\n')
-            f.write(f'    echo "Error downloading {local_fn}: exit code $rc"\n')
-            f.write('    sleep 5\n')
-            f.write('    exit $rc\n')
-            f.write('  }\n')
-            f.write('fi\n\n')
+            f.write(f'download_file "{local_fn}" "{to_cdn_url(url)}" "{algo}" "{checksum}"\n\n')
         f.write('\necho "Download completed successfully"\n')
 
 
