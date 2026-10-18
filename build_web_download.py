@@ -39,9 +39,13 @@ DISTRO_CODE_TO_NAME = {
     'ubuntu2404': 'Ubuntu 24.04 LTS (Noble Numbat)',
     'ubuntu2510': 'Ubuntu 25.10 (Questing Quokka)',
     'ubuntu2604': 'Ubuntu 26.04 (Resolute Raccoon)',
+    'ubuntu2610': 'Ubuntu 26.10 (Stonking Stingray)',
+    'ubuntu2704': 'Ubuntu 27.04 (Tenacious T-Rex)',
     'debian11': 'Debian 11 (Bullseye)',
     'debian12': 'Debian 12 (Bookworm)',
     'debian13': 'Debian 13 (Trixie)',
+    'debian14': 'Debian 14 (Forky)',
+    'debian15': 'Debian 15 (Duke)',
     'opensuse156' : 'openSUSE Leap 15.6',
     'opensuse160' : 'openSUSE Leap 16.0',
 }
