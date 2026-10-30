@@ -23,7 +23,7 @@ echo "mkdir $GITD"
 mkdir $GITD || exit 1
 cd $GITD || exit 1
 echo "git clone $BRANCH"
-time git clone --depth 1 $GITURL -b $BRANCH $GITDIR || { echo "git clone failed"; exit 1; }
+time git clone --depth 1 $GITURL -b $BRANCH || { echo "git clone failed"; exit 1; }
 cd bleachbit || { echo "cd bleachbit failed"; exit 1; }
 
 echo "python setup"
@@ -31,8 +31,7 @@ echo "python setup"
 VER=$(grep '^APP_VERSION = ' bleachbit/__init__.py | sed "s/APP_VERSION = \"\(.*\)\"/\1/")
 NAMEV=${NAME}-${VER}
 make clean
-REV=`git rev-parse --short HEAD`
-echo "revision = \"$REV\"" > bleachbit/Revision.py
+make stamp
 python3 setup.py sdist --formats=bztar,gztar || { echo "python3 setup.py failed"; exit 1; }
 
 [[ -e "dist/$NAMEV.tar.gz" ]] || { echo dist/$NAMEV.tar.gz missing; exit 1; }
